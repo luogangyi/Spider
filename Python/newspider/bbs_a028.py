@@ -18,7 +18,10 @@ class A028(BaseBBS):
         response = urllib2.urlopen(url)
         content = response.read()
         soup = BeautifulSoup(content)
-        url = soup.find('a',text=u'按时间排序').parent['href']
+        try:
+            url = soup.find('a',text=u'按时间排序').parent['href']
+        except:
+            return []
         url = "http://chengdu.tg280.com"+url
         #print url
         response = urllib2.urlopen(url)
@@ -41,7 +44,7 @@ class A028(BaseBBS):
         createdAt = userInfoTag.contents[0].strip()[:-1].strip()
         createdAt = self.convertTime(createdAt)
         username = userInfoTag.a.text
-        print url.encode('utf-8'), username.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
+        #print url.encode('utf-8'), username.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
         store_bbs_post(url, username, title, content,
                    self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 
@@ -52,7 +55,7 @@ def main(id):
         obj = Baidu(id,'www.tg280.com','bbs')
         obj.main()
     except Exception, e:
-        store_error(A028_INFO_SOURCE_ID)
+        store_error(id)
         bbs_logger.exception(e) 
 
 if __name__ == "__main__":

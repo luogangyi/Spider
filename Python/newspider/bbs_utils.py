@@ -5,14 +5,14 @@ from config import *
 from utils import store_category
 
 DZ19_INFO_SOURCE_ID = 1
-CQKX_INFO_SOURCE_ID = 2
+CQKX_INFO_SOURCE_ID = 18
 DSCSQ_INFO_SOURCE_ID = 1
-CDLJL_INFO_SOURCE_ID = 1
-CDZX_INFO_SOURCE_ID = 1
+CDLJL_INFO_SOURCE_ID = 31
+CDZX_INFO_SOURCE_ID = 45
 MSLT_INFO_SOURCE_ID = 1
 MSR_INFO_SOURCE_ID = 1
 A028_INFO_SOURCE_ID = 28
-
+CDQSS_INFO_SOURCE_ID = 25
 def store_bbs_post(url, bbs_user_screen_name, title, content, info_source_id,
                    keyword_id, created_at, read_count, comment_count):
 
