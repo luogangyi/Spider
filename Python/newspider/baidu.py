@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
-
-
-#! /usr/bin/env python
-#coding=utf-8
+# update by lgy 2013.07.28
+# add category bbs! and update try/except
 
 from BaseTimeLimit import *
 from news_utils import *
@@ -20,47 +18,42 @@ class Baidu(BaseBBS):
         domain = self.domain
         # for a month
         url = 'http://www.baidu.com/s?q1=%s&q2=&q3=&q4=&rn=100&lm=7&ct=0&ft=&q5=&q6=%s&tn=baiduadv' % (keyword,domain)
-        try:
-        	content = urllib2.urlopen(url).read()
-        	soup = BeautifulSoup(content)
-    	except:
-    		return []
-            
 
-        try:
-            items = soup.findAll("table",{'class':'result'})
-        except:# there is not any result,so return empty list
-            return []
+        content = urllib2.urlopen(url).read()
+        soup = BeautifulSoup(content)
+        items = soup.findAll("table",{'class':'result'})
+
         #print len(items)
         time.sleep(1)
         
         return items
     
     def itemProcess(self,item):
-        try:
-            a = item.find('a')
-            url = a['href']
-            title = a.text
 
-            response = urllib2.urlopen(url)
-            url = response.geturl()
+        a = item.find('a')
+        url = a['href']
+        title = a.text
 
-            content = item.find('div',{'class':'c-abstract'}).text
-            
-            citeTime = item.find('div',{'class':'f13'}).span.text
-            
-            createdAt = self.convertTime(citeTime)
-            
-            if self.category=="news":
-                add_news_to_session(url, self.sourcename, title, content,
-                                self.INFO_SOURCE_ID, createdAt, self.keywordId)
-            elif self.category=="blog":
-                store_blog_post(url, "", title, content,
-                                    self.INFO_SOURCE_ID,self.keywordId, createdAt, 0,0)
-            else:
-                print "category is error"  
-        except Exception, e:
-            print e
+        response = urllib2.urlopen(url)
+        url = response.geturl()
+
+        content = item.find('div',{'class':'c-abstract'}).text
+        
+        citeTime = item.find('div',{'class':'f13'}).span.text
+        
+        createdAt = self.convertTime(citeTime)
+        print url.encode('utf-8'), username.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
+        if self.category=="news":
+            add_news_to_session(url, self.sourcename, title, content,
+                            self.INFO_SOURCE_ID, createdAt, self.keywordId)
+        elif self.category=="blog":
+            store_blog_post(url, "", title, content,
+                                self.INFO_SOURCE_ID,self.keywordId, createdAt, 0,0)
+        elif self.category=="bbs":
+            store_bbs_post(url, "", title, content,
+                                self.INFO_SOURCE_ID, self.keywordId, createdAt, 0,0)
+        else:
+            print "category is error"  
         
         
         

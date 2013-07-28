@@ -17,30 +17,29 @@ BLOG163_INFO_SOURCE_ID = 3
 SCXWW_INFO_SOURCE_ID = 3
 
 def add_news_to_session(url, source_name, title, content, info_source_id, created_at, keyword_id):
-    try:
-        sql_news = session.query(News).filter(News.url==url).first()
-        if not sql_news:
-            sql_news = News()
-        else:
-            return
 
-        sql_news.url = url
-        sql_news.source_name = source_name
-        sql_news.title = title
-        sql_news.content = content
-        sql_news.info_source_id = info_source_id 
-        sql_news.keyword_id = keyword_id
-        sql_news.created_at = created_at
+    sql_news = session.query(News).filter(News.url==url).first()
+    if not sql_news:
+        sql_news = News()
+    else:
+        return
 
-        session.merge(sql_news) #merge
+    sql_news.url = url
+    sql_news.source_name = source_name
+    sql_news.title = title
+    sql_news.content = content
+    sql_news.info_source_id = info_source_id 
+    sql_news.keyword_id = keyword_id
+    sql_news.created_at = created_at
 
-        session.flush()
-        session.commit()
+    session.merge(sql_news) #merge
+
+    session.flush()
+    session.commit()
 
 
-        sql_news = session.query(News).filter(News.url==url,
-                             News.info_source_id==info_source_id).first()
-        if sql_news:
-            store_category('news', str(sql_news.id))
-    except:
-        print "add_news_to_session error"
+    sql_news = session.query(News).filter(News.url==url,
+                         News.info_source_id==info_source_id).first()
+    # if sql_news:
+    #     store_category('news', str(sql_news.id))
+

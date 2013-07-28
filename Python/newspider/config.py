@@ -30,10 +30,14 @@ socket.setdefaulttimeout(90)
 # MYSQL_USER = 'mysql'
 # MYSQL_PASSWORD = '^12fg7'
 
-MYSQL_ADDR = 'localhost:3306/soya?charset=utf8'
-MYSQL_USER = 'root'
-MYSQL_PASSWORD = 'asdasd'
+# MYSQL_ADDR = 'localhost:3306/soya?charset=utf8'
+# MYSQL_USER = 'root'
+# MYSQL_PASSWORD = 'asdasd'
+MYSQL_ADDR = 'localhost:3306/soya-yc?charset=utf8'
 
+MYSQL_USER = 'root'
+#MYSQL_PASSWORD = '^12fg7'
+MYSQL_PASSWORD = '123456'
 mysql_connection = 'mysql://' + MYSQL_USER + ':' + MYSQL_PASSWORD + '@' + MYSQL_ADDR
 
 engine = create_engine(mysql_connection,
@@ -49,7 +53,7 @@ for row in session.query(Keyword):
 
 #PYTHON_DIR = '/home/tbs/soya-yc/Python/'
 
-PYTHON_DIR = '/Users/falconlux/workspace/soya/Python/'
+PYTHON_DIR = '/home/lgy/Code/lgy_git/Python/'
 
 
 
