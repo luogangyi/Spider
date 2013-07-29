@@ -3,7 +3,7 @@
 # update by lgy, 2013.7.28
 
 from BaseBBS import *
-
+from baidu import Baidu
 class A028(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -47,7 +47,7 @@ class A028(BaseBBS):
         createdAt = userInfoTag.contents[0].strip()[:-1].strip()
         createdAt = self.convertTime(createdAt)
         username = userInfoTag.a.text
-        #print url.encode('utf-8'), username.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
+        print url.encode('utf-8'), username.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
         store_bbs_post(url, username, title, content,
                    self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 
@@ -67,8 +67,7 @@ def main(id):
 
 
 if __name__ == "__main__":
-    obj = A028(A028_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    main(A028_INFO_SOURCE_ID)
     
 
         

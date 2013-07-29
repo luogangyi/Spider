@@ -8,7 +8,7 @@ from datetime import date
 from config import *
 from bbs_utils import *
 from utils import bbs_logger, store_error
-
+from baidu import Baidu
 class WYSQBBS(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -106,8 +106,7 @@ def main(id):
         bbs_logger.exception(e)
 
 if __name__ == "__main__":
-    obj = WYSQBBS(WYSQ_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    main(WYSQ_INFO_SOURCE_ID)
     
 
         

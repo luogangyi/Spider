@@ -5,7 +5,7 @@ import time
 import urllib2
 from datetime import datetime
 import logging  
-from config import PYTHON_DIR
+from config import *
 
 
 def baidu_date_str_to_datetime(date_str):
@@ -35,7 +35,24 @@ def store_category(info_type, idstr):
 
     #content
 
+def store_error(info_source_id):
+    sql_job_error = JobError()
+    sql_job_error.happened_at = datetime.now()
+    sql_job_error.info_source_id = info_source_id
 
+    session.add(sql_job_error)
+    session.flush()
+    session.commit()
+
+
+def recheck_title(keyword, title):
+    keywords = keyword.str.split()
+    for key in keywords:
+        if key =='':
+            continue
+        if title.find(key)<0:
+            return False
+    return True
 # Logging Part
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')  
 

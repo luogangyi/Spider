@@ -4,7 +4,7 @@
 
 
 from BaseBBS import *
-
+from baidu import Baidu
 class DZ19BBS(BaseBBS):
     def nextPage(self,keyword):
         url = 'http://www.dz19.net'
@@ -91,9 +91,8 @@ def main(id):
         bbs_logger.exception(e) 
 
 if __name__ == "__main__":
-    obj = DZ19BBS(DZ19_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
-    
+    main(DZ19_INFO_SOURCE_ID)
+
 
         
         

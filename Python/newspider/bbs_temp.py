@@ -4,7 +4,7 @@
 from config import *
 from bbs_utils import *
 from utils import bbs_logger
-
+from baidu import Baidu
 
 gIsFinished = False
 gLastTime = 0

@@ -4,7 +4,7 @@
 
 
 from BaseBBS import *
-
+from baidu import Baidu
 
 class GogoPZH(BaseBBS):
     def __init__(self,sourceId):
@@ -74,8 +74,8 @@ def main(id):
         
 
 if __name__ == "__main__":
-    obj = GogoPZH(GogoPZH_INFO_SOURCE_ID )#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    main(GogoPZH_INFO_SOURCE_ID)
+
     
 
         

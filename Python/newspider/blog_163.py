@@ -1,14 +1,21 @@
 from youdao import Youdao
-from news_utils import *
-
+from blog_utils import *
+from utils import *
+from baidu import Baidu
+#update by lgy 2013.7.29 ,add baidu search
 def main(id):
-    obj = Youdao(id,'blog.163.com','blog')
-    obj.main()
+    try:
+        obj = Youdao(id,'blog.163.com','blog')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        blog_logger.exception(e)
+    try:
+        obj = Baidu(id,'blog.163.com','blog')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        blog_logger.exception(e)
 
 if __name__=="__main__":
-    obj = Youdao(41,'blog.163.com','blog')
-    obj.main()
-#    test()
-
-
-#ok
+    main(WY163_BLOG_INFO_SOURCE_ID)

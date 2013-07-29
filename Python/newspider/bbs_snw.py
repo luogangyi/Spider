@@ -3,7 +3,7 @@
 #update by lgy 2013.7.29 ,add baidu search
 
 from BaseBBS import *
-
+from baidu import Baidu
 class SNW(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -118,6 +118,6 @@ def main(id):
         bbs_logger.exception(e)
 
 if __name__ == "__main__":
-    obj = SNW(SNW_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    main(SNW_INFO_SOURCE_ID)
+
     

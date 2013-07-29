@@ -5,6 +5,8 @@
 
 from BaseTimeLimit import *
 from news_utils import *
+from blog_utils import *
+from bbs_utils import *
 
 class Baidu(BaseBBS):
     def __init__(self,sourceId,domain,category,sourcename=""):
@@ -41,8 +43,9 @@ class Baidu(BaseBBS):
         
         citeTime = item.find('div',{'class':'f13'}).span.text
         
+        print citeTime
         createdAt = self.convertTime(citeTime)
-        print url.encode('utf-8'), username.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
+        print url, title,content,createdAt
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
@@ -58,11 +61,33 @@ class Baidu(BaseBBS):
         
         
              
-    def convertTime(self,createdAt):
+    def convertTime(self,strtime):
         
-        m = re.search(r'\d+-\d+-\d+',createdAt)
-       
-        return datetime.strptime(m.group(),'%Y-%m-%d')
+        now = datetime.now()
+        pattern = re.compile(r"(\d+-\d+-\d+)")
+        m = pattern.search(strtime)
+        if m != None :
+            return m.group(1)
+        #print m.group(1)
+        pattern = re.compile(r"(\d+)")
+        m = pattern.search(strtime)
+        if m == None :
+            return -1
+        else:
+            m = m.group(1)
+        #print strtime
+        if strtime.find(u'年')>-1:  
+            return -1
+        elif strtime.find(u'月')>-1:
+            time = now-timedelta(days=(int(m)*30))
+        elif strtime.find(u'天')>-1: 
+            time =  now-timedelta(days=int(m))
+        elif strtime.find(u'小时')>-1:
+            time =  now-timedelta(hours=int(m))
+        else:
+            time = now
+        return time.strftime("%Y-%m-%d")
+
         
         
 def test():

@@ -4,7 +4,7 @@
 
 
 from BaseBBS import *
-
+from baidu import Baidu
 
 
 class DSCSQ(BaseBBS):
@@ -103,8 +103,7 @@ def main(id):
  
 
 if __name__ == "__main__":
-    obj = DSCSQ(DSCSQ_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    main(DSCSQ_INFO_SOURCE_ID)
     
 
         

@@ -3,7 +3,7 @@
 #update by lgy 2013.7.29 ,add baidu search
 
 from BaseBBS import *
-
+from baidu import Baidu
 class WOJUBLBBS(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -99,8 +99,8 @@ def main(id):
 
 
 if __name__ == "__main__":
-    obj = WOJUBLBBS(30)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    main(WOJUBLBBSL_INFO_SOURCE_ID)
+
     
 
         

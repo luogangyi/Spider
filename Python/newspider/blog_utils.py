@@ -2,12 +2,16 @@
 #coding=utf-8
 
 from config import *
-from utils import store_category
+from utils import *
 
+SINA_BLOG_INFO_SOURCE_ID = 14
+WY163_BLOG_INFO_SOURCE_ID = 41
+HexunBlog_BLOG_INFO_SOURCE_ID =42
+Cnfol_BLOG_INFO_SOURCE_ID = 43
+EastMoney_Blog_BLOG_INFO_SOURCE_ID = 44
 
 def store_blog_post(url, blog_user_screen_name, title, content, info_source_id,
                    keyword_id, created_at, read_count, comment_count):
-
     sql_post = session.query(BlogPost).filter(BlogPost.url==url).first()
     if not sql_post:
        sql_post = BlogPost()

@@ -4,7 +4,7 @@
 
 
 from BaseBBS import *
-
+from baidu import Baidu
 class FuFengLBBS(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -126,8 +126,8 @@ def main(id):
         bbs_logger.exception(e)
 
 if __name__ == "__main__":
-    obj = FuFengLBBS(FuFengL_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    main(FuFengL_INFO_SOURCE_ID)
+
     
 
         
