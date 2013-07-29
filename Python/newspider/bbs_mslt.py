@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-
-#ok
+#update by lgy 2013.7.29 ,add baidu search
 
 from BaseBBS import *
 
@@ -63,7 +62,7 @@ class MSLT(BaseBBS):
         createdAt = self.convertTime(createdAt)
 
         username = userInfoTag.a.text
-        print url, username, title, content
+        #print url, username, title, content
         store_bbs_post(url, username, title, content,
                        self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 

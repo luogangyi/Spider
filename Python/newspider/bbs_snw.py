@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-
-#ok
+#update by lgy 2013.7.29 ,add baidu search
 
 from BaseBBS import *
 
@@ -16,7 +15,7 @@ class SNW(BaseBBS):
         response = urllib2.urlopen(first_url)
         content = response.read()
         soup = BeautifulSoup(content)
-        items = soup.find("form",id="scbar_form").
+        items = soup.find("form",id="scbar_form")
         if items == None:
             return []
         items = items.findAll("input",attrs={'type':'hidden'})
@@ -80,7 +79,7 @@ class SNW(BaseBBS):
         createdAt = self.convertTime(userInfoTag.text[0:userInfoTag.text.find(" -")])
 
         username = userInfoTag('a')[0].text
-        print url, username, title, content
+        #print url, username, title, content,createdAt
         store_bbs_post(url, username, title, content,
                         self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 

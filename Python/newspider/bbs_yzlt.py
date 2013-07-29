@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-
-#ok
+#update by lgy 2013.7.29 ,add baidu search
 
 from BaseBBS import *
 
@@ -11,18 +10,18 @@ class YZLTBBS(BaseBBS):
     
     #in this situation, override to set url 
     def nextPage(self,keyword):
-        try:
-            url='http://search.soufun.com/bbs/search.jsp?&btnSearch=++&fld=all&author=&forum=&city=&sort=date&newwindow=1&q='+keyword.str.encode('gb2312')
-            response = urllib2.urlopen(url)
-            content = response.read()
-            #just need to visit once, because it is order by time in default
-            soup = BeautifulSoup(content)
-        except:
+        
+        url='http://search.soufun.com/bbs/search.jsp?&btnSearch=++&fld=all&author=&forum=&city=&sort=date&newwindow=1&q='+keyword.str.encode('gb2312')
+        response = urllib2.urlopen(url)
+        content = response.read()
+        #just need to visit once, because it is order by time in default
+        soup = BeautifulSoup(content)
+
+        items = soup.find("div",id='content')
+        if items == None:
             return []
-        try:
-            items = soup.find("div",id='content').findAll("div",{'class':'result'})
-        except:
-            return []
+        items = items.findAll("div",{'class':'result'})
+
         return items
     
 
@@ -67,36 +66,43 @@ class YZLTBBS(BaseBBS):
     
     #in this situation, override to modify the readCount, commentCount
     def itemProcess(self,item):
-        try:
-            url = item.find("div",{'class':'postTitle'}).a['href']
-        #print url
-            title = item.find("div",{'class':'postTitle'}).a.text
-        #print title.encode('gbk')
-        #there is not readcount and commentcount， so let both be None
-            readCount = commentCount = 0
-#        readCount,commentCount = self.getReadAndComment(item.p.text)
-            createdAt =  item.find('div',{'class':'postTitle'}).contents[2].string
-    	    print createdAt    
-            createdAt = self.convertTime(createdAt)
-            print createdAt
-		#print createdAt.encode('gbk')
-            content =item.find('div',{'class':'postSource'}).contents[1].text
-        
-            userInfoTag = item('p')[-1]
-       
-        
-            username = userInfoTag.a.text
-            #store_bbs_post(url, username, title, content,
-                       #self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
-        except Exception, e:
-            print e
+
+        url = item.find("div",{'class':'postTitle'}).a['href']
+        title = item.find("div",{'class':'postTitle'}).a.text
+
+        readCount = commentCount = 0
+
+        createdAt =  item.find('div',{'class':'postTitle'}).contents[2].string 
+        createdAt = self.convertTime(createdAt)
+
+        content =item.find('div',{'class':'postSource'}).contents[1].text
+    
+        userInfoTag = item('p')[-1]
+    
+        username = userInfoTag.a.text
+
+        #print url, username, title, content,createdAt
+        store_bbs_post(url, username, title, content,
+                   self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
+
 
 def main(id):
-    obj = YZLTBBS(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()    
+    try:
+        obj = YZLTBBS(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e) 
+    try:
+        obj = Baidu(id,'soufun.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+
 
 if __name__ == "__main__":
-    obj = YZLTBBS(32)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
+    obj = YZLTBBS(YZLT_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
     obj.main()
     
 

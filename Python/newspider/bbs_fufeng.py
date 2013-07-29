@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-#ok
+#update by lgy 2013.7.29 ,add baidu search,bug fix#update by lgy 2013.7.29 ,add baidu search,bug fix
 
 
 from BaseBBS import *
@@ -78,7 +78,7 @@ class FuFengLBBS(BaseBBS):
    
         createdAt = self.convertTime(createdAt)
         username = userInfoTag.a.text
-        print username, title, content, createdAt
+        #print username, title, content, createdAt
         store_bbs_post(url, username, title, content,
                        self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 

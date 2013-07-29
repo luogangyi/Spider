@@ -85,7 +85,7 @@ class WYSQBBS(BaseBBS):
             createdAt = datetime.now()
             bbs_logger.exception(e) 
 
-        print url,username.encode('utf-8'),title.encode('utf-8'),content.encode('utf-8'),createdAt,readCount,commentCount
+        #print url,username.encode('utf-8'),title.encode('utf-8'),content.encode('utf-8'),createdAt,readCount,commentCount
         store_bbs_post(url, username, title, content,
                        self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 
