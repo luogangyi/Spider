@@ -4,6 +4,7 @@
 from baidu import Baidu
 from BaseTimeLimit import *
 from news_utils import *
+from google_search import Google
 
 SOURCENAME="成都商报"
 class EChengduNews(BaseTimeLimit):

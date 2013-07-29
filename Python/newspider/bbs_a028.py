@@ -4,6 +4,7 @@
 
 from BaseBBS import *
 from baidu import Baidu
+from google_search import Google
 class A028(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -52,18 +53,25 @@ class A028(BaseBBS):
                    self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 
 def main(id):
+    # try:
+    #     obj = A028(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'www.tg280.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)  
     try:
-        obj = A028(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
-    try:
-        obj = Baidu(id,'www.tg280.com','bbs')
+        obj = Google(id,'www.tg280.com','bbs')
         obj.main()
     except Exception, e:
         store_error(id)
         bbs_logger.exception(e) 
+
 
 
 if __name__ == "__main__":

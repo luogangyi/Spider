@@ -5,7 +5,7 @@ from BaseTimeLimit import *
 from blog_utils import *
 from news_hexun import HexunNews
 from baidu import Baidu
-
+from google_search import Google
 class HexunBlog(HexunNews):
     '''和讯博客  http://blog.hexun.com/—— 按博客搜索 属于blog故存入blog_posts表'''
     def __init__(self,sourceId):

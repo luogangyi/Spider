@@ -2,7 +2,7 @@
 #coding=utf-8
 #modifeid by lgy,2013.07.20
 #测试通过,*网易bbs搜索速度较慢
-
+from google_search import Google
 from BaseBBS import *
 from datetime import date
 from config import *

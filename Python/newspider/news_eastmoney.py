@@ -4,7 +4,7 @@
 from baidu import Baidu
 from BaseTimeLimit import *
 from news_utils import *
-
+from google_search import Google
 SOURCENAME = "东方财富资讯"
 class EastMoneyNews(BaseBBS):
     '''东方财富博客   http://blog.eastmoney.com/—— 按资讯搜索 属于news故存入news表'''

@@ -3,6 +3,7 @@
 #update by lgy 2013.7.29 ,add baidu search
 from BaseBBS import *
 from baidu import Baidu
+from google_search import Google
 class MSRBBS(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)

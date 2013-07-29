@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search,bug fix!
+from google_search import Google
 from baidu import Baidu
 from BaseBBS import *
 from news_utils import *

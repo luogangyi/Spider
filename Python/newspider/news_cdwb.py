@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 #test OK (不按时间排序）
-
+from google_search import Google
 from baidu import Baidu
 from news_utils import *
 

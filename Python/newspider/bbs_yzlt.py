@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
-
+from google_search import Google
 from BaseBBS import *
 from baidu import Baidu
 class YZLTBBS(BaseBBS):

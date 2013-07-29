@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 #update by lgy 2013.7.29 ,add baidu search
+from google_search import Google
 from baidu import Baidu
 from BaseBBS import *
 from news_utils import *
@@ -68,8 +69,7 @@ def main(id):
     except Exception, e:
         store_error(id)
         bbs_logger.exception(e)
-
-    
+  
 
 if __name__ == "__main__":
     main(36)

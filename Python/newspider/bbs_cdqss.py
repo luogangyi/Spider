@@ -4,6 +4,7 @@
 
 from BaseBBS import *
 from baidu import Baidu
+from google_search import Google
 class CDQSS(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)

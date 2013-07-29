@@ -5,6 +5,7 @@ from BaseTimeLimit import *
 from blog_utils import *
 from news_cnfol import CnfolNews
 from baidu import Baidu
+from google_search import Google
 class CnfolBlog(CnfolNews):
     '''中金博客   http://blog.cnfol.com/ —— 按博客搜索 属于blog故存入blog_posts表'''
     def __init__(self,sourceId):
