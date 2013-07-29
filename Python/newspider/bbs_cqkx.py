@@ -63,10 +63,10 @@ class CQKXBBS(BaseBBS):
         content = p_tags[1].text
         #content =  item.find('p',{'class':'content'}).text
         userInfoTag = p_tags [-1]
-        createdAt = userInfoTag.contents[0].strip()[:-1].strip()
-        createdAt = self.convertTime(createdAt)
+        createdAt = userInfoTag.find('span').text
+        #createdAt = self.convertTime(createdAt)
         username = userInfoTag.a.text
-        print username.encode('utf-8'),content.encode('utf-8'),createdAt, readCount, commentCount
+        #print username.encode('utf-8'),content.encode('utf-8'),createdAt, readCount, commentCount
         store_bbs_post(url, username, title, content,
                        self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 def main(id):

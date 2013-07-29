@@ -68,6 +68,7 @@ class DZ19BBS(BaseBBS):
         createdAt = self.convertTime(createdAt)
         username = userInfoTag.a.text
         #print url.encode("utf-8"),title.encode("utf-8"),username.encode("utf-8"),createdAt
+        #print createdAt
         store_bbs_post(url, username, title, content,
                        self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
     

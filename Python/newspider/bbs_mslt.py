@@ -11,66 +11,62 @@ class MSLT(BaseBBS):
 
      #in this situation, override to set url 
     def nextPage(self,keyword):
-        try:
-            url = "http://bbs.qx818.com/search.php"
-            response = urllib2.urlopen(url)
-            content = response.read()
-            soup = BeautifulSoup(content)
-            formhash = soup.find("div",id="ct").find("input",attrs={'type':'hidden'})["value"]
-          
-            data = {'formhash': formhash,
-                    'srchtxt': keyword.str.encode("gbk"),
-                    'searchsubmit': 'yes',
-                    }
-            data = urllib.urlencode(data)
+        url = "http://bbs.qx818.com/search.php"
+        response = urllib2.urlopen(url)
+        content = response.read()
+        soup = BeautifulSoup(content)
+        formhash = soup.find("div",id="ct").find("input",attrs={'type':'hidden'})["value"]
+      
+        data = {'formhash': formhash,
+                'srchtxt': keyword.str.encode("gbk"),
+                'searchsubmit': 'yes',
+                }
+        data = urllib.urlencode(data)
 
 
-            req = urllib2.Request(url, data = data)  
+        req = urllib2.Request(url, data = data)  
 
-            response = urllib2.urlopen(req)  
+        response = urllib2.urlopen(req)  
 
-            url = response.url
-            response = urllib2.urlopen(url)
-            content = response.read()
-            #just need to visit once, because it is order by time in default
-            soup = BeautifulSoup(content)
-        except:
+        url = response.url
+        response = urllib2.urlopen(url)
+        content = response.read()
+        #just need to visit once, because it is order by time in default
+        soup = BeautifulSoup(content)
+        items = soup.find("div",id="threadlist")
+        if items == None:
             return []
-        #print soup
-        try:
-            items = soup.find("div",id="threadlist").findAll("li")
-        except:
-            return []
-        
+
+        items = items.findAll("li")
         return items
     
     #in this situation, override to modify the readCount, commentCount
     def itemProcess(self,item):
-        try:
-            url = "http://qx818.cn/"+item.h3.a['href']
-            title = item.h3.a.text
-            #print title
-            #there is not readcount and commentcount， so let both be None
-            readCount = commentCount = 0
-    #        readCount,commentCount = self.getReadAndComment(item.p.text)
-        
-            #content =  item.find('p',{'class':'content'}).text
-            content =  item('p')[1].text
-            #print content
 
-            userInfoTag = item('p')[-1]
+        url = "http://qx818.cn/"+item.h3.a['href']
+        title = item.h3.a.text
+        #print title
+        #there is not readcount and commentcount， so let both be None
+        readCount = commentCount = 0
+#        readCount,commentCount = self.getReadAndComment(item.p.text)
+    
+        #content =  item.find('p',{'class':'content'}).text
+        content =  item('p')[1].text
+        #print content
+
+        userInfoTag = item('p')[-1]
 
 
 
-            createdAt = userInfoTag('span')[0].text # userInfoTag.contents[0].strip()[:-1].strip()
+        createdAt = userInfoTag('span')[0].text # userInfoTag.contents[0].strip()[:-1].strip()
 
-            createdAt = self.convertTime(createdAt)
+        createdAt = self.convertTime(createdAt)
 
-            username = userInfoTag.a.text
-            store_bbs_post(url, username, title, content,
-                           self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
-        except Exception, e:
-            print e
+        username = userInfoTag.a.text
+        print url, username, title, content
+        store_bbs_post(url, username, title, content,
+                       self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
+
         
     
     def convertTime(self,strtime):
@@ -89,12 +85,24 @@ class MSLT(BaseBBS):
             return strtime
 
 def main(id):
-    obj = MSLT(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
-    
+    try:
+        obj = MSLT(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
+        obj.main()
+
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+
+    try:
+        obj = Baidu(id,'bbs.qx818.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+
 
 if __name__ == "__main__":
-    obj = MSLT(23)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
+    obj = MSLT(MSLT_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
     obj.main()
     
 

@@ -11,78 +11,77 @@ class FuFengLBBS(BaseBBS):
     
     #in this situation, override to set url 
     def nextPage(self,keyword):
-        try:
-            first_url = "http://bbs.fuling.com"
-            response = urllib2.urlopen(first_url)
-            content = response.read()
-            soup = BeautifulSoup(content)
-            items = soup.find("form",id="scbar_form").findAll("input")
 
-            hidden_key_value = {}
+        first_url = "http://bbs.fuling.com"
+        response = urllib2.urlopen(first_url)
+        content = response.read()
+        soup = BeautifulSoup(content)
+        items = soup.find("form",id="scbar_form").findAll("input")
 
-            for input_item in items :
-                #print input_item["name"]+" "+input_item["value"]
-                hidden_key_value[input_item["name"]] = input_item["value"]
+        hidden_key_value = {}
 
-            #print "============="
-            second_url='http://search.fuling.com/f/discuz?mod=forum&formhash='+hidden_key_value['formhash']+\
-                '&srchtype=title&srhfid=&srhlocality=forum%3A%3Aindex&sId='+hidden_key_value['sId']+\
-                '&ts='+hidden_key_value['ts']+'&cuId=0&cuName=&gId=7&agId=0&egIds=&fmSign=&ugSign7=&ext_vgIds=0&'+\
-                'sign='+hidden_key_value['sign']+'&charset=gbk&source=discuz&fId=0&q=&srchtxt=&searchsubmit=true'
+        for input_item in items :
+            #print input_item["name"]+" "+input_item["value"]
+            hidden_key_value[input_item["name"]] = input_item["value"]
 
-            response = urllib2.urlopen(second_url)
-            content = response.read()
-            soup = BeautifulSoup(content)
-            items = soup.find("form",id="topSearchBar").findAll("input",attrs={'type':'hidden'})
-            for input_item in items :
-                #print input_item["name"]+" "+input_item["value"]
-                hidden_key_value[input_item["name"]] = input_item["value"]
+        #print "============="
+        second_url='http://search.fuling.com/f/discuz?mod=forum&formhash='+hidden_key_value['formhash']+\
+            '&srchtype=title&srhfid=&srhlocality=forum%3A%3Aindex&sId='+hidden_key_value['sId']+\
+            '&ts='+hidden_key_value['ts']+'&cuId=0&cuName=&gId=7&agId=0&egIds=&fmSign=&ugSign7=&ext_vgIds=0&'+\
+            'sign='+hidden_key_value['sign']+'&charset=gbk&source=discuz&fId=0&q=&srchtxt=&searchsubmit=true'
+
+        response = urllib2.urlopen(second_url)
+        content = response.read()
+        soup = BeautifulSoup(content)
+        items = soup.find("form",id="topSearchBar").findAll("input",attrs={'type':'hidden'})
+        for input_item in items :
+            #print input_item["name"]+" "+input_item["value"]
+            hidden_key_value[input_item["name"]] = input_item["value"]
 
 
-            url = 'http://search.fuling.com/f/discuz?mod=forum&'+\
-                'formhash='+hidden_key_value['formhash'].encode('gbk')+'&srchtype=title&srhfid=&srhlocality=forum%3A%3Aindex&'+\
-                'sId='+hidden_key_value['sId'].encode('gbk')+'&ts='+hidden_key_value['ts'].encode('gbk')+'&cuId=0&cuName=&gId=7&agId=0&egIds=&fmSign=&ugSign7=&ext_vgIds=0&'+\
-                'sign='+hidden_key_value['sign'].encode('gbk')+'&charset=gbk&source=discuz&fId=0&q='+keyword.str.encode('gbk')+\
-                '&srchtxt='+keyword.str.encode('gbk')+'&searchsubmit=true'
+        url = 'http://search.fuling.com/f/discuz?mod=forum&'+\
+            'formhash='+hidden_key_value['formhash'].encode('gbk')+'&srchtype=title&srhfid=&srhlocality=forum%3A%3Aindex&'+\
+            'sId='+hidden_key_value['sId'].encode('gbk')+'&ts='+hidden_key_value['ts'].encode('gbk')+'&cuId=0&cuName=&gId=7&agId=0&egIds=&fmSign=&ugSign7=&ext_vgIds=0&'+\
+            'sign='+hidden_key_value['sign'].encode('gbk')+'&charset=gbk&source=discuz&fId=0&q='+keyword.str.encode('gbk')+\
+            '&srchtxt='+keyword.str.encode('gbk')+'&searchsubmit=true'
 
-            #print url
-            response = urllib2.urlopen(url)
-            content = response.read()
-            #just need to visit once, because it is order by time in default
-            soup = BeautifulSoup(content)
-        except:
+        #print url
+        response = urllib2.urlopen(url)
+        content = response.read()
+        #just need to visit once, because it is order by time in default
+        soup = BeautifulSoup(content)
+
+        items = soup.find("span",id="result-items")
+
+        if items ==None:
             return []
-        try:
-            items = soup.find("span",id="result-items").findAll("li")
-        except:
-            return []
-        
+        items = items.findAll("li")
+
         return items
     
     #in this situation, override to modify the readCount, commentCount
     def itemProcess(self,item):
-        try:
-            url = item.a['href']
-            title = item.a.text
-            #there is not readcount and commentcount， so let both be None
-            readCount = commentCount = 0
-            #readCount,commentCount = self.getReadAndComment(item('p')[0].text)
-        
-        
-            content = item('p')[1].text
-            #print title
-            #print readCount+" "+commentCount
-            #content =  item.find('p',{'class':'content'}).text
-            userInfoTag = item('p')[-1]
-            createdAt = self.getTime(userInfoTag.text)
-       
-            createdAt = self.convertTime(createdAt)
-            username = userInfoTag.a.text
-             # print username+" "+createdAt
-            store_bbs_post(url, username, title, content,
-                           self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
-        except Exception, e:
-            print e
+
+        url = item.a['href']
+        title = item.a.text
+        #there is not readcount and commentcount， so let both be None
+        readCount = commentCount = 0
+        #readCount,commentCount = self.getReadAndComment(item('p')[0].text)
+    
+    
+        content = item('p')[1].text
+        #print title
+        #print readCount+" "+commentCount
+        #content =  item.find('p',{'class':'content'}).text
+        userInfoTag = item('p')[-1]
+        createdAt = self.getTime(userInfoTag.text)
+   
+        createdAt = self.convertTime(createdAt)
+        username = userInfoTag.a.text
+        print username, title, content, createdAt
+        store_bbs_post(url, username, title, content,
+                       self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
+
 
     def getReadAndComment(self,content):
         pattern = re.compile(r'\s*(\d*).*-\s*(\d*).*')
@@ -111,11 +110,23 @@ class FuFengLBBS(BaseBBS):
             return strtime
 
 def main(id):
-    obj = FuFengLBBS(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    try:
+        obj = FuFengLBBS(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
+        obj.main()
+
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+
+    try:
+        obj = Baidu(id,'bbs.fuling.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
 
 if __name__ == "__main__":
-    obj = FuFengLBBS(29)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
+    obj = FuFengLBBS(FuFengL_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
     obj.main()
     
 

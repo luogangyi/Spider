@@ -98,6 +98,12 @@ def main(id):
     except Exception, e:
         store_error(WYSQ_INFO_SOURCE_ID)
         bbs_logger.exception(e) 
+    try:
+        obj = Baidu(id,'bbs.163.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
 
 if __name__ == "__main__":
     obj = WYSQBBS(WYSQ_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
