@@ -1,17 +1,18 @@
 #! /usr/bin/env python
 #coding=utf-8
-#test OK (不按时间排序）
+#update by lgy 2013.7.29 
 
 from baidu import Baidu
 from news_utils import *
 
 def main(id):
-    #若是博客，则把类型news改为blog
-    obj = Baidu(id,'www.sc.xinhuanet.com','news','新华网四川频道')
-    obj.main()
+    try:
+        obj = Baidu(id,'www.sc.xinhuanet.com','news','新华网四川频道')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
 
 
 if __name__=="__main__":
     main(51)
-
-#    test()

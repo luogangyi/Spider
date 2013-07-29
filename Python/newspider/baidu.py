@@ -1,12 +1,13 @@
 #! /usr/bin/env python
 #coding=utf-8
 # update by lgy 2013.07.28
-# add category bbs! and update try/except
+# add category bbs, wiki, and update try/except
 
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
 from bbs_utils import *
+from wiki_utils import *
 
 class Baidu(BaseBBS):
     def __init__(self,sourceId,domain,category,sourcename=""):
@@ -55,6 +56,9 @@ class Baidu(BaseBBS):
         elif self.category=="bbs":
             store_bbs_post(url, "", title, content,
                                 self.INFO_SOURCE_ID, self.keywordId, createdAt, 0,0)
+        elif self.category=="wiki":
+            store_wiki_post(url, "", title, content,
+                                self.INFO_SOURCE_ID, self.keywordId, createdAt, 0,0,0)
         else:
             print "category is error"  
         
@@ -95,7 +99,9 @@ def test():
     s = BeautifulSoup(s).a
     print s['id']
     print s['href']
-        
+
+
+# for test!!
 if __name__=="__main__":
     obj = Baidu(SCTV_INFO_SOURCE_ID,'sctv.com','news')
     obj.main()

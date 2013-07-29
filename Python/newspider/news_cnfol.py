@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
-#OK
+#update by lgy 2013.7.29 ,add baidu search
+from baidu import Baidu
 from BaseTimeLimit import *
 from news_utils import *
 
@@ -11,37 +12,34 @@ class CnfolNews(BaseBBS):
         BaseBBS.__init__(self,sourceId)
     
     def nextPage(self,keyword):
-        try:
-            url = 'http://search.cnfol.com/%s/article/1/10' % (keyword.str.encode('utf8'))
-            #print url
-            content = urllib2.urlopen(url).read()
-            soup = BeautifulSoup(content)
-            
-            btsz = soup.findAll('div',{'class':'btsz'})
-            btszx = soup.findAll('div',{'class':'btszx'})
-            nrsz = soup.findAll('div',{'class':'nrsz'})
-            
-            items = []
-            for (i,t) in enumerate(btsz):
-                items.append([t,btszx[i],nrsz[i]])
-            
-            #print len(items)
-            return items
-        except:
-            return []
+        url = 'http://search.cnfol.com/%s/article/1/10' % (keyword.str.encode('utf8'))
+        #print url
+        content = urllib2.urlopen(url).read()
+        soup = BeautifulSoup(content)
+        
+        btsz = soup.findAll('div',{'class':'btsz'})
+        btszx = soup.findAll('div',{'class':'btszx'})
+        nrsz = soup.findAll('div',{'class':'nrsz'})
+        
+        items = []
+        for (i,t) in enumerate(btsz):
+            items.append([t,btszx[i],nrsz[i]])
+        
+        #print len(items)
+        return items
+
     
     def itemProcess(self,item):
-        try:
-            a = item[0].a
-            url  = a['href']
-            title = a.text
-            createdAt = self.convertTime(item[1].text)
-            content = item[2].text
 
-            add_news_to_session(url, SOURCENAME, title, content,
-                                self.INFO_SOURCE_ID, createdAt, self.keywordId)
-        except Exception, e:
-            print e
+        a = item[0].a
+        url  = a['href']
+        title = a.text
+        createdAt = self.convertTime(item[1].text)
+        content = item[2].text
+        #print url, SOURCENAME, title, content, createdAt
+        add_news_to_session(url, SOURCENAME, title, content,
+                            self.INFO_SOURCE_ID, createdAt, self.keywordId)
+
         
         
         
@@ -50,11 +48,23 @@ class CnfolNews(BaseBBS):
         return datetime.strptime(m.group(),'%Y-%m-%d %H:%M')
 
 def main(id):
-    obj = CnfolNews(id)
-    obj.main()
+    try:
+        obj = CnfolNews(id)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+    try:
+        obj = Baidu(id,'blog.cnfol.com','news',SOURCENAME )
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+
+
     
         
 if __name__=="__main__":
-    obj = CnfolNews(48)
-    obj.main()
+    main(48)
+
 

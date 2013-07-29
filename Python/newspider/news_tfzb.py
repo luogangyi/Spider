@@ -1,61 +1,72 @@
 #! /usr/bin/env python
 #coding=utf-8
-#OK
+#update by lgy 2013.7.29 ,add baidu search
+from baidu import Baidu
 from BaseTimeLimit import *
 from news_utils import *
-
+SOURCENAME = "天府早报"
 class TFZBNews(BaseTimeLimit):
     def __init__(self,sourceId):
         BaseTimeLimit.__init__(self,sourceId)
     
     def nextPage(self,keyword):
-        try:
-            url = 'http://morning.scol.com.cn/new/site/template/Paper_List.asp?paperCode=tfzb&bgcolor=E52815'
-            data = {'ArticleContent': keyword.str.encode('gbk'),
-                    'DataSearch': '',
-                    'urllink': '../../html/tfzb/20130602/index.html+../../tfzb/20130602/index.htm+../../tfzb/20130602/tfzb_20130602.exe',
-                    }
-            data = urllib.urlencode(data)
+
+        url = 'http://morning.scol.com.cn/new/site/template/Paper_List.asp?paperCode=tfzb&bgcolor=E52815'
+        data = {'ArticleContent': keyword.str.encode('gbk'),
+                'DataSearch': '',
+                'urllink': '../../html/tfzb/20130602/index.html+../../tfzb/20130602/index.htm+../../tfzb/20130602/tfzb_20130602.exe',
+                }
+        data = urllib.urlencode(data)
 
 
-            req = urllib2.Request(url, data = data)  
-            response = urllib2.urlopen(req)  
-            content = response.read() 
-            soup = BeautifulSoup(content)
-        except:
+        req = urllib2.Request(url, data = data)  
+        response = urllib2.urlopen(req)  
+        content = response.read() 
+        soup = BeautifulSoup(content,fromencoding="gbk")
+
+        items = soup.find("table",id='Table3')
+        if items==None:
             return []
- 
-#        print content
-        try:
-            items = soup.find("table",id='Table3').findAll("table")
-        except:# there is not any result,so return empty list
-            return []
-        #print items[0]
-        #all the info is wraped in first table!!
-        items = [items[0]]
-        return items
-    
+        items = items.findAll("table")
+
+        return [items[0]],len(items[0].findAll("tr")[1:-2])
+
+    def searchWrapper(self,count):
+        for keyword in KEYWORDS:
+            self.keywordId = keyword.id
+            print keyword.id
+#            pageIndex = 1
+            isFinished = False
+            while not isFinished:                
+                items,count_temp = self.nextPage(keyword)
+                count += count_temp
+                self.search4EachItem(items)
+#                pageIndex += 1
+                isFinished = True #just crawl the first page
+            time.sleep(5)
+        return count
+
     def itemProcess(self,item):
-        try:
-            i = 1
-            #print "circle"
-            for each_tr in item.findAll("tr")[1:-2] :
-                if (i%2 ==1):
-                    a = each_tr.td.a
-                    url = "http://morning.scol.com.cn/"+a["href"][6:]
-                    title = a.text
-                    createdAt = each_tr.td.text.encode("GB18030")
-                    createdAt = self.getCreateTime(createdAt)
-                    #print createdAt
-                    #print each_tr.td.a["href"]
 
-                else:
-                    content = each_tr.td.text[24:]
-                    add_news_to_session(url, None, title, content,
-                                self.INFO_SOURCE_ID, createdAt, self.keywordId)
-                i = i+1
-        except Exception, e:
-            print e
+        i = 1
+        #print "circle"
+        for each_tr in item.findAll("tr")[1:-2] :
+            if (i%2 ==1):
+                a = each_tr.td.a
+                url = "http://morning.scol.com.cn/"+a["href"][6:]
+                title = a.text
+                createdAt = each_tr.td.text
+                createdAt = self.getCreateTime(createdAt)
+                #print createdAt
+                #print each_tr.td.a["href"]
+
+            else:
+                content = each_tr.td.text[24:]
+                print url, None, title, content,createdAt
+                add_news_to_session(url, SOURCENAME, title, content,
+                            self.INFO_SOURCE_ID, createdAt, self.keywordId)
+            i = i+1
+
 
 
 
@@ -72,10 +83,20 @@ class TFZBNews(BaseTimeLimit):
         except:
             return datetime.strptime(createdAt,'%Y-%m-%d %H:%M')
 def main(id):
-    obj = TFZBNews(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-    obj.main()
+    try:
+        obj = TFZBNews(id)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+    try:
+        obj = Baidu(id,'morning.scol.com.cn','news',SOURCENAME)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+
 
         
 if __name__=="__main__":
-    obj = TFZBNews(TFZB_INFO_SOURCE_ID)
-    obj.main()
+    main(47)

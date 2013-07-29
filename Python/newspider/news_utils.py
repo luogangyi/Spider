@@ -2,7 +2,7 @@
 #coding=utf-8
 
 from config import *
-from utils import store_category
+from utils import *
 
 
 SCPEOPLE_INFO_SOURCE_ID = 3

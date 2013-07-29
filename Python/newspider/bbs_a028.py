@@ -47,7 +47,7 @@ class A028(BaseBBS):
         createdAt = userInfoTag.contents[0].strip()[:-1].strip()
         createdAt = self.convertTime(createdAt)
         username = userInfoTag.a.text
-        print url.encode('utf-8'), username.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
+        #print url.encode('utf-8'), username.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
         store_bbs_post(url, username, title, content,
                    self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 

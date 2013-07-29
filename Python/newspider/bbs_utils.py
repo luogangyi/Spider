@@ -2,7 +2,7 @@
 #coding=utf-8
 
 from config import *
-from utils import store_category
+from utils import *
 
 DZ19_INFO_SOURCE_ID = 17
 CQKX_INFO_SOURCE_ID = 18

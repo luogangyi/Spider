@@ -1,9 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-
-
-#! /usr/bin/env python
-#coding=utf-8
+#update by lgy 2013.7.29
 
 from BaseTimeLimit import *
 from news_utils import *
@@ -14,46 +11,43 @@ class Sogou(BaseBBS):
         self.domain = domain
     
     def nextPage(self,keyword):
-        try:
-            keyword = keyword.str.encode('utf8')
-            
-            domain = self.domain
-            #for a day
-            url = "http://www.sogou.com/web?sitequery=%s&num=100&query=%s+site%%3A%s&bstype=&q=%s" % (domain,keyword,domain,keyword) +"&fieldstripurl=&located=0&tro=on&filetype=&exclude=&ie=utf8&fieldtitle=&fieldcontent=&sourceid=inttime_day&interV=kKIOkrELjbkMmLkElbYTkKIKmbELjboJmLkEkL8TkKIMkLELjbcQmLkEmrELjbgRmLkEkLYTkKIM%0Alo%3D%3D_-483884962&tsn=1&interation=" 
-            # for a month
-            url = "http://www.sogou.com/web?sitequery=%s&num=100&query=%s+site%%3A%s&bstype=&q=%s" % (domain,keyword,domain,keyword) +"&fieldstripurl=&located=0&tro=on&filetype=&exclude=&ie=utf8&fieldtitle=&fieldcontent=&sourceid=inttime_month&interV=kKIOkrELjbkMmLkElbYTkKIKmbELjboJmLkEkL8TkKIMkLELjbcQmLkEmrELjbgRmLkEkLYTkKIM%0Alo%3D%3D_-483884962&tsn=3&interation=" 
-            
-            content = urllib2.urlopen(url).read()
-            soup = BeautifulSoup(content)
-        except:
-            return []
 
-        try:
-            items = soup.find("div",{'class':'results'}).findAll("div",recursive = False)
-        except:# there is not any result,so return empty list
+        keyword = keyword.str.encode('utf8')
+        
+        domain = self.domain
+        #for a day
+        url = "http://www.sogou.com/web?sitequery=%s&num=100&query=%s+site%%3A%s&bstype=&q=%s" % (domain,keyword,domain,keyword) +"&fieldstripurl=&located=0&tro=on&filetype=&exclude=&ie=utf8&fieldtitle=&fieldcontent=&sourceid=inttime_day&interV=kKIOkrELjbkMmLkElbYTkKIKmbELjboJmLkEkL8TkKIMkLELjbcQmLkEmrELjbgRmLkEkLYTkKIM%0Alo%3D%3D_-483884962&tsn=1&interation=" 
+        # for a month
+        url = "http://www.sogou.com/web?sitequery=%s&num=100&query=%s+site%%3A%s&bstype=&q=%s" % (domain,keyword,domain,keyword) +"&fieldstripurl=&located=0&tro=on&filetype=&exclude=&ie=utf8&fieldtitle=&fieldcontent=&sourceid=inttime_month&interV=kKIOkrELjbkMmLkElbYTkKIKmbELjboJmLkEkL8TkKIMkLELjbcQmLkEmrELjbgRmLkEkLYTkKIM%0Alo%3D%3D_-483884962&tsn=3&interation=" 
+        
+        content = urllib2.urlopen(url).read()
+        soup = BeautifulSoup(content)
+
+
+        items = soup.find("div",{'class':'results'})
+        if items ==None:
             return []
-#        print len(items)
+        items = items.findAll("div",recursive = False)
+
         return items
     
     def itemProcess(self,item):
-        try:
-            a = item.h3.find('a')
-            a = self.deleteAnnotation(a).a
-            
-            
-            url = a['href']
-            title = a.text
-            
-            content = self.deleteAnnotation(item.div).div.text
-            citeTime = item.find('cite').text
-            
-            createdAt = self.convertTime(citeTime)
-            
-            
-            add_news_to_session(url, None, title, content,
-                                self.INFO_SOURCE_ID, createdAt, self.keywordId)
-        except Exception, e:
-            print e
+        a = item.h3.find('a')
+        a = self.deleteAnnotation(a).a
+        
+        
+        url = a['href']
+        title = a.text
+        
+        content = self.deleteAnnotation(item.div).div.text
+        citeTime = item.find('cite').text
+        
+        createdAt = self.convertTime(citeTime)
+        
+        print url, title, content,createdAt
+        add_news_to_session(url, None, title, content,
+                            self.INFO_SOURCE_ID, createdAt, self.keywordId)
+
         
         
     def deleteAnnotation(self,tag):

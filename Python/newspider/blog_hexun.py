@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-#ok
+#update by lgy 2013.7.29 ,add baidu search
 from BaseTimeLimit import *
 from blog_utils import *
 from news_hexun import HexunNews

@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
-#OK
+#update by lgy 2013.7.29 ,add baidu search
+from baidu import Baidu
 from BaseTimeLimit import *
 from news_utils import *
 
@@ -11,37 +12,35 @@ class HexunNews(BaseBBS):
         BaseBBS.__init__(self,sourceId)
     
     def nextPage(self,keyword):
-        try:
-            url = 'http://news.search.hexun.com/cgi-bin/search/info_search.cgi?f=0&key=%s&s=1&pg=1&t=0' % (keyword.str.encode('gbk'))
-    #        print url
-            content = urllib2.urlopen(url).read()
-    #        print content
-            soup = BeautifulSoup(content)
-        except:
+
+        url = 'http://news.search.hexun.com/cgi-bin/search/info_search.cgi?f=0&key=%s&s=1&pg=1&t=0' % (keyword.str.encode('gbk'))
+
+        content = urllib2.urlopen(url).read()
+
+        soup = BeautifulSoup(content,fromEncoding='gbk')
+
+        items = soup.find("div",{'class':'search_result'})
+        if items == None:
             return []
-#        print soup.find("div",{'class':'search_result'})
-        try:
-            items = soup.find("div",{'class':'search_result'}).find('div',{"class":'list'}).ul.findAll('li',recursive=False)
-        except:# there is not any result,so return empty list
+        items = items.find('div',{"class":'list'})
+        if items == None:
             return []
-#        print len(items)
+        items = items.ul.findAll('li',recursive=False)
         return items
     
     def itemProcess(self,item):
-        try:
-            ult = item.find('div',{'class':'ul_t'})
-            a = ult.find('a')
-            url  = a['href']
-            title = a.text
-            title = self.deleteTag(title)
-            createdAt = self.convertTime(ult.h4.text)
-            content = item.find('div',{'class':'cont'}).text
-            content = self.deleteTag(content)
 
-            add_news_to_session(url, SOURCENAME, title, content,
-                                self.INFO_SOURCE_ID, createdAt, self.keywordId)
-        except Exception, e:
-            print e
+        ult = item.find('div',{'class':'ul_t'})
+        a = ult.find('a')
+        url  = a['href']
+        title = a.text
+        title = self.deleteTag(title)
+        createdAt = self.convertTime(ult.h4.text)
+        content = item.find('div',{'class':'cont'}).text
+        content = self.deleteTag(content)
+        #print url, SOURCENAME, title, content,createdAt
+        add_news_to_session(url, SOURCENAME, title, content,
+                            self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
         
         
@@ -64,8 +63,19 @@ class HexunNews(BaseBBS):
             return datetime.strptime(strtime.encode('utf8'),'%Y年%m月%d日 %H:%M')
 
 def main(id):
-    obj = HexunNews(id)
-    obj.main()
+    try:
+        obj = EastMoneyNews(id)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+    try:
+        obj = Baidu(id,'hexun.com','news',SOURCENAME )
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+
     
         
 if __name__=="__main__":

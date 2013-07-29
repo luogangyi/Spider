@@ -4,6 +4,8 @@
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
+from bbs_utils import *
+from wiki_utils import *
 class Youdao(BaseBBS):
     def __init__(self,sourceId,domain,category,sourcename=""):
         BaseBBS.__init__(self,sourceId)
@@ -49,10 +51,12 @@ class Youdao(BaseBBS):
         elif self.category=="bbs":
             store_bbs_post(url, "", title, content,
                                 self.INFO_SOURCE_ID, self.keywordId, createdAt, 0,0)
+        elif self.category=="wiki":
+            store_wiki_post(url, "", title, content,
+                                self.INFO_SOURCE_ID, self.keywordId, createdAt, 0,0,0)
         else:
             print "category is error" 
 
-        
         
 
              

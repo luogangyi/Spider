@@ -50,10 +50,10 @@ session = Session()
 KEYWORDS = []
 for row in session.query(Keyword): 
     KEYWORDS.append(row)
-
+    
+PYTHON_DIR = '/home/lgy/Code/lgy_git/Python/'
 #PYTHON_DIR = '/home/tbs/soya-yc/Python/'
 
-PYTHON_DIR = '/home/lgy/Code/lgy_git/Python/'
 
 
 

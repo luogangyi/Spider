@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
-#OK
+#update by lgy 2013.7.29 ,add baidu search
+from baidu import Baidu
 from BaseTimeLimit import *
 from news_utils import *
 
@@ -10,41 +11,31 @@ class EChengduNews(BaseTimeLimit):
         BaseTimeLimit.__init__(self,sourceId)
     
     def nextPage(self,keyword):
-        try:
-            url = 'http://so.chengdu.cn/?words=%s&sortmode=2&tn=&cwords=&twords=&inid=0&indexid=0&mtach=2' % (keyword.str.encode('utf8'))
-            content = urllib2.urlopen(url).read()
-            soup = BeautifulSoup(content)
-     
-    #        print content
-            try:
-                items = soup.find("table",id='ires-table').findAll("tr")
-            except:# there is not any result,so return empty list
-                return []
-    #        print items
-            return items
-        except:
+
+        url = 'http://so.chengdu.cn/?words=%s&sortmode=2&tn=&cwords=&twords=&inid=0&indexid=0&mtach=2' % (keyword.str.encode('utf8'))
+        content = urllib2.urlopen(url).read()
+        soup = BeautifulSoup(content)
+ 
+
+        items = soup.find("table",id='ires-table')
+        if items == None:
             return []
+        items= items.findAll("tr")
+        return items
     
     def itemProcess(self,item):
-        try:
-            createdAt = self.convertTime(item.td.h3.span.text)
-            #here is important to guarantee the while loop can be over normally
-            if self.setIsFinished(createdAt):
-                 return
-            
-            a = item.td.h3.a
-            title =a.text
-            #print title
-            url = a['href']
-            content = item.td.p.text
+        createdAt = self.convertTime(item.td.h3.span.text)
 
-            add_news_to_session(url, SOURCENAME, title, content,
-                                self.INFO_SOURCE_ID, createdAt, self.keywordId)
-        except Exception, e:
-            print e
-        
-        
-        
+        a = item.td.h3.a
+        title =a.text
+
+        url = a['href']
+        content = item.td.p.text
+        #print url, SOURCENAME, title, content,createdAt
+        add_news_to_session(url, SOURCENAME, title, content,
+                            self.INFO_SOURCE_ID, createdAt, self.keywordId)
+
+
     def convertTime(self,createdAt):
         try:
             return datetime.strptime(createdAt,'%Y-%m-%d')
@@ -52,9 +43,19 @@ class EChengduNews(BaseTimeLimit):
             return datetime.strptime(createdAt,'%Y-%m-%d %H:%M')
         
 def main(id):
-    obj = EChengduNews(id)
-    obj.main()
+    try:
+        obj = EChengduNews(id)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+    try:
+        obj = Baidu(id,'chengdu.cn','news',SOURCENAME )
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
     
 if __name__=="__main__":
-    obj = EChengduNews(39)
-    obj.main()
+    main(39)
+

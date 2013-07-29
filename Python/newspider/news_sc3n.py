@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
-#OK
+#update by lgy 2013.7.29 ,add baidu search
+from baidu import Baidu
 from BaseBBS import *
 from news_utils import *
 
@@ -10,60 +11,82 @@ class Sc3N(BaseBBS):
     
     
     def nextPage(self,keyword):
-        try:
-            url = 'http://www.baidu.com/baidu?tn=bds&cl=3&ct=2097152&si=sannong.newssc.org&word=' + (keyword.str.encode('gb2312'))
-            response = urllib2.urlopen(url)
-            content = response.read()
-            
-            soup = BeautifulSoup(content)
-            items = soup.findAll("td", attrs={'class':'f'})
-            #print items
-        except:
-            return []
+
+        url = 'http://www.baidu.com/baidu?tn=bds&cl=3&ct=2097152&si=sannong.newssc.org&word=' + (keyword.str.encode('gb2312'))
+        response = urllib2.urlopen(url)
+        content = response.read()
+        
+        soup = BeautifulSoup(content)
+        items = soup.findAll("td", attrs={'class':'f'})
+
         return items
     
     def itemProcess(self,item):
-        try:
-            title = item.h3.a.text
-            #print title
-            #print title.encode('gbk')
-            content = item.find('div', attrs={'class':'c-abstract'}).text
-            #print content.encode('gbk')
-            url = item.h3.a['href']
-            response = urllib2.urlopen(url)
-            url = response.geturl()
-            
-            createdAt = self.convertTime(item.find('span', attrs={'class':'g'}).text.split(' ')[1])
-            #print createdAt
-            #here, use add_news_to_session instead store_bbs_post
-            add_news_to_session(url, '四川三农新闻网', title, content,
-                                self.INFO_SOURCE_ID, createdAt, self.keywordId)
-        except Exception, e:
-            return
+
+        title = item.h3.a.text
+        #print title
+        #print title.encode('gbk')
+        content = item.find('div', attrs={'class':'c-abstract'}).text
+        #print content.encode('gbk')
+        url = item.h3.a['href']
+        response = urllib2.urlopen(url)
+        url = response.geturl()
+        
+        #print item.find('span', attrs={'class':'g'}).prettify()
+        createdAt = self.convertTime(item.find('span', attrs={'class':'g'}).text)
+        #print createdAt
+        #here, use add_news_to_session instead store_bbs_post
+        #print url, '四川三农新闻网', title, content,createdAt
+        add_news_to_session(url, '四川三农新闻网', title, content,
+                            self.INFO_SOURCE_ID, createdAt, self.keywordId)
+
         
 
-    def convertTime(self,time):
-        return datetime.strptime(time,'%Y-%m-%d')
+    def convertTime(self,strtime):
+        now = datetime.now()
+        pattern = re.compile(r"(\d+-\d+-\d+)")
+        m = pattern.search(strtime)
+        if m != None :
+            return m.group(1)
+        #print m.group(1)
+        pattern = re.compile(r"(\d+)")
+        m = pattern.search(strtime)
+        if m == None :
+            return -1
+        else:
+            m = m.group(1)
+        #print strtime
+        if strtime.find(u'年')>-1:  
+            return -1
+        elif strtime.find(u'月')>-1:
+            time = now-timedelta(days=(int(m)*30))
+        elif strtime.find(u'天')>-1: 
+            time =  now-timedelta(days=int(m))
+        elif strtime.find(u'小时')>-1:
+            time =  now-timedelta(hours=int(m))
+        else:
+            time = now
+        return time.strftime("%Y-%m-%d")
+
 
 def main(id):
-    obj = Sc3N(id)
-    obj.main()
 
-#def handlexml():
-#    file = open('out.html','r')
-#    soup = BeautifulSoup(file.read())
-##    print soup.prettify()
-#    item =soup.find('result')
-#    convertTime(item.publishtime.text)
-#    
-#def convertTime(time):
-#    pattern = re.compile(r'(\d+)\D*(\d+)\D*(\d+)\D*(\d+)\D*(\d+)\D*(\d+)\D*')
-#    m = pattern.match(time)
-#    return datetime(int(m.group(1)),int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5)),int(m.group(6)))
-#
+    try:
+        obj = Sc3N(id)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+    try:
+        obj = Baidu(id,'sannong.newssc.org','news',SOURCENAME)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+
 if __name__=="__main__":
-    obj = Sc3N(35)
-    obj.main()
+    main(35)
+
 
 
 

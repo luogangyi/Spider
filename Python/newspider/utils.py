@@ -7,7 +7,6 @@ from datetime import datetime
 import logging  
 from config import *
 
-
 def baidu_date_str_to_datetime(date_str):
     if len(date_str) > 17:
         temp = datetime(*(time.strptime(date_str, '%Y-%m-%d %H:%M:%S')[0:6]))
