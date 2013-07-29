@@ -16,9 +16,14 @@ class CDQSS(BaseBBS):
         content = response.read()
         #just need to visit once, because it is order by time in default
         soup = BeautifulSoup(content)
-        items = soup.find("table", {"class":"searchresult"}).findAll("tbody")
+
+        items = soup.find("table", {"class":"searchresult"})
+        if items == None:
+            return []
+        items = items == items.findAll("tbody")
 
         return items
+
     
     #in this situation, override to modify the readCount, commentCount
     def itemProcess(self,item):
@@ -43,11 +48,16 @@ def main(id):
     try:
         obj = CDQSS(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
         obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e) 
+    try:
         obj = Baidu(id,'bbs.chengdu.cn','bbs')
         obj.main()
     except Exception, e:
         store_error(id)
-        bbs_logger.exception(e) 
+        bbs_logger.exception(e)  
+
 
             
 if __name__ == "__main__":

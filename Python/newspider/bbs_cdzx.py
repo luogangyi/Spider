@@ -18,7 +18,10 @@ class CDZXBBS(BaseBBS):
         #just need to visit once, because it is order by time in default
         soup = BeautifulSoup(content)
         #print soup.prettify()
-        items = soup.find("div",{'class':'main_rt'}).findAll("div",'nr_a')
+        items = soup.find("div",{'class':'main_rt'})
+        if items ==None:
+            return []
+        items = items.findAll("div",'nr_a')
         return items
 
     def convertTime(self,strtime):
@@ -52,6 +55,11 @@ def main(id):
     try:
         obj = CDZXBBS(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
         obj.main()
+
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e) 
+    try:
         obj = Baidu(id,'www.cd.ccoo.cn','bbs')
         obj.main()
     except Exception, e:

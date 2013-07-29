@@ -28,7 +28,10 @@ class A028(BaseBBS):
         content = response.read()
         soup = BeautifulSoup(content)
 
-        items = soup.find("span", id="result-items").findAll("li")
+        items = soup.find("span", id="result-items")
+        if items == None:
+            return []
+        items = items.findAll("li")
 
         return items
     
@@ -52,11 +55,16 @@ def main(id):
     try:
         obj = A028(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
         obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+    try:
         obj = Baidu(id,'www.tg280.com','bbs')
         obj.main()
     except Exception, e:
         store_error(id)
         bbs_logger.exception(e) 
+
 
 if __name__ == "__main__":
     obj = A028(A028_INFO_SOURCE_ID)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
