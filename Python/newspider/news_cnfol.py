@@ -56,19 +56,19 @@ def main(id):
     except Exception, e:
         store_error(id)
         news_logger.exception(e)
-    try:
-        obj = Baidu(id,'blog.cnfol.com','news',SOURCENAME )
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'blog.cnfol.com','news',SOURCENAME )
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
-    try:
-        obj = Google(id,'blog.cnfol.com','news',SOURCENAME )
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Google(id,'blog.cnfol.com','news',SOURCENAME )
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
 
 
