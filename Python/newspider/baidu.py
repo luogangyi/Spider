@@ -2,7 +2,7 @@
 #coding=utf-8
 # update by lgy 2013.07.28
 # add category bbs, wiki, and update try/except
-
+# update by lgy , add filer:recheck_title
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -27,15 +27,19 @@ class Baidu(BaseBBS):
         items = soup.findAll("table",{'class':'result'})
 
         #print len(items)
-        time.sleep(2)
+        time.sleep(60)
         
         return items
     
-    def itemProcess(self,item):
+    def itemProcess(self,item,keyword):
 
         a = item.find('a')
         url = a['href']
         title = a.text
+
+        #recheck title!
+        if not recheck_title(keyword,title):
+            return
 
         response = urllib2.urlopen(url)
         url = response.geturl()
@@ -92,7 +96,24 @@ class Baidu(BaseBBS):
             time = now
         return time.strftime("%Y-%m-%d")
 
-        
+    def searchWrapper(self,count):
+        for keyword in KEYWORDS:
+            self.keywordId = keyword.id
+            print keyword.id
+#            pageIndex = 1
+            isFinished = False
+            while not isFinished:                
+                items = self.nextPage(keyword)
+                count += len(items)
+                self.search4EachItem(items,keyword)
+#                pageIndex += 1
+                isFinished = True #just crawl the first page
+            time.sleep(5)
+        return count
+
+    def search4EachItem(self,items,keyword):
+        for item in items:
+            self.itemProcess(item,keyword)         
         
 def test():
     s = '<a name="dttl" target="_blank" id="uigs_d0_0" href="http://news.sctv.com/jyxw/201305/t20130508_1462577.shtml"><!--awbg0-->[图文]“高考阅卷老师冒死揭露内幕”原是“旧帖新炒” - <em><!--red_beg-->四川<!--red_end--></em>网络广...</a>'
@@ -103,7 +124,7 @@ def test():
 
 # for test!!
 if __name__=="__main__":
-    obj = Baidu(SCTV_INFO_SOURCE_ID,'sctv.com','news')
+    obj = Baidu(1,'sctv.com','news')
     obj.main()
 #    test()
 

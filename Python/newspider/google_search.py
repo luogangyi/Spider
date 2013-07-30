@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 #coding=utf-8
 #written by huaiweicheng
-#update by lgy 2013.7.30
-
+# update by lgy 2013.7.30
+# update by lgy , add filer:recheck_title
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -50,11 +50,13 @@ class Google(BaseBBS):
         time.sleep(2)
         return items
 
-    def itemProcess(self,item):
+    def itemProcess(self,item,keyword):
         a = item.find('a')
         url = a['href']
         title = a.text
-        
+
+        if not recheck_title(keyword,title):
+            return
         content = item.find('div',{'class':'s'}).find('span',{'class':'st'}).text
         content=self.extractcontent(content)
         citeTime =  item.find('div',{'class':'s'}).find('span',{'class':'f'}).text
@@ -76,7 +78,24 @@ class Google(BaseBBS):
         else:
             print "category is error"  
         
-        
+    def searchWrapper(self,count):
+        for keyword in KEYWORDS:
+            self.keywordId = keyword.id
+            print keyword.id
+#            pageIndex = 1
+            isFinished = False
+            while not isFinished:                
+                items = self.nextPage(keyword)
+                count += len(items)
+                self.search4EachItem(items,keyword)
+#                pageIndex += 1
+                isFinished = True #just crawl the first page
+            time.sleep(60)
+        return count
+
+    def search4EachItem(self,items,keyword):
+        for item in items:
+            self.itemProcess(item,keyword)         
         
         
     def extractcontent(self,content):
