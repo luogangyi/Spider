@@ -1,11 +1,13 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
+# update by lgy, 2013.7.30, add google search
 from BaseTimeLimit import *
 from blog_utils import *
 from news_cnfol import CnfolNews
 from baidu import Baidu
 from google_search import Google
+
 class CnfolBlog(CnfolNews):
     '''中金博客   http://blog.cnfol.com/ —— 按博客搜索 属于blog故存入blog_posts表'''
     def __init__(self,sourceId):
@@ -48,6 +50,12 @@ def main(id):
         blog_logger.exception(e)
     try:
         obj = Baidu(id,'blog.cnfol.com','blog')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        blog_logger.exception(e)
+    try:
+        obj = Google(id,'blog.cnfol.com','blog')
         obj.main()
     except Exception, e:
         store_error(id)

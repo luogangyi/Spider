@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.28 ,add baidu search
+# update by lgy, 2013.7.30, add google search
+
 from BaseBBS import *
 from baidu import Baidu
 from google_search import Google
@@ -98,6 +100,12 @@ def main(id):
         bbs_logger.exception(e) 
     try:
         obj = Baidu(id,'www.cd090.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e) 
+    try:
+        obj = Google(id,'www.cd090.com','bbs')
         obj.main()
     except Exception, e:
         store_error(id)

@@ -1,11 +1,13 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
+# update by lgy, 2013.7.30, add google search
 from BaseTimeLimit import *
 from blog_utils import *
 from news_hexun import HexunNews
 from baidu import Baidu
 from google_search import Google
+
 class HexunBlog(HexunNews):
     '''和讯博客  http://blog.hexun.com/—— 按博客搜索 属于blog故存入blog_posts表'''
     def __init__(self,sourceId):
@@ -78,6 +80,7 @@ def main(id):
     except Exception, e:
         store_error(id)
         blog_logger.exception(e)
+
     try:
         obj = Baidu(id,'blog.hexun.com','blog')
         obj.main()
@@ -85,6 +88,12 @@ def main(id):
         store_error(id)
         blog_logger.exception(e)
 
+    try:
+        obj = Google(id,'blog.hexun.com','blog')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        blog_logger.exception(e)
         
 if __name__=="__main__":
     main(HexunBlog_BLOG_INFO_SOURCE_ID)

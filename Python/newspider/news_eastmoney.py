@@ -1,10 +1,12 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
+# update by lgy, 2013.7.30, add google search
 from baidu import Baidu
 from BaseTimeLimit import *
 from news_utils import *
 from google_search import Google
+
 SOURCENAME = "东方财富资讯"
 class EastMoneyNews(BaseBBS):
     '''东方财富博客   http://blog.eastmoney.com/—— 按资讯搜索 属于news故存入news表'''
@@ -47,17 +49,23 @@ def main(id):
         obj.main()
     except Exception, e:
         store_error(id)
-        bbs_logger.exception(e)
+        news_logger.exception(e)
+
     try:
         obj = Baidu(id,'blog.eastmoney.com','news',SOURCENAME )
         obj.main()
     except Exception, e:
         store_error(id)
-        bbs_logger.exception(e)
+        news_logger.exception(e)
+
+    try:
+        obj = Google(id,'blog.eastmoney.com','news',SOURCENAME )
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        news_logger.exception(e)
 
     
             
 if __name__=="__main__":
-    obj = EastMoneyNews(49)
-    obj.main()
-
+    main(EastMoney_NEWS_INFO_SOURCE_ID)

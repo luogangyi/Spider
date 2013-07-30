@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 #written by huaiweicheng
-#update by lgy 2013.7.29
+#update by lgy 2013.7.30
 
 from BaseTimeLimit import *
 from news_utils import *
@@ -39,13 +39,15 @@ class Google(BaseBBS):
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17'
             }
     
-        content= urllib2.Request(url, headers = headers)  
+        req= urllib2.Request(url, headers = headers)  
+        response = opener.open(req)
+        content = response.read() 
         #content= urllib2.urlopen(url).read()
         soup = BeautifulSoup(content)          
         #print soup    
         items = soup.findAll("li",{'class':'g'})
         #print len(items)
-        time.sleep(1)
+        time.sleep(2)
         return items
 
     def itemProcess(self,item):

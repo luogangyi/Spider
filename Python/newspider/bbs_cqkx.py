@@ -2,9 +2,10 @@
 #coding=utf-8
 
 #update by lgy 2013.7.28 ,add baidu search, fix a bug!
-from google_search import Google
+# update by lgy, 2013.7.30, add google search
 from BaseBBS import *
 from baidu import Baidu
+from google_search import Google
 class CQKXBBS(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -80,6 +81,12 @@ def main(id):
 
     try:
         obj = Baidu(id,'bbs.cqkx.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+    try:
+        obj = Google(id,'bbs.cqkx.com','bbs')
         obj.main()
     except Exception, e:
         store_error(id)

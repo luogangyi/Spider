@@ -32,6 +32,6 @@ def store_blog_post(url, blog_user_screen_name, title, content, info_source_id,
     session.commit()
 
     sql_post = session.query(BlogPost).filter(BlogPost.url==url).first()
-    # if sql_post:
-    #     store_category('blog', str(sql_post.id))
+    if sql_post:
+        store_category('blog', str(sql_post.id))
 

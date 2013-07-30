@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
+# update by lgy, 2013.7.30, add google search
 from google_search import Google
 from baidu import Baidu
 from BaseTimeLimit import *
@@ -69,18 +70,24 @@ def main(id):
         obj.main()
     except Exception, e:
         store_error(id)
-        bbs_logger.exception(e)
+        news_logger.exception(e)
+
     try:
         obj = Baidu(id,'hexun.com','news',SOURCENAME )
         obj.main()
     except Exception, e:
         store_error(id)
-        bbs_logger.exception(e)
+        news_logger.exception(e)
 
+    try:
+        obj = Google(id,'hexun.com','news',SOURCENAME )
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        news_logger.exception(e)
     
         
 if __name__=="__main__":
-    obj = HexunNews(Hexun_INFO_SOURCE_ID)
-    obj.main()
+    main(Hexun_NEWS_INFO_SOURCE_ID)
 
 

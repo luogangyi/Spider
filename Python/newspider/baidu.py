@@ -27,7 +27,7 @@ class Baidu(BaseBBS):
         items = soup.findAll("table",{'class':'result'})
 
         #print len(items)
-        time.sleep(1)
+        time.sleep(2)
         
         return items
     

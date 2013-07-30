@@ -5,6 +5,7 @@
 from config import *
 from utils import store_category
 
+WDTianYa_WIKI_INFO_SOURCE_ID
 
 def store_wiki_post(url, wiki_user_screen_name, title, content, info_source_id,
                    keyword_id, created_at, read_count, comment_count, answered):
@@ -28,6 +29,6 @@ def store_wiki_post(url, wiki_user_screen_name, title, content, info_source_id,
 
         session.flush()
         session.commit()
-        # sql_post = session.query(WikiPost).filter(WikiPost.url==url).first()
-        # if sql_post:
-        #     store_category('wiwi', str(sql_post.id))
+        sql_post = session.query(WikiPost).filter(WikiPost.url==url).first()
+        if sql_post:
+            store_category('wiki', str(sql_post.id))

@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
+# update by lgy, 2013.7.30, add google search
 from google_search import Google
 from baidu import Baidu
 from BaseTimeLimit import *
@@ -88,7 +89,7 @@ class TIANYAWD(BaseTimeLimit):
         content =  item.p.text
         username = ''
         
-        print url, username, title, content,createdAt
+        #print url, username, title, content,createdAt
 
         store_wiki_post(url, username, title, content,
                        self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount,0)
@@ -100,18 +101,23 @@ def main(id):
         obj.main()
     except Exception, e:
         store_error(id)
-        bbs_logger.exception(e)
+        wiki_logger.exception(e)
     try:
         obj = Baidu(id,'wenda.tianya.cn','wiki')
         obj.main()
     except Exception, e:
         store_error(id)
         wiki_logger.exception(e)
-
+    try:
+        obj = Google(id,'wenda.tianya.cn','wiki')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        wiki_logger.exception(e)
     
 
 if __name__ == "__main__":
-    main(58)
+    main(WDTianYa_WIKI_INFO_SOURCE_ID)
 
 
     

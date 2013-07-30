@@ -4,17 +4,29 @@
 from config import *
 from utils import *
 
+SCPeople_NEWS_INFO_SOURCE_ID = 33
+SCTV_NEWS_INFO_SOURCE_ID = 34
+SC3N_NEWS_INFO_SOURCE_ID = 35
+SCXWW_NEWS_INFO_SOURCE_ID = 36
+SCZX_NEWS_INFO_SOURCE_ID = 37
+SCCHINA_NEWS_INFO_SOURCE_ID = 38
+EChengDU_NEWS_INFO_SOURCE_ID = 39
+STOCKSC_NEWS_INFO_SOURCE_ID = 40
+SCRB_NEWS_INFO_SOURCE_ID = 46
+TFZB_NEWS_INFO_SOURCE_ID = 47
+Cnfol_NEWS_INFO_SOURCE_ID = 48
+EastMoney_NEWS_INFO_SOURCE_ID = 49
+SINASC_NEWS_INFO_SOURCE_ID = 50
+XinHuaSC_NEWS_INFO_SOURCE_ID = 51
+SCWMW_NEWS_INFO_SOURCE_ID = 52
+CDWB_NEWS_INFO_SOURCE_ID = 53
+CHINAWESTNEWS_NEWS_INFO_SOURCE_ID = 54
+SCWXW_NEWS_INFO_SOURCE_ID = 55
+HXDSB_NEWS_INFO_SOURCE_ID = 56
+XNSB_NEWS_INFO_SOURCE_ID = 57
+Hexun_NEWS_INFO_SOURCE_ID = 60
 
-SCPEOPLE_INFO_SOURCE_ID = 3
-SCCHINA_INFO_SOURCE_ID = 4
-EChengdu_INFO_SOURCE_ID = 5
-StockSC_INFO_SOURCE_ID = 6
-SCTV_INFO_SOURCE_ID = 7
-EastMoney_INFO_SOURCE_ID = 8
-Cnfol_INFO_SOURCE_ID = 1
-Hexun_INFO_SOURCE_ID = 2
-BLOG163_INFO_SOURCE_ID = 3
-SCXWW_INFO_SOURCE_ID = 3
+
 
 def add_news_to_session(url, source_name, title, content, info_source_id, created_at, keyword_id):
 
@@ -40,6 +52,6 @@ def add_news_to_session(url, source_name, title, content, info_source_id, create
 
     sql_news = session.query(News).filter(News.url==url,
                          News.info_source_id==info_source_id).first()
-    # if sql_news:
-    #     store_category('news', str(sql_news.id))
+    if sql_news:
+        store_category('news', str(sql_news.id))
 

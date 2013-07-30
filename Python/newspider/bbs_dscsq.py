@@ -1,11 +1,11 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search,bug fix
+# update by lgy, 2013.7.30, add google search
 
-from google_search import Google
 from BaseBBS import *
 from baidu import Baidu
-
+from google_search import Google
 
 class DSCSQ(BaseBBS):
     def __init__(self,sourceId):
@@ -96,6 +96,12 @@ def main(id):
         bbs_logger.exception(e) 
     try:
         obj = Baidu(id,'91town.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e) 
+    try:
+        obj = Google(id,'91town.com','bbs')
         obj.main()
     except Exception, e:
         store_error(id)

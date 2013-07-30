@@ -1,9 +1,11 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
+# update by lgy, 2013.7.30, add google search
 from BaseBBS import *
 from baidu import Baidu
 from google_search import Google
+
 class MSRBBS(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -89,7 +91,12 @@ def main(id):
     except Exception, e:
         store_error(id)
         bbs_logger.exception(e)
-
+    try:
+        obj = Google(id,'bbs.meishanren.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
 
 if __name__ == "__main__":
     main(MSR_INFO_SOURCE_ID)

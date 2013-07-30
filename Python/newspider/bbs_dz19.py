@@ -1,10 +1,12 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search,bug fix
+# update by lgy, 2013.7.30, add google search
 
-from google_search import Google
 from BaseBBS import *
 from baidu import Baidu
+from google_search import Google
+
 class DZ19BBS(BaseBBS):
     def nextPage(self,keyword):
         url = 'http://www.dz19.net'
@@ -85,6 +87,12 @@ def main(id):
         bbs_logger.exception(e)
     try:
         obj = Baidu(id,'dz19.net','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e) 
+    try:
+        obj = Google(id,'dz19.net','bbs')
         obj.main()
     except Exception, e:
         store_error(id)

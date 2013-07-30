@@ -2,13 +2,16 @@
 #coding=utf-8
 #modifeid by lgy,2013.07.20
 #测试通过,*网易bbs搜索速度较慢
-from google_search import Google
+# update by lgy, 2013.7.30, add baidu and  google search
+
 from BaseBBS import *
 from datetime import date
 from config import *
 from bbs_utils import *
 from utils import bbs_logger, store_error
 from baidu import Baidu
+from google_search import Google
+
 class WYSQBBS(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)
@@ -98,8 +101,15 @@ def main(id):
     except Exception, e:
         store_error(WYSQ_INFO_SOURCE_ID)
         bbs_logger.exception(e) 
+
     try:
         obj = Baidu(id,'bbs.163.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
+    try:
+        obj = Google(id,'bbs.163.com','bbs')
         obj.main()
     except Exception, e:
         store_error(id)
