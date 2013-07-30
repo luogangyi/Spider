@@ -22,7 +22,7 @@ class CDQSS(BaseBBS):
         items = soup.find("table", {"class":"searchresult"})
         if items == None:
             return []
-        items = items == items.findAll("tbody")
+        items = items.findAll("tbody")
 
         return items
 
