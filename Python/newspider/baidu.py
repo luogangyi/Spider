@@ -2,7 +2,7 @@
 #coding=utf-8
 # update by lgy 2013.07.28
 # add category bbs, wiki, and update try/except
-# update by lgy , add filer:recheck_title
+# update by lgy , add filer:recheck_title,recheck_url
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -27,7 +27,7 @@ class Baidu(BaseBBS):
         items = soup.findAll("table",{'class':'result'})
 
         #print len(items)
-        time.sleep(60)
+        time.sleep(10)
         
         return items
     
@@ -41,9 +41,14 @@ class Baidu(BaseBBS):
         if not recheck_title(keyword,title):
             return
 
+
+
         response = urllib2.urlopen(url)
         url = response.geturl()
 
+        #recheck url
+        if recheck_url(url):
+            return
         content = item.find('div',{'class':'c-abstract'}).text
         
         citeTime = item.find('div',{'class':'f13'}).span.text
@@ -124,7 +129,7 @@ def test():
 
 # for test!!
 if __name__=="__main__":
-    obj = Baidu(1,'sctv.com','news')
+    obj = Baidu(1,'news.chengdu.cn','news')
     obj.main()
 #    test()
 

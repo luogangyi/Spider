@@ -2,7 +2,7 @@
 #coding=utf-8
 #written by huaiweicheng
 # update by lgy 2013.7.30
-# update by lgy , add filer:recheck_title
+# update by lgy , add filer:recheck_title,recheck_url
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -54,7 +54,10 @@ class Google(BaseBBS):
         a = item.find('a')
         url = a['href']
         title = a.text
-
+        #recheck url
+        if recheck_url(url):
+            return
+        #recheck title
         if not recheck_title(keyword,title):
             return
         content = item.find('div',{'class':'s'}).find('span',{'class':'st'}).text

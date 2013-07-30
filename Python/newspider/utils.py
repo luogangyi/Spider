@@ -7,6 +7,8 @@ from datetime import datetime
 import logging  
 from config import *
 
+URL_KEYWORDS_FILTER=['redirect','goto']
+
 def baidu_date_str_to_datetime(date_str):
     if len(date_str) > 17:
         temp = datetime(*(time.strptime(date_str, '%Y-%m-%d %H:%M:%S')[0:6]))
@@ -52,6 +54,13 @@ def recheck_title(keyword, title):
         if title.find(key)<0:
             return False
     return True
+
+def recheck_url(url):
+    for key in URL_KEYWORDS_FILTER:
+        if url.find(key)>=0:
+            return True
+    return False
+    
 # Logging Part
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')  
 
