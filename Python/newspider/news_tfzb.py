@@ -65,7 +65,7 @@ class TFZBNews(BaseTimeLimit):
 
             else:
                 content = each_tr.td.text[24:]
-                print url, None, title, content,createdAt
+                #print url, None, title, content,createdAt
                 add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
             i = i+1

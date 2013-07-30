@@ -5,7 +5,7 @@
 from config import *
 from utils import store_category
 
-WDTianYa_WIKI_INFO_SOURCE_ID
+WDTianYa_WIKI_INFO_SOURCE_ID = 58
 
 def store_wiki_post(url, wiki_user_screen_name, title, content, info_source_id,
                    keyword_id, created_at, read_count, comment_count, answered):

@@ -19,7 +19,7 @@ class Youdao(BaseBBS):
         domain = self.domain
         # for a month
         url = "http://www.youdao.com/search?q=site%%3A%s+%s&start=0&ue=utf8&keyfrom=web.time&lq=site%%3A%s+%s&lm=7" % (domain,keyword,domain,keyword)
-        print url
+        #print url
         content = urllib2.urlopen(url).read()
         soup = BeautifulSoup(content)
 
@@ -41,7 +41,7 @@ class Youdao(BaseBBS):
         citeTime = item.find('cite').text
         
         createdAt = self.convertTime(citeTime)
-        print url.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
+        #print url.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)

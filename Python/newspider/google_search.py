@@ -60,7 +60,7 @@ class Google(BaseBBS):
         citeTime =  item.find('div',{'class':'s'}).find('span',{'class':'f'}).text
         
         createdAt = self.convertTime(citeTime)
-        print url, title,content,createdAt
+        #print url, title,content,createdAt
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)

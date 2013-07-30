@@ -38,18 +38,17 @@ class BaseBBS(object):
         # if not self.isCanRun():
         #     return False
         previous_real_count = session.query(BBSPost).filter(BBSPost.info_source_id==self.INFO_SOURCE_ID).count()
-        previous_real_count = session.query(BBSPost).count()
         count = 0
         sql_job = Job()
         sql_job.previous_executed = datetime.now()
         sql_job.info_source_id = self.INFO_SOURCE_ID
         
         count=self.searchWrapper(count)
-
+        #print "count = ",count
         current_real_count = session.query(BBSPost).filter(BBSPost.info_source_id==self.INFO_SOURCE_ID).count()
         sql_job.fetched_info_count = count
         sql_job.real_fetched_info_count = current_real_count - previous_real_count
- 
+        #print "current_real_count = ",current_real_count, "previous_real_count = ",previous_real_count
         session.add(sql_job)
         session.flush()
         session.commit()

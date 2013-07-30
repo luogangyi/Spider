@@ -44,9 +44,9 @@ class Baidu(BaseBBS):
         
         citeTime = item.find('div',{'class':'f13'}).span.text
         
-        print citeTime
+        #print citeTime
         createdAt = self.convertTime(citeTime)
-        print url, title,content,createdAt
+        #print url, title,content,createdAt
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
