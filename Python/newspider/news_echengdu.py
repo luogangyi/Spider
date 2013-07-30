@@ -33,7 +33,7 @@ class EChengduNews(BaseTimeLimit):
 
         url = a['href']
         content = item.td.p.text
-        #print url, SOURCENAME, title, content,createdAt
+        print url, SOURCENAME, title, content,createdAt
         add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
@@ -53,14 +53,14 @@ def main(id):
         news_logger.exception(e)
 
     try:
-        obj = Baidu(id,'chengdu.cn','news',SOURCENAME )
+        obj = Baidu(id,'news.chengdu.cn','news',SOURCENAME )
         obj.main()
     except Exception, e:
         store_error(id)
         news_logger.exception(e)
 
     try:
-        obj = Google(id,'chengdu.cn','news',SOURCENAME )
+        obj = Google(id,'news.chengdu.cn','news',SOURCENAME )
         obj.main()
     except Exception, e:
         store_error(id)

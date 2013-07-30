@@ -73,14 +73,14 @@ def main(id):
         news_logger.exception(e)
 
     try:
-        obj = Baidu(id,'hexun.com','news',SOURCENAME )
+        obj = Baidu(id,'news.hexun.com','news',SOURCENAME )
         obj.main()
     except Exception, e:
         store_error(id)
         news_logger.exception(e)
 
     try:
-        obj = Google(id,'hexun.com','news',SOURCENAME )
+        obj = Google(id,'news.hexun.com','news',SOURCENAME )
         obj.main()
     except Exception, e:
         store_error(id)
