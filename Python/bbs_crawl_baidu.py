@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 # 更新于 2013.07.18
+# fix a bug by lgy, 2013.7.31
 from config import *
 from bbs_utils import *
 from utils import baidu_date_str_to_datetime, bbs_logger, store_error
@@ -46,6 +47,8 @@ def search_for_baidu_tieba_posts():
 
 
             for post in posts:
+                if post.find('p', attrs={'class': 'p_hot p_content'})!=None:
+                    continue
                 temp_url = post.a['href']
                 url = 'http://tieba.baidu.com'+ temp_url#[:tail-1]
                 title = post.a.text
@@ -66,7 +69,7 @@ def search_for_baidu_tieba_posts():
 
                 comment_count = get_comment_count(url)
                 read_count = 0
-                #print url,title,bbs_user_screen_name,created_at,comment_count
+                #print url#,title,bbs_user_screen_name,created_at,comment_count
                 store_bbs_post(url, bbs_user_screen_name, title, content,
                                BAIDU_TIEBA_INFO_SOURCE_ID, keyword.id, created_at, read_count, comment_count)
 

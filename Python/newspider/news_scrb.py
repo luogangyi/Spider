@@ -7,7 +7,7 @@ from baidu import Baidu
 from BaseTimeLimit import *
 from news_utils import *
 
-source_name = "四川日报"
+SOURCENAME = "四川日报"
 class SCRBNews(BaseTimeLimit):
     def __init__(self,sourceId):
         BaseTimeLimit.__init__(self,sourceId)
