@@ -43,7 +43,7 @@ class SCTVBBS(BaseBBS):
         createdAt = self.convertTime(item.find('span', attrs={'class':'g'}).text)
 
         username = None
-        print url,SOURCENAME , title, content,createdAt
+        #print url,SOURCENAME , title, content,createdAt
         add_news_to_session(url,SOURCENAME , title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
