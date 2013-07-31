@@ -75,9 +75,9 @@ class FuFengLBBS(BaseBBS):
         #print readCount+" "+commentCount
         #content =  item.find('p',{'class':'content'}).text
         userInfoTag = item('p')[-1]
-        createdAt = self.getTime(userInfoTag.text)
+        #createdAt = self.getTime(userInfoTag.text)
    
-        createdAt = self.convertTime(createdAt)
+        createdAt = self.convertTime(userInfoTag.text)
         username = userInfoTag.a.text
         #print username, title, content, createdAt
         store_bbs_post(url, username, title, content,
@@ -97,18 +97,29 @@ class FuFengLBBS(BaseBBS):
 
     def convertTime(self,strtime):
         now = datetime.now()
-        pattern = re.compile(r"\d*")
-    
-        if strtime.find(u'天')>-1:
-            m = pattern.search(strtime)
-            m = m.group()        
-            return now-timedelta(days=int(m))
-        elif strtime.find(u'小时')>-1:
-            m = pattern.search(strtime)
-            m = m.group()
-            return now-timedelta(hours=int(m))
+        pattern = re.compile(r"(\d+-\d+-\d+)")
+        m = pattern.search(strtime)
+        if m != None :
+            return m.group(1)
+        #print m.group(1)
+        pattern = re.compile(r"(\d+)")
+        m = pattern.search(strtime)
+        if m == None :
+            return -1
         else:
-            return strtime
+            m = m.group(1)
+        #print strtime
+        if strtime.find(u'年')>-1:  
+            return -1
+        elif strtime.find(u'月')>-1:
+            time = now-timedelta(days=(int(m)*30))
+        elif strtime.find(u'天')>-1: 
+            time =  now-timedelta(days=int(m))
+        elif strtime.find(u'小时')>-1:
+            time =  now-timedelta(hours=int(m))
+        else:
+            time = now
+        return time.strftime("%Y-%m-%d")
 
 def main(id):
     try:

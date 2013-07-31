@@ -53,7 +53,7 @@ class CDLJL(BaseBBS):
         items = soup.find("span",id="result-items")
         if items == None:
             return []
-        items = items == items.findAll("li")
+        items == items.findAll("li")
 
         return items
     
