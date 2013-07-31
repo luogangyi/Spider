@@ -66,7 +66,7 @@ class HexunNews(BaseBBS):
 
 def main(id):
     try:
-        obj = EastMoneyNews(id)
+        obj = HexunNews(id)
         obj.main()
     except Exception, e:
         store_error(id)
