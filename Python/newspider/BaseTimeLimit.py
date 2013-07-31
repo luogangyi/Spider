@@ -17,11 +17,11 @@ class BaseTimeLimit(BaseBBS):
             self.lasttime = datetime.now() - timedelta(days=365)
             
     def main(self):
-        if not self.isCanRun():
-            return False
+        # if not self.isCanRun():
+        #     return False
         
         self.setLastTime()
-        previous_real_count = session.query(BBSPost).count()
+        previous_real_count = session.query(BBSPost).filter(BBSPost.info_source_id==self.INFO_SOURCE_ID).count()
         count = 0
         sql_job = Job()
         sql_job.previous_executed = datetime.now()
@@ -29,7 +29,7 @@ class BaseTimeLimit(BaseBBS):
         
         count=self.searchWrapper(count)
         
-        current_real_count = session.query(BBSPost).count()
+        current_real_count = session.query(BBSPost).filter(BBSPost.info_source_id==self.INFO_SOURCE_ID).count()
         
         sql_job.fetched_info_count = count
         sql_job.real_fetched_info_count = current_real_count - previous_real_count

@@ -2,11 +2,12 @@
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
+#fix bug SOURCENAME 
 from google_search import Google
 from baidu import Baidu
 from BaseBBS import *
 from news_utils import *
-
+SOURCENAME = "四川三农新闻网"
 class Sc3N(BaseBBS):
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)

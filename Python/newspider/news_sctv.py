@@ -2,6 +2,7 @@
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
+# fix convertTime bug by lgy.
 from google_search import Google
 from baidu import Baidu
 from BaseBBS import *
@@ -39,13 +40,38 @@ class SCTVBBS(BaseBBS):
     
         content = content = item.find('div', attrs={'class':'c-abstract'}).text
 
-        createdAt = self.convertTime(item.find('span', attrs={'class':'g'}).text.split(' ')[1])
+        createdAt = self.convertTime(item.find('span', attrs={'class':'g'}).text)
 
         username = None
-        #print url,SOURCENAME , title, content,createdAt
+        print url,SOURCENAME , title, content,createdAt
         add_news_to_session(url,SOURCENAME , title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
+    def convertTime(self,strtime):
+        now = datetime.now()
+        pattern = re.compile(r"(\d+-\d+-\d+)")
+        m = pattern.search(strtime)
+        if m != None :
+            return m.group(1)
+        #print m.group(1)
+        pattern = re.compile(r"(\d+)")
+        m = pattern.search(strtime)
+        if m == None :
+            return -1
+        else:
+            m = m.group(1)
+        #print strtime
+        if strtime.find(u'年')>-1:  
+            return -1
+        elif strtime.find(u'月')>-1:
+            time = now-timedelta(days=(int(m)*30))
+        elif strtime.find(u'天')>-1: 
+            time =  now-timedelta(days=int(m))
+        elif strtime.find(u'小时')>-1:
+            time =  now-timedelta(hours=int(m))
+        else:
+            time = now
+        return time.strftime("%Y-%m-%d")
 
 def main(id):
     try:
