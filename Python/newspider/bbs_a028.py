@@ -12,7 +12,7 @@ class A028(BaseBBS):
     
     #in this situation, override to set url 
     def nextPage(self,keyword):
-
+        #print keyword.str.encode('utf-8')
         url = 'http://www.tg280.com/search.php'
         response = urllib2.urlopen(url)
         url = response.geturl()
@@ -60,18 +60,18 @@ def main(id):
     except Exception, e:
         store_error(id)
         bbs_logger.exception(e)
-    try:
-        obj = Baidu(id,'www.tg280.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)  
-    try:
-        obj = Google(id,'www.tg280.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e) 
+    # try:
+    #     obj = Baidu(id,'www.tg280.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)  
+    # try:
+    #     obj = Google(id,'www.tg280.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e) 
 
 
 

@@ -93,19 +93,19 @@ def main(id):
         store_error(id)
         bbs_logger.exception(e) 
 
-    try:
-        obj = Baidu(id,'www.scol.cn','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'www.scol.cn','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
 
-    try:
-        obj = Google(id,'www.scol.cn','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
+    # try:
+    #     obj = Google(id,'www.scol.cn','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
 
 if __name__ == "__main__":
     main(TianFu_INFO_SOURCE_ID)

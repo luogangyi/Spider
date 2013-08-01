@@ -112,19 +112,19 @@ def main(id):
         store_error(id)
         bbs_logger.exception(e)
 
-    try:
-        obj = Baidu(id,'suiningwang.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'suiningwang.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
         
-    try:
-        obj = Google(id,'suiningwang.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
+    # try:
+    #     obj = Google(id,'suiningwang.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
 
 if __name__ == "__main__":
     main(SNW_INFO_SOURCE_ID)

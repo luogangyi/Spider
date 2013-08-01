@@ -70,19 +70,19 @@ def main(id):
     except Exception, e:
         store_error(id)
         bbs_logger.exception(e) 
-    try:
-        obj = Baidu(id,'www.chengtu.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'www.chengtu.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
 
-    try:
-        obj = Google(id,'www.chengtu.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
+    # try:
+    #     obj = Google(id,'www.chengtu.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
 
     
 

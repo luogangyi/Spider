@@ -102,18 +102,18 @@ def main(id):
         store_error(WYSQ_INFO_SOURCE_ID)
         bbs_logger.exception(e) 
 
-    try:
-        obj = Baidu(id,'bbs.163.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
-    try:
-        obj = Google(id,'bbs.163.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'bbs.163.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
+    # try:
+    #     obj = Google(id,'bbs.163.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
 
 if __name__ == "__main__":
     main(WYSQ_INFO_SOURCE_ID)

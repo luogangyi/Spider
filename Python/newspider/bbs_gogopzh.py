@@ -64,18 +64,18 @@ def main(id):
         store_error(id)
         bbs_logger.exception(e)
 
-    try:
-        obj = Baidu(id,'www.gogopzh.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
-    try:
-        obj = Google(id,'www.gogopzh.com','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'www.gogopzh.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
+    # try:
+    #     obj = Google(id,'www.gogopzh.com','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
         
 
 if __name__ == "__main__":

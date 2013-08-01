@@ -60,18 +60,18 @@ def main(id):
     except Exception, e:
         store_error(id)
         bbs_logger.exception(e) 
-    try:
-        obj = Baidu(id,'www.cd.ccoo.cn','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
-    try:
-        obj = Google(id,'www.cd.ccoo.cn','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e) 
+    # try:
+    #     obj = Baidu(id,'www.cd.ccoo.cn','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)
+    # try:
+    #     obj = Google(id,'www.cd.ccoo.cn','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e) 
 
 
     

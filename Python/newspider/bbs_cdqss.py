@@ -53,18 +53,18 @@ def main(id):
     except Exception, e:
         store_error(id)
         bbs_logger.exception(e) 
-    try:
-        obj = Baidu(id,'bbs.chengdu.cn','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e) 
-    try:
-        obj = Google(id,'bbs.chengdu.cn','bbs')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)   
+    # try:
+    #     obj = Baidu(id,'bbs.chengdu.cn','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e) 
+    # try:
+    #     obj = Google(id,'bbs.chengdu.cn','bbs')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     bbs_logger.exception(e)   
 
 
             
