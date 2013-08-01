@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-
+# update by lgy, add keyword filter! 2013.8.1
 
 import urllib
 import urllib2
@@ -48,7 +48,7 @@ session = Session()
 
 
 KEYWORDS = []
-for row in session.query(Keyword): 
+for row in session.query(Keyword).filter(Keyword.enable==1): 
     KEYWORDS.append(row)
     
 PYTHON_DIR = '/home/lgy/Code/lgy_git/Python/'
