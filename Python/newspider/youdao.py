@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 #update by lgy 2013.7.29
+# update by lgy, 2013.08.04 .fix bug of calculate fetched count of different category 
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -79,6 +80,52 @@ class Youdao(BaseBBS):
         else:
             return datetime.strptime(strtime.strip(),'%Y-%m-%d')
 
+    def main(self):
+        #last_time = session.query(Job).filter(Job.info_source_id==self.INFO_SOURCE_ID).order_by(Job.id.desc()).first().previous_executed    
+        # if not self.isCanRun():
+        #     return False
+        previous_real_count = 0
+
+        if self.category=="news":
+            previous_real_count = session.query(News).filter(News.info_source_id==self.INFO_SOURCE_ID).count()
+        elif self.category=="blog":
+            previous_real_count = session.query(BlogPost).filter(BlogPost.info_source_id==self.INFO_SOURCE_ID).count()
+        elif self.category=="bbs":
+            previous_real_count = session.query(BBSPost).filter(BBSPost.info_source_id==self.INFO_SOURCE_ID).count()
+        elif self.category=="wiki":
+            previous_real_count = session.query(WikiPost).filter(WikiPost.info_source_id==self.INFO_SOURCE_ID).count()
+        else:
+            raise Exception("category is error")
+
+        #previous_real_count = session.query(BBSPost).filter(BBSPost.info_source_id==self.INFO_SOURCE_ID).count()
+        count = 0
+        sql_job = Job()
+        sql_job.previous_executed = datetime.now()
+        sql_job.info_source_id = self.INFO_SOURCE_ID
+        
+        count=self.searchWrapper(count)
+        #print "count = ",count
+        
+        current_real_count = 0
+
+        if self.category=="news":
+            current_real_count = session.query(News).filter(News.info_source_id==self.INFO_SOURCE_ID).count()
+        elif self.category=="blog":
+            current_real_count = session.query(BlogPost).filter(BlogPost.info_source_id==self.INFO_SOURCE_ID).count()
+        elif self.category=="bbs":
+            current_real_count = session.query(BBSPost).filter(BBSPost.info_source_id==self.INFO_SOURCE_ID).count()
+        elif self.category=="wiki":
+            current_real_count = session.query(WikiPost).filter(WikiPost.info_source_id==self.INFO_SOURCE_ID).count()
+        else:
+            raise Exception("category is error")
+        #current_real_count = session.query(BBSPost).filter(BBSPost.info_source_id==self.INFO_SOURCE_ID).count()
+        sql_job.fetched_info_count = count
+        sql_job.real_fetched_info_count = current_real_count - previous_real_count
+        #print "current_real_count = ",current_real_count, "previous_real_count = ",previous_real_count
+        session.add(sql_job)
+        session.flush()
+        session.commit()
+        return True
     
             
 if __name__=="__main__":

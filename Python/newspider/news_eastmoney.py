@@ -3,15 +3,15 @@
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
 from baidu import Baidu
-from BaseTimeLimit import *
+from BaseNews import *
 from news_utils import *
 from google_search import Google
 
 SOURCENAME = "东方财富资讯"
-class EastMoneyNews(BaseBBS):
+class EastMoneyNews(BaseNews):
     '''东方财富博客   http://blog.eastmoney.com/—— 按资讯搜索 属于news故存入news表'''
     def __init__(self,sourceId):
-        BaseBBS.__init__(self,sourceId)
+        BaseNews.__init__(self,sourceId)
     
     def nextPage(self,keyword):
 

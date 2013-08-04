@@ -4,14 +4,14 @@
 # update by lgy, 2013.7.30, add google search
 from google_search import Google
 from baidu import Baidu
-from BaseTimeLimit import *
+from BaseNews import *
 from news_utils import *
 
 SOURCENAME = '和讯资讯'
-class HexunNews(BaseBBS):
+class HexunNews(BaseNews):
     '''和讯博客  http://blog.hexun.com/—— 按资讯搜索 属于news故存入news表'''
     def __init__(self,sourceId):
-        BaseBBS.__init__(self,sourceId)
+        BaseNews.__init__(self,sourceId)
     
     def nextPage(self,keyword):
 
@@ -72,19 +72,19 @@ def main(id):
         store_error(id)
         news_logger.exception(e)
 
-    try:
-        obj = Baidu(id,'news.hexun.com','news',SOURCENAME )
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'news.hexun.com','news',SOURCENAME )
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
-    try:
-        obj = Google(id,'news.hexun.com','news',SOURCENAME )
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Google(id,'news.hexun.com','news',SOURCENAME )
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
     
         
 if __name__=="__main__":

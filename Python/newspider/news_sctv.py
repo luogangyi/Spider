@@ -5,13 +5,13 @@
 # fix convertTime bug by lgy.
 from google_search import Google
 from baidu import Baidu
-from BaseBBS import *
+from BaseNews import *
 from news_utils import *
 
 SOURCENAME = "四川电视台"
-class SCTVBBS(BaseBBS):
+class SCTVBBS(BaseNews):
     def __init__(self,sourceId):
-        BaseBBS.__init__(self,sourceId)
+        BaseNews.__init__(self,sourceId)
     
     #in this situation, override to set url 
     def nextPage(self,keyword):
@@ -80,18 +80,18 @@ def main(id):
     except Exception, e:
         store_error(id)
         news_logger.exception(e)
-    try:
-        obj = Baidu(id,'sctv.com','news',SOURCENAME)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
-    try:
-        obj = Google(id,'sctv.com','news',SOURCENAME)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'sctv.com','news',SOURCENAME)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
+    # try:
+    #     obj = Google(id,'sctv.com','news',SOURCENAME)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
 if __name__ == "__main__":
     main(SCTV_NEWS_INFO_SOURCE_ID)

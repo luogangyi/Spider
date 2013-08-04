@@ -7,19 +7,20 @@ from baidu import Baidu
 from news_utils import *
 
 def main(id):
-    try:
-        obj = Baidu(id,'www.sc.xinhuanet.com','news','新华网四川频道')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'www.sc.xinhuanet.com','news','新华网四川频道')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
-    try:
-        obj = Google(id,'www.sc.xinhuanet.com','news','新华网四川频道')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Google(id,'www.sc.xinhuanet.com','news','新华网四川频道')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
+    return
 
 
 if __name__=="__main__":

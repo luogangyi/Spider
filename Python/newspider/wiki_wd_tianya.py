@@ -4,16 +4,15 @@
 # update by lgy, 2013.7.30, add google search
 from google_search import Google
 from baidu import Baidu
-from BaseTimeLimit import *
-from BaseBBS import *
+from BaseBlog import *
 from wiki_utils import *
 
-class TIANYAWD(BaseTimeLimit):
+class TIANYAWD(BaseBlog):
    # def __init__(self,sourceId):
        # BaseBBS.__init__(self,sourceId)
     
     def __init__(self,sourceId):
-        BaseTimeLimit.__init__(self,sourceId)
+        BaseBlog.__init__(self,sourceId)
     #in this situation, override to set url 
 
     def convertTime(self,strtime):

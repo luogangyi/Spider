@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
+#update by lgy,2013.8.4
 
 from config import *
 from utils import *
@@ -9,6 +10,7 @@ WY163_BLOG_INFO_SOURCE_ID = 41
 HexunBlog_BLOG_INFO_SOURCE_ID =42
 Cnfol_BLOG_INFO_SOURCE_ID = 43
 EastMoney_Blog_BLOG_INFO_SOURCE_ID = 44
+BlogChina_Blog_BLOG_INFO_SOURCE_ID = 59
 
 def store_blog_post(url, blog_user_screen_name, title, content, info_source_id,
                    keyword_id, created_at, read_count, comment_count):

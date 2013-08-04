@@ -3,12 +3,12 @@
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
 from baidu import Baidu
-from BaseTimeLimit import *
+from BaseNews import *
 from news_utils import *
 from google_search import Google
 
 SOURCENAME="成都商报"
-class EChengduNews(BaseTimeLimit):
+class EChengduNews(BaseNews):
     def __init__(self,sourceId):
         BaseTimeLimit.__init__(self,sourceId)
     
@@ -33,7 +33,7 @@ class EChengduNews(BaseTimeLimit):
 
         url = a['href']
         content = item.td.p.text
-        print url, SOURCENAME, title, content,createdAt
+        #print url, SOURCENAME, title, content,createdAt
         add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
@@ -52,19 +52,19 @@ def main(id):
         store_error(id)
         news_logger.exception(e)
 
-    try:
-        obj = Baidu(id,'news.chengdu.cn','news',SOURCENAME )
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'news.chengdu.cn','news',SOURCENAME )
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
-    try:
-        obj = Google(id,'news.chengdu.cn','news',SOURCENAME )
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Google(id,'news.chengdu.cn','news',SOURCENAME )
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
     
 if __name__=="__main__":
     main(EChengDU_NEWS_INFO_SOURCE_ID)

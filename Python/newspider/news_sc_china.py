@@ -2,13 +2,14 @@
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
+#fix a bug of title
 from google_search import Google
 from baidu import Baidu
-from BaseBBS import *
+from BaseNews import *
 from news_utils import *
 
 SOURCENAME = "中国新闻网四川新闻"
-class ScChinaNews(BaseBBS):
+class ScChinaNews(BaseNews):
 
     def nextPage(self,keyword):
 
@@ -42,7 +43,8 @@ class ScChinaNews(BaseBBS):
         title = soup.find('div',{'class':'news_h1'})
         if title == None:
             title = ""
-        title = title.text
+        else:
+            title = title.text
         #print title
         timeAndSource = soup.find('div',{'class':'new_txtct'})('span')
 
@@ -81,19 +83,19 @@ def main(id):
         store_error(id)
         news_logger.exception(e)
 
-    try:
-        obj = Baidu(id,'sc.chinanews.com.cn','news',SOURCENAME)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'sc.chinanews.com.cn','news',SOURCENAME)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
-    try:
-        obj = Google(id,'sc.chinanews.com.cn','news',SOURCENAME)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Google(id,'sc.chinanews.com.cn','news',SOURCENAME)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
     
 if __name__=="__main__":
     main(SCCHINA_NEWS_INFO_SOURCE_ID)

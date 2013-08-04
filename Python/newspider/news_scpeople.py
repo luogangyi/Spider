@@ -4,14 +4,14 @@
 # update by lgy, 2013.7.30, add google search
 from google_search import Google
 from baidu import Baidu
-from BaseBBS import *
+from BaseNews import *
 from news_utils import *
 
 
 SOURCENAME = "人民网四川频道"
-class ScPeopleNews(BaseBBS):
+class ScPeopleNews(BaseNews):
     def __init__(self,sourceId):
-        BaseBBS.__init__(self,sourceId)
+        BaseNews.__init__(self,sourceId)
     
     
     def nextPage(self,keyword):
@@ -59,19 +59,19 @@ def main(id):
         store_error(id)
         news_logger.exception(e)
 
-    try:
-        obj = Baidu(id,'people.com.cn','news',SOURCENAME)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'people.com.cn','news',SOURCENAME)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
-    try:
-        obj = Google(id,'people.com.cn','news',SOURCENAME)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Google(id,'people.com.cn','news',SOURCENAME)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
 if __name__=="__main__":
     main(SCPeople_NEWS_INFO_SOURCE_ID)

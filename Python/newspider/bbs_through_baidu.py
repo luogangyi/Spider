@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #coding=utf8
-
+#update by lgy ,2013.08.01
 from BaseBBS import *
 from bbs_utils import *
 from baidu import Baidu

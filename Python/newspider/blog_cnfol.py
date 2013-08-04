@@ -48,18 +48,18 @@ def main(id):
     except Exception, e:
         store_error(id)
         blog_logger.exception(e)
-    try:
-        obj = Baidu(id,'blog.cnfol.com','blog')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        blog_logger.exception(e)
-    try:
-        obj = Google(id,'blog.cnfol.com','blog')
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        blog_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'blog.cnfol.com','blog')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     blog_logger.exception(e)
+    # try:
+    #     obj = Google(id,'blog.cnfol.com','blog')
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     blog_logger.exception(e)
     
         
 if __name__=="__main__":

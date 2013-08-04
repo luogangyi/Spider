@@ -3,13 +3,13 @@
 # update by lgy, 2013.7.30, add google search
 from google_search import Google
 from baidu import Baidu
-from BaseBBS import *
+from BaseNews import *
 from news_utils import *
 
 SOURCENAME= "四川新闻网"
-class SCXWW(BaseBBS):
+class SCXWW(BaseNews):
     def __init__(self,sourceId):
-        BaseBBS.__init__(self,sourceId)
+        BaseNews.__init__(self,sourceId)
 
      #in this situation, override to set url 
     def nextPage(self,keyword):
@@ -65,19 +65,19 @@ def main(id):
     except Exception, e:
         store_error(id)
         news_logger.exception(e)
-    try:
-        obj = Baidu(id,'newssc.org','news',SOURCENAME)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Baidu(id,'newssc.org','news',SOURCENAME)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
 
-    try:
-        obj = Google(id,'newssc.org','news',SOURCENAME)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
+    # try:
+    #     obj = Google(id,'newssc.org','news',SOURCENAME)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
   
   
 
