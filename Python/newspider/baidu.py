@@ -86,7 +86,7 @@ class Baidu(BaseBBS):
              
     def convertTime(self,strtime):
         
-        print strtime
+        #print strtime
         now = datetime.now()
         pattern = re.compile(r"(\d+-\d+-\d+)")
         m = pattern.search(strtime)

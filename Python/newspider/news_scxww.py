@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+#coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
 from google_search import Google
@@ -6,7 +7,7 @@ from baidu import Baidu
 from BaseNews import *
 from news_utils import *
 
-SOURCENAME= "四川新闻网"
+SOURCENAME = "四川新闻网"
 class SCXWW(BaseNews):
     def __init__(self,sourceId):
         BaseNews.__init__(self,sourceId)
@@ -38,7 +39,7 @@ class SCXWW(BaseNews):
         createdAt = self.convertTime(item.span.text)
 
         username = ""
-        #print url, SOURCENAME, title, content,createdAt
+        print url, SOURCENAME, title, content,createdAt
         add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
