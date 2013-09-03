@@ -31,5 +31,5 @@ def store_bbs_post(url, bbs_user_screen_name, title, content, info_source_id,
     session.commit()
 
     sql_post = session.query(BBSPost).filter(BBSPost.url==url).first()
-    if sql_post:
-        store_category('bbs', str(sql_post.id))
+    # if sql_post:
+    #     store_category('bbs', str(sql_post.id))

@@ -26,7 +26,7 @@ import socket
 socket.setdefaulttimeout(90)
 
 
-MYSQL_ADDR = 'localhost:3306/soya-yc?charset=utf8'
+MYSQL_ADDR = 'localhost:3306/soya?charset=utf8'
 
 MYSQL_USER = 'root'
 #MYSQL_PASSWORD = '^12fg7'
@@ -46,4 +46,4 @@ for row in session.query(Keyword).filter(Keyword.enable==True):
     KEYWORDS.append(row)
 
 
-PYTHON_DIR = '/home/lgy/git_code/soya/Python/'
+PYTHON_DIR = '/home/lgy/Code/lgy_git/Python/'

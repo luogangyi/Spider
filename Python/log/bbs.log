@@ -1,0 +1,336 @@
+2013-08-04 21:59:10,914 - bbs_logger - ERROR - (OperationalError) (1048, "Column 'fetched_info_count' cannot be null") 'INSERT INTO jobs (info_source_id, fetched_info_count, real_fetched_info_count, previous_executed) VALUES (%s, %s, %s, %s)' (19, None, None, datetime.datetime(2013, 8, 4, 21, 58, 59, 271095))
+Traceback (most recent call last):
+  File "kaidi_crawler.py", line 124, in main
+    search_kaidi_for_posts()
+  File "kaidi_crawler.py", line 53, in search_kaidi_for_posts
+    session.flush()
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/orm/session.py", line 1818, in flush
+    self._flush(objects)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/orm/session.py", line 1936, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/util/langhelpers.py", line 58, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/orm/session.py", line 1900, in _flush
+    flush_context.execute()
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/orm/unitofwork.py", line 372, in execute
+    rec.execute(self)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/orm/unitofwork.py", line 525, in execute
+    uow
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/orm/persistence.py", line 64, in save_obj
+    table, insert)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/orm/persistence.py", line 569, in _emit_insert_statements
+    execute(statement, params)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/engine/base.py", line 662, in execute
+    params)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/engine/base.py", line 761, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/engine/base.py", line 874, in _execute_context
+    context)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/engine/base.py", line 1024, in _handle_dbapi_exception
+    exc_info
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/util/compat.py", line 195, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/engine/base.py", line 867, in _execute_context
+    context)
+  File "/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.8.2-py2.7.egg/sqlalchemy/engine/default.py", line 324, in do_execute
+    cursor.execute(statement, parameters)
+  File "build/bdist.linux-x86_64/egg/MySQLdb/cursors.py", line 201, in execute
+    self.errorhandler(self, exc, value)
+  File "build/bdist.linux-x86_64/egg/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+OperationalError: (OperationalError) (1048, "Column 'fetched_info_count' cannot be null") 'INSERT INTO jobs (info_source_id, fetched_info_count, real_fetched_info_count, previous_executed) VALUES (%s, %s, %s, %s)' (19, None, None, datetime.datetime(2013, 8, 4, 21, 58, 59, 271095))
+2013-08-28 16:40:51,495 - bbs_logger - ERROR - <urlopen error [Errno 111] Connection refused>
+Traceback (most recent call last):
+  File "bbs_xici_crawl.py", line 95, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "bbs_xici_crawl.py", line 85, in searchWrapper
+    self.search4EachItem(items)
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 98, in search4EachItem
+    self.itemProcess(item)
+  File "bbs_xici_crawl.py", line 52, in itemProcess
+    self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
+  File "/home/lgy/Code/lgy_git/Python/bosch/bbs_utils.py", line 49, in store_bbs_post
+    store_category('bbs', str(sql_post.id))
+  File "/home/lgy/Code/lgy_git/Python/bosch/utils.py", line 34, in store_category
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 400, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.7/urllib2.py", line 418, in _open
+    '_open', req)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 1207, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.7/urllib2.py", line 1177, in do_open
+    raise URLError(err)
+URLError: <urlopen error [Errno 111] Connection refused>
+2013-08-28 16:53:09,672 - bbs_logger - ERROR - HTTP Error 400: Bad Request
+Traceback (most recent call last):
+  File "bbs_xici_crawl.py", line 95, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "bbs_xici_crawl.py", line 80, in searchWrapper
+    items = self.nextPage(keyword,pageIndex)
+  File "bbs_xici_crawl.py", line 19, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 400: Bad Request
+2013-08-28 16:53:15,117 - bbs_logger - ERROR - HTTP Error 400: Bad Request
+Traceback (most recent call last):
+  File "bbs_xici_crawl.py", line 95, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "bbs_xici_crawl.py", line 80, in searchWrapper
+    items = self.nextPage(keyword,pageIndex)
+  File "bbs_xici_crawl.py", line 19, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 400: Bad Request
+2013-08-28 16:54:04,455 - bbs_logger - ERROR - HTTP Error 400: Bad Request
+Traceback (most recent call last):
+  File "bbs_xici_crawl.py", line 95, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "bbs_xici_crawl.py", line 80, in searchWrapper
+    items = self.nextPage(keyword,pageIndex)
+  File "bbs_xici_crawl.py", line 19, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 400: Bad Request
+2013-08-28 16:55:32,544 - bbs_logger - ERROR - HTTP Error 400: Bad Request
+Traceback (most recent call last):
+  File "bbs_xici_crawl.py", line 95, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "bbs_xici_crawl.py", line 80, in searchWrapper
+    items = self.nextPage(keyword,pageIndex)
+  File "bbs_xici_crawl.py", line 19, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 400: Bad Request
+2013-08-28 16:56:08,191 - bbs_logger - ERROR - HTTP Error 400: Bad Request
+Traceback (most recent call last):
+  File "bbs_xici_crawl.py", line 95, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "bbs_xici_crawl.py", line 80, in searchWrapper
+    items = self.nextPage(keyword,pageIndex)
+  File "bbs_xici_crawl.py", line 19, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 400: Bad Request
+2013-08-28 17:14:20,272 - bbs_logger - ERROR - HTTP Error 500: Internal Server Error
+Traceback (most recent call last):
+  File "bbs_xici_crawl.py", line 96, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "bbs_xici_crawl.py", line 81, in searchWrapper
+    items = self.nextPage(keyword,pageIndex)
+  File "bbs_xici_crawl.py", line 20, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 500: Internal Server Error
+2013-08-28 17:20:42,160 - bbs_logger - ERROR - HTTP Error 500: Internal Server Error
+Traceback (most recent call last):
+  File "bbs_xici_crawl.py", line 96, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "bbs_xici_crawl.py", line 81, in searchWrapper
+    items = self.nextPage(keyword,pageIndex)
+  File "bbs_xici_crawl.py", line 20, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 500: Internal Server Error
+2013-08-29 13:36:28,831 - bbs_logger - ERROR - HTTP Error 505: HTTP Version Not Supported
+Traceback (most recent call last):
+  File "bbs_19lou_crawl.py", line 85, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 64, in searchWrapper
+    items = self.nextPage(keyword)
+  File "bbs_19lou_crawl.py", line 19, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 505: HTTP Version Not Supported
+2013-08-29 13:37:46,325 - bbs_logger - ERROR - HTTP Error 505: HTTP Version Not Supported
+Traceback (most recent call last):
+  File "bbs_19lou_crawl.py", line 85, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 64, in searchWrapper
+    items = self.nextPage(keyword)
+  File "bbs_19lou_crawl.py", line 19, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 505: HTTP Version Not Supported
+2013-08-29 13:38:45,199 - bbs_logger - ERROR - HTTP Error 505: HTTP Version Not Supported
+Traceback (most recent call last):
+  File "bbs_19lou_crawl.py", line 85, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 64, in searchWrapper
+    items = self.nextPage(keyword)
+  File "bbs_19lou_crawl.py", line 19, in nextPage
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 505: HTTP Version Not Supported
+2013-08-29 13:55:32,319 - bbs_logger - ERROR - HTTP Error 404: Not Found
+Traceback (most recent call last):
+  File "bbs_19lou_crawl.py", line 97, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 64, in searchWrapper
+    items = self.nextPage(keyword)
+  File "bbs_19lou_crawl.py", line 31, in nextPage
+    response = urllib2.urlopen(req)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 406, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.7/urllib2.py", line 519, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.7/urllib2.py", line 444, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 527, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 404: Not Found
+2013-08-29 14:03:13,032 - bbs_logger - ERROR - u'\u535a'
+Traceback (most recent call last):
+  File "bbs_19lou_crawl.py", line 94, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "/home/lgy/Code/lgy_git/Python/bosch/BaseBBS.py", line 64, in searchWrapper
+    items = self.nextPage(keyword)
+  File "bbs_19lou_crawl.py", line 18, in nextPage
+    url = 'http://www.19lou.com/search/thread?keyword=%s&fid=0&sorts=createdTime&timeType=0&fids=undefined' % quote((keyword.str))
+  File "/usr/lib/python2.7/urllib.py", line 1268, in quote
+    return ''.join(map(quoter, s))
+KeyError: u'\u535a'

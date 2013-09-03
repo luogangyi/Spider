@@ -1,0 +1,29 @@
+2013-08-05 00:01:14,430 - wiki_logger - ERROR - <urlopen error [Errno 111] Connection refused>
+Traceback (most recent call last):
+  File "/home/lgy/Code/lgy_git/Python/newspider/wiki_wd_tianya.py", line 100, in main
+    obj.main()
+  File "/home/lgy/Code/lgy_git/Python/newspider/BaseBlog.py", line 46, in main
+    count=self.searchWrapper(count)
+  File "/home/lgy/Code/lgy_git/Python/newspider/BaseBlog.py", line 66, in searchWrapper
+    self.search4EachItem(items)
+  File "/home/lgy/Code/lgy_git/Python/newspider/BaseBlog.py", line 98, in search4EachItem
+    self.itemProcess(item)
+  File "/home/lgy/Code/lgy_git/Python/newspider/wiki_wd_tianya.py", line 94, in itemProcess
+    self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount,0)
+  File "/home/lgy/Code/lgy_git/Python/newspider/wiki_utils.py", line 34, in store_wiki_post
+    store_category('wiki', str(sql_post.id))
+  File "/home/lgy/Code/lgy_git/Python/newspider/utils.py", line 34, in store_category
+    response = urllib2.urlopen(url)
+  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.7/urllib2.py", line 400, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.7/urllib2.py", line 418, in _open
+    '_open', req)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 1207, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.7/urllib2.py", line 1177, in do_open
+    raise URLError(err)
+URLError: <urlopen error [Errno 111] Connection refused>

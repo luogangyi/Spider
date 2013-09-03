@@ -107,6 +107,7 @@ def store_by_bbs_url(url, keyword_id):
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
     }
     
+    print url
     req = urllib2.Request(url, headers = headers)  
     response = urllib2.urlopen(req)  
     content = response.read()  
@@ -132,7 +133,7 @@ def store_by_bbs_url(url, keyword_id):
     content_div = soup.find('div', attrs={'class': "bbs-content clearfix"})
     content = content_div.text
 
-    
+    print url, bbs_user_screen_name, title, content
     store_bbs_post(url, bbs_user_screen_name, title, content,
                    TIANYA_INFO_SOURCE_ID, keyword_id, created_at, read_count, comment_count)
 

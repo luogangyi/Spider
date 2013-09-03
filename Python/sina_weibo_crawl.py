@@ -155,16 +155,17 @@ def search_for_new_statuses():
     sql_job = Job()
     sql_job.previous_executed = datetime.now()
     sql_job.info_source_id = SEARCH_INFO_SOURCE_ID
-
+    
     for keyword in KEYWORDS : 
-        search_statuses = client.search.statuses.get(q=keyword.str, count=50, starttime=starttime)
-        statuses = search_statuses['statuses']
+        for page_id in range(1,50): 
+            search_statuses = client.search.statuses.get(q=keyword.str, count=50, starttime=starttime,page=page_id)
+            statuses = search_statuses['statuses']
+            #print page_id
+            count = count + len(statuses)
+            #print count
 
-        count = count + len(statuses)
-        #print count
-
-        for status in statuses:
-            add_status_and_user_to_session(status, keyword.id)
+            for status in statuses:
+                add_status_and_user_to_session(status, keyword.id)
 
 
         time.sleep(5)
@@ -346,6 +347,7 @@ def add_status_and_user_to_session(status, keyword_id):
     sql_status.keyword_id = keyword_id
     sql_status.info_source_id = SEARCH_INFO_SOURCE_ID
     sql_status.text = status['text']
+    print sql_status.text
     sql_status.created_at = weibo_date_str_to_datetime(status['created_at'])
     sql_status.repost_count = status['reposts_count']
     sql_status.comment_count = status['comments_count']
@@ -513,7 +515,7 @@ def main():
         refresh_monitoring_status()
         #get_hots()
     except Exception, e:
-        store_error(SEARCH_INFO_SOURCE_ID)
+        #store_error(SEARCH_INFO_SOURCE_ID)
         weibo_logger.exception(e)
 
 
