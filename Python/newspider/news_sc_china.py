@@ -14,14 +14,15 @@ class ScChinaNews(BaseNews):
     def nextPage(self,keyword):
 
         url = 'http://www.sc.chinanews.com.cn/uda/SearchInfo.aspx?txtkey=%s' % (keyword.str.encode('utf8'))
+        print url
         content = urllib2.urlopen(url).read()
         soup = BeautifulSoup(content)
 
-        items = soup.find("ul")
-        if items== None:
-            return []
-        items = items.findAll("li")
-
+        # items = soup.find('div',id="SearchList")
+        # if items== None:
+        #     return []
+        items = soup.findAll("li")
+        # print len(items)
         return items
     
 
@@ -29,28 +30,27 @@ class ScChinaNews(BaseNews):
 
         url = item.find('a')['href']
         url = self.getCompleteURL('http://www.sc.chinanews.com.cn/',url)
- 
         createdAt = self.convertTime(item.contents[-1])
         
         
         content = self.getDetailPage(url)
         soup = BeautifulSoup(content)
         
-        soup = soup.find('div',{'class':'news_nr'})
-        
-        
-        
-        title = soup.find('div',{'class':'news_h1'})
-        if title == None:
-            title = ""
-        else:
-            title = title.text
-        #print title
-        timeAndSource = soup.find('div',{'class':'new_txtct'})('span')
+        news_nr = soup.find('div',{'class':'news_nr'})
+        title = news_nr.find('div',{'class':'new_h1'})
+        #print news_nr.prettify()
 
-        sourceName = self.getSourceName(timeAndSource[1].text)
+        if title != None:
+            title = title.text
+            timeAndSource = soup.find('div',{'class':'new_txtct'})('span')
+        #print title
+        else:
+            title = news_nr.h1.text
+        
         content = soup.find('div',id='newbody').text
-        #print url, sourceName, title, content,createdAt
+        if len(content) >256:
+            content = content[0:255]
+        print url, SOURCENAME, title, content,createdAt
         add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
@@ -72,7 +72,7 @@ class ScChinaNews(BaseNews):
         return datetime.strptime(createdAt,'[%Y-%m-%d]')
             
     def getSourceName(self,sourceName):
-        m = re.match(r'\w*:(\w*)',sourceName)
+        m = re.search(u'\w*：(\w*)',sourceName)
         return m.group(1)
         
 def main(id):
