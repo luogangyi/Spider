@@ -3,6 +3,7 @@
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
 #fix a bug of title
+# update by lgy.2013.9.3
 from google_search import Google
 from baidu import Baidu
 from BaseNews import *
@@ -14,7 +15,7 @@ class ScChinaNews(BaseNews):
     def nextPage(self,keyword):
 
         url = 'http://www.sc.chinanews.com.cn/uda/SearchInfo.aspx?txtkey=%s' % (keyword.str.encode('utf8'))
-        print url
+        #print url
         content = urllib2.urlopen(url).read()
         soup = BeautifulSoup(content)
 
@@ -50,7 +51,7 @@ class ScChinaNews(BaseNews):
         content = soup.find('div',id='newbody').text
         if len(content) >256:
             content = content[0:255]
-        print url, SOURCENAME, title, content,createdAt
+        #print url, SOURCENAME, title, content,createdAt
         add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
