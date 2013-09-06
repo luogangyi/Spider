@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 # modified at 2013.7.23
+# update by lgy at 2013.9.6
 
 from config import *
 from utils import store_category, recheck_title, baidu_date_str_to_datetime
@@ -198,13 +199,13 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
         finished = False
         while(not finished):
             data = {'word': keyword.str.encode('gb2312'),
-                    'tn': 'news',
+                    'tn': 'newstitle',
+                    'from':'news',
                     'ie': 'gb2312',
                     'sr': 0,
                     'cl': 2,
                     'rn': 20,
-                    'ct': 0,
-                    'clk': 'sortbytime',
+                    'ct': 0, 
                     'pn': page
                    }
             
@@ -220,38 +221,47 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
             content = response.read() 
     
             soup = BeautifulSoup(content, fromEncoding="gbk")
-            
-            news_tables = soup.findAll('table', attrs={'cellspacing': '0', 'cellpadding':
-                                                   '2'})
+            #print soup.prettify()
+            res = soup.findAll('p', attrs={'class': 'res'})
+            for contents in res:
+                news = contents.findAll('span')
+                if len(news)>0:
+                    news_tables = news
+                    break
+
+
             count = count + len(news_tables)
 
             if len(news_tables) == 0:
                 break
 
             for news_table in news_tables:
-                url = news_table.tr.td.a['href']
-                title = news_table.tr.td.a.text
-                source_and_date = news_table.find('font', attrs={'color':
-                                                                 '#666666'}).text.split()
-                content = news_table.find('font', attrs={'size': '-1'}).text
+
+                url = news_table.a['href']
+                title = news_table.a.text
+                source_and_date = news_table.findAll('font', attrs={'class': 'g'})[-1].text.split()
+                content = ""
 
                 source_name = source_and_date[0]
+                #print source_name
                 if len(source_and_date) == 3:
                     date = source_and_date[1] + ' ' + source_and_date[2]
                 else:
-                    continue
+                    date = source_and_date[1]
 
                 created_at = baidu_date_str_to_datetime(date)
-                
+                #print url, source_name, title, content,created_at
                 # 新闻展开
                 morelink_a = news_table.find('a',attrs={'class':'more_link'})
                 if morelink_a != None:
                     url = 'http://news.baidu.com'+morelink_a['href']
                     #print morelink_a['href']+morelink_a.text
-                    count = inner_search_for_baidu_news_posts(url,count,last_time,keyword,info_source_id)
+                    inner_count = inner_search_for_baidu_news_posts(url,count,last_time,keyword,info_source_id)
+                    count = count + inner_count
                     # 展开新闻，则在本次循环中不保存
                     continue
 
+                
                 if info_source_id == BAIDU_NEWS_INFO_SOURCE_ID:
                     add_news_to_session(url, source_name, title, content,
                                         info_source_id, created_at, keyword)
@@ -296,29 +306,34 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
 
         soup = BeautifulSoup(content, fromEncoding="gbk")
 
-        news_tables = soup.findAll('table', attrs={'cellspacing': '0', 'cellpadding':
-                                               '2'})
+        res = soup.findAll('p', attrs={'class': 'res'})
+        for contents in res:
+            news = contents.findAll('span')
+            if len(news)>0:
+                news_tables = news
+                break
+        
         count = count + len(news_tables)
 
         if len(news_tables) == 0:
             break
 
         for news_table in news_tables:
-            url = news_table.tr.td.a['href']
-            title = news_table.tr.td.a.text
-            source_and_date = news_table.find('font', attrs={'color':
-                                                             '#666666'}).text.split()
-            content = news_table.find('font', attrs={'size': '-1'}).text
+            url = news_table.a['href']
+            title = news_table.a.text
+            source_and_date = news_table.findAll('font', attrs={'class': 'g'})[-1].text.split()
+            content = ""
 
             source_name = source_and_date[0]
 
             if len(source_and_date) == 3:
                 date = source_and_date[1] + ' ' + source_and_date[2]
             else:
-                continue
+                date = source_and_date[1]
 
             created_at = baidu_date_str_to_datetime(date)
 
+            #print url, source_name, title, content,created_at
             if info_source_id == BAIDU_NEWS_INFO_SOURCE_ID:
                 add_news_to_session(url, source_name, title, content,
                                     info_source_id, created_at, keyword)
