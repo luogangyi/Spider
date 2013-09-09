@@ -2,6 +2,7 @@
 #coding=utf-8
 # modified at 2013.7.23
 # update by lgy at 2013.9.6
+# update by lgy at 2013.9.9
 
 from config import *
 from utils import store_category, recheck_title, baidu_date_str_to_datetime
@@ -114,7 +115,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
     for keyword in using_keywords :
         page = 0
         finished = False
-        while(not finished):
+        while(not finished and page <= 100):
             data = {'q': keyword.str.encode('utf8'),
                     'tbm': 'nws',
                     'hl': 'zh-CN',
@@ -144,7 +145,13 @@ def search_for_google_news_posts(using_keywords, info_source_id):
                 title = news_table.a.text
                 source_name = news_table.find('span', attrs={'class': 'news-source'}).text
                 date_str = news_table.find('span', attrs={'class': 'f nsa'}).text
-                created_at = google_date_str_to_datetime(date_str)
+
+                try:
+                    created_at = google_date_str_to_datetime(date_str)
+                except:
+                    created_at =  datetime.now()
+
+                
                 content = news_table.find('div', attrs={'class': 'st'}).text
 
                 if created_at < last_time:
@@ -152,6 +159,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
                     break
 
                 if info_source_id == GOOGLE_NEWS_INFO_SOURCE_ID:
+                    print url, source_name, title, content,created_at
                     add_news_to_session(url, source_name, title, content,
                                     info_source_id, created_at, keyword)
                 else:
@@ -197,7 +205,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
     for keyword in using_keywords :
         page = 0
         finished = False
-        while(not finished):
+        while(not finished and page <= 200):
             data = {'word': keyword.str.encode('gb2312'),
                     'tn': 'newstitle',
                     'from':'news',
@@ -233,6 +241,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
             count = count + len(news_tables)
 
             if len(news_tables) == 0:
+                finished = True
                 break
 
             for news_table in news_tables:
@@ -248,14 +257,17 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
                     date = source_and_date[1] + ' ' + source_and_date[2]
                 else:
                     date = source_and_date[1]
-
-                created_at = baidu_date_str_to_datetime(date)
-                #print url, source_name, title, content,created_at
+                try:
+                    created_at = baidu_date_str_to_datetime(date)
+                except:
+                    created_at =  datetime.now()
+                print url, source_name, title, content,created_at
                 # 新闻展开
                 morelink_a = news_table.find('a',attrs={'class':'more_link'})
                 if morelink_a != None:
                     url = 'http://news.baidu.com'+morelink_a['href']
                     #print morelink_a['href']+morelink_a.text
+                    time.sleep(5)
                     inner_count = inner_search_for_baidu_news_posts(url,count,last_time,keyword,info_source_id)
                     count = count + inner_count
                     # 展开新闻，则在本次循环中不保存
@@ -331,7 +343,10 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
             else:
                 date = source_and_date[1]
 
-            created_at = baidu_date_str_to_datetime(date)
+            try:
+                created_at = baidu_date_str_to_datetime(date)
+            except:
+                created_at =  datetime.now()
 
             #print url, source_name, title, content,created_at
             if info_source_id == BAIDU_NEWS_INFO_SOURCE_ID:
@@ -342,7 +357,7 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
                                     info_source_id, created_at, keyword)
 
 
-        time.sleep(5)
+        time.sleep(10)
         page_nav = soup.find('div',attrs={'class':'page-nav'})
 
         # 没有下一页，则结束
