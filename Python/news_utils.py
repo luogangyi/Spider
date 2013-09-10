@@ -2,7 +2,7 @@
 #coding=utf-8
 # modified at 2013.7.23
 # update by lgy at 2013.9.6
-# update by lgy at 2013.9.9
+# update by lgy at 2013.9.9,sort by time!! only crawl 7 days data!
 
 from config import *
 from utils import store_category, recheck_title, baidu_date_str_to_datetime
@@ -115,7 +115,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
     for keyword in using_keywords :
         page = 0
         finished = False
-        while(not finished and page <= 100):
+        while(not finished):
             data = {'q': keyword.str.encode('utf8'),
                     'tbm': 'nws',
                     'hl': 'zh-CN',
@@ -123,7 +123,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
                    }
             
             url = "http://www.google.com.hk/search?tbs=sbd:1&" + urllib.urlencode(data)
-
+            page = page + 10
             headers = {
                 'Host': 'www.google.com.hk',
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17'
@@ -170,7 +170,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
                 break
 
             time.sleep(60)
-            page = page + 10
+            
 
     
     if info_source_id == GOOGLE_NEWS_INFO_SOURCE_ID:
@@ -205,7 +205,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
     for keyword in using_keywords :
         page = 0
         finished = False
-        while(not finished and page <= 200):
+        while(not finished):
             data = {'word': keyword.str.encode('gb2312'),
                     'tn': 'newstitle',
                     'from':'news',
@@ -218,6 +218,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
                    }
             
             url = "http://news.baidu.com/ns?" + urllib.urlencode(data)
+            page = page + 20
 
             headers = {
                 'Host': 'news.baidu.com',
@@ -231,6 +232,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
             soup = BeautifulSoup(content, fromEncoding="gbk")
             #print soup.prettify()
             res = soup.findAll('p', attrs={'class': 'res'})
+            news_tables =[]
             for contents in res:
                 news = contents.findAll('span')
                 if len(news)>0:
@@ -240,7 +242,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
 
             count = count + len(news_tables)
 
-            if len(news_tables) == 0:
+            if len(news_tables) <20:
                 finished = True
                 break
 
@@ -261,7 +263,13 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
                     created_at = baidu_date_str_to_datetime(date)
                 except:
                     created_at =  datetime.now()
-                print url, source_name, title, content,created_at
+
+                # check time!!    
+                if created_at < last_time:
+                    finished = True
+                    break
+
+                print "outer",url, source_name, title, content,created_at,keyword.str,finished
                 # 新闻展开
                 morelink_a = news_table.find('a',attrs={'class':'more_link'})
                 if morelink_a != None:
@@ -283,7 +291,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
 
 
             time.sleep(5)
-            page = page + 20
+            
 
         
     if info_source_id == BAIDU_NEWS_INFO_SOURCE_ID:
@@ -319,15 +327,19 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
         soup = BeautifulSoup(content, fromEncoding="gbk")
 
         res = soup.findAll('p', attrs={'class': 'res'})
+        news_tables =[]
         for contents in res:
             news = contents.findAll('span')
             if len(news)>0:
                 news_tables = news
                 break
+
+
         
         count = count + len(news_tables)
 
-        if len(news_tables) == 0:
+        if len(news_tables) ==0:
+            finished = True
             break
 
         for news_table in news_tables:
@@ -348,7 +360,7 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
             except:
                 created_at =  datetime.now()
 
-            #print url, source_name, title, content,created_at
+            print "inner",url, source_name, title, content,created_at
             if info_source_id == BAIDU_NEWS_INFO_SOURCE_ID:
                 add_news_to_session(url, source_name, title, content,
                                     info_source_id, created_at, keyword)
