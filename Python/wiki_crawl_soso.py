@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 #coding=utf-8
+# update by lgy,2013.9.12
 
 from config import *
-from utils import baidu_date_str_to_datetime, wiki_logger, store_category, store_error
+from utils import baidu_date_str_to_datetime, wiki_logger, store_category, store_error,recheck_title
 
 
 SOSO_WENWEN_INFO_SOURCE_ID = 13
@@ -22,7 +23,7 @@ def search_for_soso_wenwen_posts():
             data = {'sp': 'S' + keyword.str.encode('utf8'),
                     'st': st,
                     'sci': 0,
-                    'sti': 3
+                    'sti': 2
                    }
             
             url = "http://wenwen.soso.com/z/Search.e?" + urllib.urlencode(data)
@@ -66,7 +67,7 @@ def search_for_soso_wenwen_posts():
                 #print url
                 #print comment_count
 
-                store_by_wiki_url(url, comment_count, answered, keyword.id)
+                store_by_wiki_url(url, comment_count, answered, keyword.id,keyword)
 
                 
             time.sleep(5)
@@ -83,7 +84,7 @@ def search_for_soso_wenwen_posts():
     session.commit()    
 
 
-def store_by_wiki_url(url, comment_count, answered, keyword_id):
+def store_by_wiki_url(url, comment_count, answered, keyword_id,keyword):
     sql_post = session.query(WikiPost).filter(WikiPost.url==url).first()
     if not sql_post:
        sql_post = WikiPost() 
@@ -111,20 +112,35 @@ def store_by_wiki_url(url, comment_count, answered, keyword_id):
         wiki_user_screen_name = u'匿名'
     else:
         wiki_user_screen_name = wiki_user_screen_name.text
-    date_str = soup.find('span', attrs={'class':"question_time"}).text
-    created_at = baidu_date_str_to_datetime(date_str)
-    title = soup.find('h3', attrs={'id':"questionTitle"}).text
+    try:
+        date_str = soup.find('span', attrs={'class':"question_time"}).text
+        created_at = baidu_date_str_to_datetime(date_str)
+    except:
+        created_at = datetime.now()
+    try:
+        title = soup.find('h3', attrs={'id':"questionTitle"}).text
+    except:
+        time.sleep(5)
+        return
+
     content_div = soup.find('div', attrs={'class':"question_con"})
     if content_div is None:
         content = ""
     else:
         content = content_div.text
 
+    #print "before",title,created_at
+    if not recheck_title(keyword, title):
+        time.sleep(5)
+        return
+
     sql_post.read_count = 0
     sql_post.wiki_user_screen_name = wiki_user_screen_name
     sql_post.title = title
     sql_post.content = content
     sql_post.created_at = created_at
+
+    #print "after",title,created_at
 
     session.merge(sql_post) #merge
 
