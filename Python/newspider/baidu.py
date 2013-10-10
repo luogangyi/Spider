@@ -5,12 +5,13 @@
 # update by lgy , add filer:recheck_title,recheck_url
 # update by lgy ,2013.08.04. add retry, adjust sleep time;
 # update by lgy, 2013.08.04 .fix bug of calculate fetched count of different category 
+# update by lgy, 2013.10.11 .filter time
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
 from bbs_utils import *
 from wiki_utils import *
-
+import time
 class Baidu(BaseBBS):
     def __init__(self,sourceId,domain,category,sourcename=""):
         BaseBBS.__init__(self,sourceId)
@@ -61,11 +62,20 @@ class Baidu(BaseBBS):
         
         citeTime = item.find('div',{'class':'f13'}).span.text
         
+        
+        
         #print citeTime
 
         createdAt = self.convertTime(citeTime)
-        
-        #print url, title,content,createdAt
+        year,month,day = self.getYearMonthDay(createdAt)
+        created_date = datetime(int(year),int(month),int(day))
+        cur_date = datetime.now()
+
+        #cur_date = time.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+        delta_days = (cur_date - created_date).days
+        if delta_days >10:
+            return
+        #print url, title,content,createdAt,delta_days
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
@@ -103,14 +113,24 @@ class Baidu(BaseBBS):
         if strtime.find(u'年')>-1:  
             return -1
         elif strtime.find(u'月')>-1:
-            time = now-timedelta(days=(int(m)*30))
+            createdAt = now-timedelta(days=(int(m)*30))
         elif strtime.find(u'天')>-1: 
-            time =  now-timedelta(days=int(m))
+            createdAt =  now-timedelta(days=int(m))
         elif strtime.find(u'小时')>-1:
-            time =  now-timedelta(hours=int(m))
+            createdAt =  now-timedelta(hours=int(m))
         else:
-            time = now
-        return time.strftime("%Y-%m-%d")
+            createdAt = now
+        return createdAt.strftime("%Y-%m-%d")
+
+    def getYearMonthDay(self,strtime):
+        
+        #print strtime
+        now = datetime.now()
+        pattern = re.compile(r"(\d+)-(\d+)-(\d+)")
+        m = pattern.search(strtime)
+        if m != None :
+            return m.group(1),m.group(2),m.group(3)
+
 
     def searchWrapper(self,count):
         for keyword in KEYWORDS:
@@ -124,7 +144,7 @@ class Baidu(BaseBBS):
                 self.search4EachItem(items,keyword)
 #                pageIndex += 1
                 isFinished = True #just crawl the first page
-            time.sleep(1)
+            time.sleep(5)
         return count
 
     def search4EachItem(self,items,keyword):
