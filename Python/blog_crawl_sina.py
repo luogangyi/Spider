@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-
+#update by lgy 2013.10.18
 from config import *
 from utils import baidu_date_str_to_datetime, blog_logger, store_category, store_error
 from blog_utils import *
@@ -53,13 +53,13 @@ def search_for_sina_blog_posts():
                 blog_user_screen_name = post.find('a', attrs={'class':
                                                              'fblue'}).text
                 created_at = baidu_date_str_to_datetime(post.find('span',
-                                                                  attrs={'class': 'fgreen time'}).text)
+                                                                  attrs={'class': 'fgray_time'}).text)
                 content = post.p.text
 
                 counts = get_count_from_url(url)
                 read_count = counts['read_count']
                 comment_count = counts['comment_count']
-
+                #print url, blog_user_screen_name, title, content,
 
                 if created_at < last_time:
                     finished = True
