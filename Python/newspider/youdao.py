@@ -2,6 +2,7 @@
 #coding=utf-8
 #update by lgy 2013.7.29
 # update by lgy, 2013.08.04 .fix bug of calculate fetched count of different category 
+# update by lgy, 2013.10.17 .filter old data 
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -42,6 +43,16 @@ class Youdao(BaseBBS):
         citeTime = item.find('cite').text
         
         createdAt = self.convertTime(citeTime)
+        #print createdAt
+        year,month,day = self.getYearMonthDay(createdAt.strftime("%Y-%m-%d"))
+        created_date = datetime(int(year),int(month),int(day))
+        cur_date = datetime.now()
+
+        #cur_date = time.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+        delta_days = (cur_date - created_date).days
+        if delta_days >20:
+            return
+
         #print url.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
@@ -59,7 +70,14 @@ class Youdao(BaseBBS):
             print "category is error" 
 
         
-
+    def getYearMonthDay(self,strtime):
+        
+        #print strtime
+        now = datetime.now()
+        pattern = re.compile(r"(\d+)-(\d+)-(\d+)")
+        m = pattern.search(strtime)
+        if m != None :
+            return m.group(1),m.group(2),m.group(3)
              
     def convertTime(self,createdAt):
         
@@ -78,7 +96,12 @@ class Youdao(BaseBBS):
             m = m.group()
             return now-timedelta(hours=int(m))
         else:
-            return datetime.strptime(strtime.strip(),'%Y-%m-%d')
+
+            try:
+                createdAt = datetime.strptime(nowstrtime.strip(),'%Y-%m-%d')
+            except:
+                createdAt = datetime.strptime(str(now.year)+"-"+strtime.strip(),'%Y-%m-%d')
+            return createdAt
 
     def main(self):
         #last_time = session.query(Job).filter(Job.info_source_id==self.INFO_SOURCE_ID).order_by(Job.id.desc()).first().previous_executed    
