@@ -2,6 +2,7 @@
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search,bug fix!
 # update by lgy, 2013.7.30, add google search
+# update by lgy, 2013.10.30,fix bugs
 from google_search import Google
 from baidu import Baidu
 from BaseNews import *
@@ -40,8 +41,8 @@ class SCZX(BaseNews):
             createdAt = item.div.findAll('div')[1].div.text.split(' ')[4]
             createdAt = self.convertTime(createdAt)
         except:
-            createdAt = datetime.now()
-        #print url, SOURCENAME, title, content,createdAt
+            createdAt = "0000-00-00"
+        print url, SOURCENAME, title, content,createdAt
         add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
@@ -51,19 +52,19 @@ class SCZX(BaseNews):
         return datetime.strptime(time,'%Y-%m-%d')
 
 def main(id):
-    try:
-        obj =  SCZX(id)
-        obj.main()
-    except Exception, e:
-        store_error(id)
-        news_logger.exception(e)
-
     # try:
-    #     obj = Baidu(id,'scol.com.cn','news',SOURCENAME)
+    #     obj =  SCZX(id)
     #     obj.main()
     # except Exception, e:
     #     store_error(id)
     #     news_logger.exception(e)
+
+    try:
+        obj = Baidu(id,'scol.com.cn','news',SOURCENAME)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        news_logger.exception(e)
   
     # try:
     #     obj = Google(id,'scol.com.cn','news',SOURCENAME)
