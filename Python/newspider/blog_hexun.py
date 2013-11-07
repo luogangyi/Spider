@@ -3,13 +3,14 @@
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
 # update by lgy, 2013.8.4, fix bugs.
+# update by lgy, 2013.10.30, fix bugs.
 from BaseTimeLimit import *
 from blog_utils import *
 from news_hexun import HexunNews
 from baidu import Baidu
 from google_search import Google
 
-class HexunBlog(HexunNews):
+class HexunBlog(BaseBBS):
     '''和讯博客  http://blog.hexun.com/—— 按博客搜索 属于blog故存入blog_posts表'''
     def __init__(self,sourceId):
         BaseBBS.__init__(self,sourceId)

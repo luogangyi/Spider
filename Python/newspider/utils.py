@@ -29,7 +29,7 @@ def store_category(info_type, idstr):
     #url = "http://localhost:8080/soya/classifier/run?info=%s&id=%s" % (info_type, idstr)
 
     url = "http://localhost:3010/classify/%s/%s" % (info_type, idstr)
-    print url
+    #print url
 
     # response = urllib2.urlopen(url)  
     # content = response.read() 

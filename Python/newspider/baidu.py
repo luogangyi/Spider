@@ -6,6 +6,10 @@
 # update by lgy ,2013.08.04. add retry, adjust sleep time;
 # update by lgy, 2013.08.04 .fix bug of calculate fetched count of different category 
 # update by lgy, 2013.10.11 .filter time
+<<<<<<< HEAD
+=======
+# update by lgy, 2013.10.30 . updates
+>>>>>>> 9b1224332da6a448f74fc8d54c297d797c287dcf
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -22,17 +26,42 @@ class Baidu(BaseBBS):
     def nextPage(self,keyword):
         keyword = keyword.str.encode('utf8')
         domain = self.domain
+
+
+        cookie_jar = cookielib.LWPCookieJar()
+        cookie_support = urllib2.HTTPCookieProcessor(cookie_jar)
+        opener = urllib2.build_opener(cookie_support, urllib2.HTTPHandler)
+        opener.addheaders = [('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17')]
+        urllib2.install_opener(opener)
+
+        # get cookie
+        cookie_url = '''http://www.baidu.com'''
+        opener.open(cookie_url)
+
         # for a month
         url = 'http://www.baidu.com/s?q1=%s&q2=&q3=&q4=&rn=100&lm=7&ct=0&ft=&q5=&q6=%s&tn=baiduadv' % (keyword,domain)
 
+        #url = 'http://www.google.com.hk/search?as_q=%s&as_epq=&as_oq=&as_eq=&as_nlo=&as_nhi=&lr=lang_zh-CN&cr=&as_qdr=w&as_sitesearch=%s&as_occt=any&safe=active&as_filetype=&as_rights=' % (keyword,domain)
+        headers = {
+                    'Host': 'wwww.baidu.com',
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17'
+        }
+            #print url
+        req= urllib2.Request(url, headers = headers)  
+
+
         items = []
         try:
-            content = urllib2.urlopen(url).read()
+            response = opener.open(req)
+            content = response.read() 
             soup = BeautifulSoup(content)
+            #print soup.prettify()
             items = soup.findAll("table",{'class':'result'})
+
             time.sleep(2)
         except:
-            content = urllib2.urlopen(url).read()
+            response = opener.open(req)
+            content = response.read()
             soup = BeautifulSoup(content)
             items = soup.findAll("table",{'class':'result'})
             print "retry!"
@@ -52,12 +81,12 @@ class Baidu(BaseBBS):
 
 
 
-        response = urllib2.urlopen(url)
-        url = response.geturl()
+        #response = urllib2.urlopen(url)
+        #url = response.geturl()
 
         #recheck url
-        if recheck_url(url):
-            return
+        # if recheck_url(url):
+        #     return
         content = item.find('div',{'class':'c-abstract'}).text
         
         citeTime = item.find('div',{'class':'f13'}).span.text

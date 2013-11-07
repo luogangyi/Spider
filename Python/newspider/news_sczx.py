@@ -2,7 +2,11 @@
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search,bug fix!
 # update by lgy, 2013.7.30, add google search
+<<<<<<< HEAD
 # update by lgy, 2013.10.11 .fix time bug
+=======
+# update by lgy, 2013.10.30,fix bugs
+>>>>>>> 9b1224332da6a448f74fc8d54c297d797c287dcf
 from google_search import Google
 from baidu import Baidu
 from BaseNews import *
@@ -43,7 +47,11 @@ class SCZX(BaseNews):
             print createdAt
             createdAt = self.convertTime(createdAt)
         except:
+<<<<<<< HEAD
             createdAt = datetime.now()
+=======
+            createdAt = "0000-00-00"
+>>>>>>> 9b1224332da6a448f74fc8d54c297d797c287dcf
         print url, SOURCENAME, title, content,createdAt
         add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)

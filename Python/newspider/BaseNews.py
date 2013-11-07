@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 # written by lgy. 2013.8.4
+# update by lgy.2013.9.3
 from config import *
 from news_utils import *
 import HTMLParser

@@ -60,14 +60,14 @@ def main(id):
     #     news_logger.exception(e)
 
     try:
-        obj = Baidu(id,'people.com.cn','news',SOURCENAME)
+        obj = Baidu(id,'sc.people.com.cn','news',SOURCENAME)
         obj.main()
     except Exception, e:
         store_error(id)
         news_logger.exception(e)
 
     try:
-        obj = Google(id,'people.com.cn','news',SOURCENAME)
+        obj = Google(id,'sc.people.com.cn','news',SOURCENAME)
         obj.main()
     except Exception, e:
         store_error(id)

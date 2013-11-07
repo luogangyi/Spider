@@ -1,0 +1,3 @@
+*.pyc
+Python/config.py
+Python/newspider/config.py
