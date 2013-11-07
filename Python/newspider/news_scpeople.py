@@ -24,15 +24,15 @@ class ScPeopleNews(BaseNews):
         response = urllib2.urlopen(request)
 
         content = response.read()
-        
+        print content
         soup = BeautifulSoup(content)
-
+        print soup.pretiffy()
         items = soup.findAll('result')
 
         return items
     
     def itemProcess(self,item):
-
+        print item.pretiffy()
         title = item.title.text
         #print title
         content = item.content.text[21:]
@@ -52,26 +52,26 @@ class ScPeopleNews(BaseNews):
 
 
 def main(id):
+    # try:
+    #     obj = ScPeopleNews(id)
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(id)
+    #     news_logger.exception(e)
+
     try:
-        obj = ScPeopleNews(id)
+        obj = Baidu(id,'people.com.cn','news',SOURCENAME)
         obj.main()
     except Exception, e:
         store_error(id)
         news_logger.exception(e)
 
-    # try:
-    #     obj = Baidu(id,'people.com.cn','news',SOURCENAME)
-    #     obj.main()
-    # except Exception, e:
-    #     store_error(id)
-    #     news_logger.exception(e)
-
-    # try:
-    #     obj = Google(id,'people.com.cn','news',SOURCENAME)
-    #     obj.main()
-    # except Exception, e:
-    #     store_error(id)
-    #     news_logger.exception(e)
+    try:
+        obj = Google(id,'people.com.cn','news',SOURCENAME)
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        news_logger.exception(e)
 
 if __name__=="__main__":
     main(SCPeople_NEWS_INFO_SOURCE_ID)
