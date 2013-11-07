@@ -6,10 +6,7 @@
 # update by lgy ,2013.08.04. add retry, adjust sleep time;
 # update by lgy, 2013.08.04 .fix bug of calculate fetched count of different category 
 # update by lgy, 2013.10.11 .filter time
-<<<<<<< HEAD
-=======
 # update by lgy, 2013.10.30 . updates
->>>>>>> 9b1224332da6a448f74fc8d54c297d797c287dcf
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -81,12 +78,12 @@ class Baidu(BaseBBS):
 
 
 
-        #response = urllib2.urlopen(url)
-        #url = response.geturl()
+        response = urllib2.urlopen(url)
+        url = response.geturl()
 
         #recheck url
-        # if recheck_url(url):
-        #     return
+        if recheck_url(url):
+            return
         content = item.find('div',{'class':'c-abstract'}).text
         
         citeTime = item.find('div',{'class':'f13'}).span.text
@@ -104,7 +101,7 @@ class Baidu(BaseBBS):
         delta_days = (cur_date - created_date).days
         if delta_days >10:
             return
-        #print url, title,content,createdAt,delta_days
+        print url, title,content,createdAt,delta_days
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
