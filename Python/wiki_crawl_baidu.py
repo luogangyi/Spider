@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 #coding=utf-8
-
+#update by lgy 2013.9.12
 from config import *
-from utils import baidu_date_str_to_datetime, wiki_logger, store_category, store_error
+from utils import baidu_date_str_to_datetime, wiki_logger, store_category, store_error,recheck_title
 
 BAIDU_ZHIDAO_INFO_SOURCE_ID = 2
 
@@ -50,13 +50,20 @@ def search_for_baidu_zhidao_posts():
         for post in posts:
             try:
                 url = post.dt.a['href']
+                title = post.dt.a.text
+                #print "before",title
+                if not recheck_title(keyword, title):
+                    time.sleep(10)
+                    continue
+                #print "after",title
                 comment_count = 0
                 if post.find('a', attrs={'log': "pos:ans"}):
                     comment_count_str = post.find('a', attrs={'log': "pos:ans"}).text
                     tail = comment_count_str.find(u'个回答')
                     comment_count = int(comment_count_str[:tail])
 
-                store_by_wiki_url(url, comment_count, keyword.id)
+
+                store_by_wiki_url(url, comment_count, keyword.id,title)
             except Exception, e:
                 store_error(BAIDU_ZHIDAO_INFO_SOURCE_ID)
                 wiki_logger.exception(e) 
@@ -76,7 +83,7 @@ def search_for_baidu_zhidao_posts():
     session.commit()    
 
 
-def store_by_wiki_url(url, comment_count, keyword_id):
+def store_by_wiki_url(url, comment_count, keyword_id,title):
     #print url
     sql_post = session.query(WikiPost).filter(WikiPost.url==url).first()
     if not sql_post:
@@ -138,6 +145,7 @@ def store_by_wiki_url(url, comment_count, keyword_id):
 
 
     content = soup.find('pre', attrs={'accuse': "qContent"})
+    #print sql_post.title
     if content is None:
         sql_post.content = ""
     else:
@@ -151,6 +159,10 @@ def store_by_wiki_url(url, comment_count, keyword_id):
         sql_post.answered = True
 
     sql_post.comment_count = comment_count
+
+
+
+    
 
     session.merge(sql_post) #merge
 

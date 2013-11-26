@@ -56,12 +56,12 @@ if __name__ == '__main__':
         store_error(SCCHINA_NEWS_INFO_SOURCE_ID)
         news_logger.exception(e)
 
-    try:
-        obj = Google(SCPeople_NEWS_INFO_SOURCE_ID,'people.com.cn','news',"人民网四川频道")
-        obj.main()
-    except Exception, e:
-        store_error(SCPeople_NEWS_INFO_SOURCE_ID)
-        news_logger.exception(e)
+    # try:
+    #     obj = Google(SCPeople_NEWS_INFO_SOURCE_ID,'sc.people.com.cn','news',"人民网四川频道")
+    #     obj.main()
+    # except Exception, e:
+    #     store_error(SCPeople_NEWS_INFO_SOURCE_ID)
+    #     news_logger.exception(e)
 
     try:
         obj = Google(SCRB_NEWS_INFO_SOURCE_ID,'scdaily.cn','news',"四川日报" )

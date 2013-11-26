@@ -7,6 +7,7 @@
 # update by lgy, 2013.08.04 .fix bug of calculate fetched count of different category 
 # update by lgy, 2013.10.11 .filter time
 # update by lgy, 2013.10.30 . updates
+# update by lgy, 2013.11.18 . updates
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -77,13 +78,15 @@ class Baidu(BaseBBS):
             return
 
 
-
-        #response = urllib2.urlopen(url)
-        #url = response.geturl()
+        try:
+            response = urllib2.urlopen(url)
+            url = response.geturl()
+        except:
+            return
 
         #recheck url
-        # if recheck_url(url):
-        #     return
+        if recheck_url(url):
+            return
         content = item.find('div',{'class':'c-abstract'}).text
         
         citeTime = item.find('div',{'class':'f13'}).span.text
@@ -101,7 +104,7 @@ class Baidu(BaseBBS):
         delta_days = (cur_date - created_date).days
         if delta_days >10:
             return
-        #print url, title,content,createdAt,delta_days
+        print url, title,content,createdAt,delta_days
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
@@ -170,11 +173,13 @@ class Baidu(BaseBBS):
                 self.search4EachItem(items,keyword)
 #                pageIndex += 1
                 isFinished = True #just crawl the first page
+                time.sleep(5)
             time.sleep(5)
         return count
 
     def search4EachItem(self,items,keyword):
         for item in items:
+            time.sleep(2)
             self.itemProcess(item,keyword)    
 
 

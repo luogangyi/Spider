@@ -159,7 +159,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
                     break
 
                 if info_source_id == GOOGLE_NEWS_INFO_SOURCE_ID:
-                    print url, source_name, title, content,created_at
+                    #print url, source_name, title, content,created_at
                     add_news_to_session(url, source_name, title, content,
                                     info_source_id, created_at, keyword)
                 else:
@@ -269,7 +269,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
                     finished = True
                     break
 
-                print "outer",url, source_name, title, content,created_at,keyword.str,finished
+                #print "outer",url, source_name, title, content,created_at,keyword.str,finished
                 # 新闻展开
                 morelink_a = news_table.find('a',attrs={'class':'more_link'})
                 if morelink_a != None:
@@ -360,7 +360,7 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
             except:
                 created_at =  datetime.now()
 
-            print "inner",url, source_name, title, content,created_at
+            #print "inner",url, source_name, title, content,created_at
             if info_source_id == BAIDU_NEWS_INFO_SOURCE_ID:
                 add_news_to_session(url, source_name, title, content,
                                     info_source_id, created_at, keyword)
