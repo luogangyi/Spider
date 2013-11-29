@@ -3,6 +3,7 @@
 # modified at 2013.7.23
 # update by lgy at 2013.9.6
 # update by lgy at 2013.9.9,sort by time!! only crawl 7 days data!
+# update by lgy at 2013.11.29
 
 from config import *
 from utils import store_category, recheck_title, baidu_date_str_to_datetime
@@ -231,30 +232,31 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
     
             soup = BeautifulSoup(content, fromEncoding="gbk")
             #print soup.prettify()
-            res = soup.findAll('p', attrs={'class': 'res'})
-            news_tables =[]
-            for contents in res:
-                news = contents.findAll('span')
-                if len(news)>0:
-                    news_tables = news
-                    break
+            news_tables = soup.findAll('li', attrs={'class': re.compile('result title.*')})
+            # res = soup.findAll('p', attrs={'class': 'res'})
+            # news_tables =[]
+            # for contents in res:
+            #     news = contents.findAll('span')
+            #     if len(news)>0:
+            #         news_tables = news
+            #         break
 
 
             count = count + len(news_tables)
-
+            #print len(news_tables)
             if len(news_tables) <20:
                 finished = True
-                break
+                time.sleep(5)
 
             for news_table in news_tables:
 
                 url = news_table.a['href']
                 title = news_table.a.text
-                source_and_date = news_table.findAll('font', attrs={'class': 'g'})[-1].text.split()
+                source_and_date = news_table.findAll('span', attrs={'class': 'c-author'})[-1].text.replace('&nbsp;',' ').split()
                 content = ""
 
                 source_name = source_and_date[0]
-                #print source_name
+                #print news_table.findAll('span', attrs={'class': 'c-author'})[-1].text.replace('&nbsp;',' ')
                 if len(source_and_date) == 3:
                     date = source_and_date[1] + ' ' + source_and_date[2]
                 else:
@@ -264,14 +266,21 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
                 except:
                     created_at =  datetime.now()
 
-                # check time!!    
-                if created_at < last_time:
+                #print last_time,created_at,(last_time-created_at).days
+                #check time!! 
+                if (last_time-created_at).days>1 :
                     finished = True
+                    time.sleep(5)
                     break
+                #check time!!    
+                # if created_at < last_time:
+                #     finished = True
+                #     time.sleep(5)
+                #     break
 
-                #print "outer",url, source_name, title, content,created_at,keyword.str,finished
+                #print "outer",keyword.str, page,url, source_name, title, content,created_at,keyword.str,finished
                 # 新闻展开
-                morelink_a = news_table.find('a',attrs={'class':'more_link'})
+                morelink_a = news_table.find('a',attrs={'class':'c-more_link'})
                 if morelink_a != None:
                     url = 'http://news.baidu.com'+morelink_a['href']
                     #print morelink_a['href']+morelink_a.text
@@ -326,13 +335,7 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
 
         soup = BeautifulSoup(content, fromEncoding="gbk")
 
-        res = soup.findAll('p', attrs={'class': 'res'})
-        news_tables =[]
-        for contents in res:
-            news = contents.findAll('span')
-            if len(news)>0:
-                news_tables = news
-                break
+        news_tables = news_tables = soup.findAll('li', attrs={'class': re.compile('result title.*')})
 
 
         
@@ -340,12 +343,13 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
 
         if len(news_tables) ==0:
             finished = True
+            time.sleep(5)
             break
 
         for news_table in news_tables:
             url = news_table.a['href']
             title = news_table.a.text
-            source_and_date = news_table.findAll('font', attrs={'class': 'g'})[-1].text.split()
+            source_and_date = news_table.findAll('span', attrs={'class': 'c-author'})[-1].text.replace('&nbsp;',' ').split()
             content = ""
 
             source_name = source_and_date[0]
@@ -360,7 +364,7 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
             except:
                 created_at =  datetime.now()
 
-            #print "inner",url, source_name, title, content,created_at
+            print "inner",url, source_name, title, content,created_at
             if info_source_id == BAIDU_NEWS_INFO_SOURCE_ID:
                 add_news_to_session(url, source_name, title, content,
                                     info_source_id, created_at, keyword)
@@ -370,15 +374,18 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
 
 
         time.sleep(10)
-        page_nav = soup.find('div',attrs={'class':'page-nav'})
+        page_nav = soup.find('p',attrs={'id':'page'})
 
         # 没有下一页，则结束
         if page_nav == None:
             #print 'no page nav'
+            time.sleep(5)
             finished = True
             break
-        next_url_a = page_nav.find('a',attrs={'class':'next'})
+        next_url_a = page_nav.find('a',attrs={'class':'n'})
         if next_url_a == None:
+            #print 'no next page'
+            time.sleep(5)
             #print page_nav.prettify()
             finished = True
             break
