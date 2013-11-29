@@ -1,6 +1,6 @@
 #! /usr/bin/env python
-#coding=utf-8
-#update by lgy 2013.9.12
+# coding=utf-8
+# update by lgy. 2013.11.29
 from config import *
 from utils import baidu_date_str_to_datetime, wiki_logger, store_category, store_error,recheck_title
 
@@ -15,59 +15,77 @@ def search_for_baidu_zhidao_posts():
     sql_job.info_source_id = BAIDU_ZHIDAO_INFO_SOURCE_ID
 
     count = 0
-
+    pn = 0
+    isFinish = False
     last_count = 0
     for keyword in KEYWORDS :
-        data = {'word': keyword.str.encode('utf8'),
-                'ie': 'utf-8',
-                'sort': 1,
-                'lm': 0,
-                'date':2,
-                'oa':0,
-                'sites':-1,
-               }
+        while(not isFinish and pn<200):
+            data = {'word': keyword.str.encode('utf8'),
+                    'ie': 'utf-8',
+                    'sort': 1,
+                    'lm': 0,
+                    'date':2,
+                    'oa':0,
+                    'sites':-1,
+                    'pn':pn
+                   }
+            pn = pn+10
+            url = "http://zhidao.baidu.com/search?" + urllib.urlencode(data)
+            # print url
+
+            headers = {
+                'Host': 'zhidao.baidu.com',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
+            }
+            
+            req = urllib2.Request(url, headers = headers)  
+            response = urllib2.urlopen(req)  
+            content = response.read() 
         
-        url = "http://zhidao.baidu.com/search?" + urllib.urlencode(data)
-        # print url
-
-        headers = {
-            'Host': 'zhidao.baidu.com',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
-        }
-    
-        req = urllib2.Request(url, headers = headers)  
-        response = urllib2.urlopen(req)  
-        content = response.read() 
-    
-        soup = BeautifulSoup(content)
+            soup = BeautifulSoup(content)
 
 
-        posts = soup.findAll('dl', attrs={'class': "dl"})
-        count = count + len(posts)
+            posts = soup.findAll('dl', attrs={'class': re.compile("dl.*")})
+            if(len(posts)==0):
+                isFinish = True
+                time.sleep(10)
+            #print keyword.str,pn,len(posts)
+            count = count + len(posts)
 
-        #print count
+            #print count
 
-        for post in posts:
-            try:
-                url = post.dt.a['href']
-                title = post.dt.a.text
-                #print "before",title
-                if not recheck_title(keyword, title):
-                    time.sleep(10)
-                    continue
-                #print "after",title
-                comment_count = 0
-                if post.find('a', attrs={'log': "pos:ans"}):
-                    comment_count_str = post.find('a', attrs={'log': "pos:ans"}).text
-                    tail = comment_count_str.find(u'个回答')
-                    comment_count = int(comment_count_str[:tail])
+            for post in posts:
+                try:
+                    url = post.dt.a['href']
+                    comment_count = 0
+                    title = post.dt.a.text
+                    if not recheck_title(keyword, title):
+                        time.sleep(10)
+                        continue
+                    if post.find('a', attrs={'log': "pos:ans"}):
+                        comment_count_str = post.find('a', attrs={'log': "pos:ans"}).text
+                        tail = comment_count_str.find(u'个回答')
+                        comment_count = int(comment_count_str[:tail])
 
+                    content = ""
+                    if post.find('dd', attrs={'class': "dd qSummary"}):
+                        content = content+post.find('dd', attrs={'class': "dd qSummary"}).text
+                    if post.find('dd', attrs={'class': "dd answer"}):
+                        content = content+post.find('dd', attrs={'class': "dd answer"}).text
 
-                store_by_wiki_url(url, comment_count, keyword.id,title)
-            except Exception, e:
-                store_error(BAIDU_ZHIDAO_INFO_SOURCE_ID)
-                wiki_logger.exception(e) 
+                    created_at = post.findAll('span', attrs={'class': "mr-8"})[0].text
+                    username_a_tag = post.findAll('span', attrs={'class': "mr-8"})[1].find('a', attrs={'class': "f-light nod"})
+                    username = u'匿名'
+                    if username_a_tag != None:
+                        username = username_a_tag.text
+                    print url,title,created_at,content,username,comment_count
+                    #time.sleep(5)
+                    store_by_wiki_url(url, comment_count, keyword.id, title,content,created_at,username)
+                except Exception, e:
+                    store_error(BAIDU_ZHIDAO_INFO_SOURCE_ID)
+                    wiki_logger.exception(e) 
 
+            time.sleep(10)
 
         if count - last_count > 30:
             time.sleep(1800)
@@ -83,87 +101,93 @@ def search_for_baidu_zhidao_posts():
     session.commit()    
 
 
-def store_by_wiki_url(url, comment_count, keyword_id,title):
-    #print url
+def store_by_wiki_url(url, comment_count, keyword_id,title,content,created_at,username):
+    
     sql_post = session.query(WikiPost).filter(WikiPost.url==url).first()
     if not sql_post:
        sql_post = WikiPost() 
-
+    #print url
     sql_post.url = url
 
     sql_post.keyword_id = keyword_id
     sql_post.info_source_id = BAIDU_ZHIDAO_INFO_SOURCE_ID
-
-    headers = {
-        'Host': 'zhidao.baidu.com',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
-    }
-    
-    req = urllib2.Request(url, headers = headers)  
-    response = urllib2.urlopen(req)  
-    content = response.read()  
-
-    soup = BeautifulSoup(content)
-
-    title = soup.find('span', attrs={'class': "ask-title"})
-    if title is None:
-        wiki_logger.error("open baidu zhidao url: " + url + " error. can't find title")
-        time.sleep(600)
-        return
-
-    sql_post.title = title.text 
-
-    asker_soup = soup.find('div', attrs={'id': "ask-info"})
-    asker = asker_soup.find('a', attrs={'class': "user-name"})
-    if asker == None:
-        sql_post.wiki_user_screen_name = u'匿名'
-    else:
-        sql_post.wiki_user_screen_name = asker.text
-    
-
-    address = url[25:]
-    start = address.find('/')
-    end = address.find('.html')
-    idstr = address[start+1:end]
-    read_count_url = "http://cp.zhidao.baidu.com/v.php?q=" + idstr + "&callback=bd__cbs__onzolk" 
-    headers = {
-        'Host': 'cp.zhidao.baidu.com',
-        'Referer': 'http://zhidao.baidu.com/question/523194115.html',       
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
-    }
-
-    req = urllib2.Request(read_count_url, headers = headers)  
-    response = urllib2.urlopen(req)  
-    read_count = response.read()
-    start = read_count.find("(")
-    end = read_count.find(")")
-    sql_post.read_count = int(read_count[start+1:end])
-
-
-    ask_time = soup.find('span', attrs={'class': "grid-r ask-time"})
-    sql_post.created_at = wiki_date_str_to_datetime(ask_time.text)
-
-
-    content = soup.find('pre', attrs={'accuse': "qContent"})
-    #print sql_post.title
-    if content is None:
-        sql_post.content = ""
-    else:
-        sql_post.content = content.renderContents()
-
-
-    editor = soup.find('span', attrs={'class': "answer-title h2 grid"})
-    if editor is None:
+    sql_post.title = title
+    sql_post.wiki_user_screen_name = username
+    sql_post.created_at = wiki_date_str_to_datetime(created_at)
+    sql_post.comment_count = comment_count
+    if content == "":
         sql_post.answered = False
     else:
         sql_post.answered = True
+    sql_post.read_count = -1
+    sql_post.content = content
+    # headers = {
+    #     'Host': 'zhidao.baidu.com',
+    #     'User-Agent':'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.160 Safari/537.22',
+    #     #'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
+    # }
+    
+    # req = urllib2.Request(url, headers = headers)  
+    # response = urllib2.urlopen(req)  
+    # content = response.read()  
 
-    sql_post.comment_count = comment_count
+    # soup = BeautifulSoup(content)
+    
+    # title = soup.find('span', attrs={'class': "ask-title"})
 
+    # if title is None:
+    #     wiki_logger.error("open baidu zhidao url: " + url + " error. can't find title")
+    #     time.sleep(600)
+    #     return
 
+    # sql_post.title = title.text 
 
+    # asker_soup = soup.find('div', attrs={'id': "ask-info"})
+    # asker = asker_soup.find('a', attrs={'class': "user-name"})
+    # if asker == None:
+    #     sql_post.wiki_user_screen_name = u'匿名'
+    # else:
+    #     sql_post.wiki_user_screen_name = asker.text
     
 
+    # address = url[25:]
+    # start = address.find('/')
+    # end = address.find('.html')
+    # idstr = address[start+1:end]
+    # read_count_url = "http://cp.zhidao.baidu.com/v.php?q=" + idstr + "&callback=bd__cbs__onzolk" 
+    # headers = {
+    #     'Host': 'cp.zhidao.baidu.com',
+    #     'Referer': 'http://zhidao.baidu.com/question/523194115.html',       
+    #     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
+    # }
+
+    # req = urllib2.Request(read_count_url, headers = headers)  
+    # response = urllib2.urlopen(req)  
+    # read_count = response.read()
+    # start = read_count.find("(")
+    # end = read_count.find(")")
+    # sql_post.read_count = int(read_count[start+1:end])
+
+
+    # ask_time = soup.find('span', attrs={'class': "grid-r ask-time"})
+    # sql_post.created_at = wiki_date_str_to_datetime(ask_time.text)
+
+
+    # content = soup.find('pre', attrs={'accuse': "qContent"})
+    # if content is None:
+    #     sql_post.content = ""
+    # else:
+    #     sql_post.content = content.renderContents()
+
+
+    # editor = soup.find('span', attrs={'class': "answer-title h2 grid"})
+    # if editor is None:
+    #     sql_post.answered = False
+    # else:
+    #     sql_post.answered = True
+
+    # sql_post.comment_count = comment_count
+    # print sql_post.url,sql_post.title,sql_post.content
     session.merge(sql_post) #merge
 
     session.flush()
@@ -173,7 +197,7 @@ def store_by_wiki_url(url, comment_count, keyword_id,title):
     if sql_post:
         store_category('wiki', str(sql_post.id))
 
-    time.sleep(10)
+    #time.sleep(10)
 
 
 def do_login(username,password):
