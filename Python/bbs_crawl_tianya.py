@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #coding=utf-8
-
+# fix bug by lgy. 2013.12.03
 from config import *
 from bbs_utils import *
 from utils import baidu_date_str_to_datetime, bbs_logger, store_error
@@ -115,6 +115,9 @@ def store_by_bbs_url(url, keyword_id):
     soup = BeautifulSoup(content)
 
     title = soup.find('span', attrs={'class': "s_title"})
+    if title ==None:
+        time.sleep(10)
+        return
     title = title.span.text
 
     info_soup = soup.find('div', attrs={'class': "atl-info"})
@@ -133,7 +136,7 @@ def store_by_bbs_url(url, keyword_id):
     content_div = soup.find('div', attrs={'class': "bbs-content clearfix"})
     content = content_div.text
 
-    print url, bbs_user_screen_name, title, content
+    #print url, bbs_user_screen_name, title, content
     store_bbs_post(url, bbs_user_screen_name, title, content,
                    TIANYA_INFO_SOURCE_ID, keyword_id, created_at, read_count, comment_count)
 
