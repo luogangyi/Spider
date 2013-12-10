@@ -2,6 +2,7 @@
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search,bug fix
 # update by lgy, 2013.7.30, add google search
+# update by lgy 2013.12.10 ,bug fix
 
 from BaseBBS import *
 from baidu import Baidu
@@ -27,26 +28,28 @@ class DZ19BBS(BaseBBS):
         keys['cuId'] =  scbar_form.find('input',attrs={'name':'cuId'})['value']
         keys['gId'] =  scbar_form.find('input',attrs={'name':'gId'})['value']
         keys['sign'] =  scbar_form.find('input',attrs={'name':'sign'})['value']
+        keys['ext_vgIds'] = scbar_form.find('input',attrs={'name':'ext_vgIds'})['value']
         # url = soup.find('a',text=u'按时间排序').parent['href']
         # url = "http://so.dz19.net/"+url
         keyword.str = keyword.str.replace(' ','+')
         url = 'http://so.dz19.net/f/discuz?mod=forum&formhash='+\
          keys['formhash'].encode('gbk')+'&srchtype=title&srhfid=0&srhlocality=portal%3A%3Aindex&sId=' +\
          keys['sId'].encode('gbk')+'&ts='+keys['ts'].encode('gbk')+'&cuId=0&cuName=&gId=7&agId=0&egIds=&fmSign=&ugSign7=&sign='+keys['sign'].encode('gbk')+\
-         '&charset=gbk&source=discuz&fId=0&q='+ keyword.str.encode('gbk')+'&srchtxt='+ keyword.str.encode('gbk')+'&searchsubmit=true'
+         '&ext_vgIds='+keys['ext_vgIds'].encode('gbk')+'&charset=gbk&source=discuz&fId=0&q='+ keyword.str.encode('gbk')+'&srchtxt='+ keyword.str.encode('gbk')+'&searchsubmit=true'
         #print url
         response = urllib2.urlopen(url)
         content = response.read()
         soup = BeautifulSoup(content)
 
+        time.sleep(3)
         if soup.find('a',text=u'24小时内')==None:
-        	return []
+            return []
         url = soup.find('a',text=u'24小时内').parent['href']
         url = "http://so.dz19.net/"+url
         response = urllib2.urlopen(url)
         content = response.read()
         soup = BeautifulSoup(content)
-
+        #print soup.prettify()
         items = soup.find("span",id="result-items")
         if items == None:
             return []
