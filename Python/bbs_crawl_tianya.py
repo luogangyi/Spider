@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
-
+# fix bug by lgy. 2013.12.03
+# update by lgy. 2013.12.13
 from config import *
 from bbs_utils import *
 from utils import baidu_date_str_to_datetime, bbs_logger, store_error
@@ -21,12 +22,12 @@ def search_for_tianya_bbs_posts():
                 'f': 3
                }
         
-        url = "http://www.tianya.cn/search/bbs?" + urllib.urlencode(data)
+        url = "http://search.tianya.cn/bbs?" + urllib.urlencode(data)
 
         headers = {
-            'Host': 'www.tianya.cn',
+            'Host': 'search.tianya.cn',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
-            'Referer': 'http://www.tianya.cn/search/bbs'            
+            'Referer': 'http://bbs.tianya.cn/'            
         }
     
         req = urllib2.Request(url, headers = headers)  
@@ -74,7 +75,7 @@ def search_for_tianya_bbs_315_posts():
         headers = {
             'Host': 'bbs.tianya.cn',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
-            'Referer': 'http://bbs.tianya.cn/'            
+            #'Referer': 'http://bbs.tianya.cn/'            
         }
     
         req = urllib2.Request(url, headers = headers)  
@@ -107,7 +108,7 @@ def store_by_bbs_url(url, keyword_id):
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17',
     }
     
-    print url
+    #print url
     req = urllib2.Request(url, headers = headers)  
     response = urllib2.urlopen(req)  
     content = response.read()  
@@ -115,6 +116,9 @@ def store_by_bbs_url(url, keyword_id):
     soup = BeautifulSoup(content)
 
     title = soup.find('span', attrs={'class': "s_title"})
+    if title ==None:
+        time.sleep(10)
+        return
     title = title.span.text
 
     info_soup = soup.find('div', attrs={'class': "atl-info"})
@@ -133,7 +137,7 @@ def store_by_bbs_url(url, keyword_id):
     content_div = soup.find('div', attrs={'class': "bbs-content clearfix"})
     content = content_div.text
 
-    print url, bbs_user_screen_name, title, content
+    #print url, bbs_user_screen_name, title, content
     store_bbs_post(url, bbs_user_screen_name, title, content,
                    TIANYA_INFO_SOURCE_ID, keyword_id, created_at, read_count, comment_count)
 
