@@ -4,6 +4,7 @@
 # update by lgy, 2013.7.30, add google search
 # update by lgy, 2013.10.30, fix bug
 # update by lgy, 2013.12.13, fix bug
+# update by lgy, 2013.12.25
 from BaseBBS import *
 from baidu import Baidu
 from google_search import Google
@@ -65,7 +66,7 @@ class ZCDBBS(BaseBBS):
         url = "http://search.discuz.qq.com"+url
         
         # according to subject
-        url = url.replace("orderField=default&menu=1&rfh=1&searchLevel=4&isAdv=1&qs=txt.form.subject","searchLevel=4&menu=1&rfh=1&qs=txt.time.a&timeLength=365&orderField=posted&timeType=inside&isAdv=1")
+        url = url.replace("orderField=default&menu=1&rfh=1&searchLevel=4&isAdv=1&qs=txt.form.subject","searchLevel=4&menu=1&rfh=1&qs=txt.time.a&timeLength=7&orderField=posted&timeType=inside&isAdv=1")
         #print url
         req = urllib2.Request(url) 
         response = urllib2.urlopen(req) 
@@ -95,7 +96,7 @@ class ZCDBBS(BaseBBS):
         createdAt = userInfoTag.contents[0].strip()[:-1].strip()
         createdAt = self.convertTime(createdAt)
         username = userInfoTag.a.text
-        #print url, username, title, content, createdAt
+        print url, username, title, content, createdAt
         store_bbs_post(url, username, title, content,
                    self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 

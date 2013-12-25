@@ -2,6 +2,7 @@
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
+# no in-site search, 2013.12.25
 from BaseBBS import *
 from baidu import Baidu
 from google_search import Google
@@ -64,7 +65,7 @@ class MSLT(BaseBBS):
         createdAt = self.convertTime(createdAt)
 
         username = userInfoTag.a.text
-        #print url, username, title, content
+        print url, username, title, content
         store_bbs_post(url, username, title, content,
                        self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 
@@ -86,20 +87,20 @@ class MSLT(BaseBBS):
             return strtime
 
 def main(id):
-    try:
-        obj = MSLT(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
-        obj.main()
-
-    except Exception, e:
-        store_error(id)
-        bbs_logger.exception(e)
-
     # try:
-    #     obj = Baidu(id,'bbs.qx818.com','bbs')
+    #     obj = MSLT(id)#Source_id defined in bbs_utils.py which is accroding the databse table keywords
     #     obj.main()
+
     # except Exception, e:
     #     store_error(id)
     #     bbs_logger.exception(e)
+
+    try:
+        obj = Baidu(id,'bbs.qx818.com','bbs')
+        obj.main()
+    except Exception, e:
+        store_error(id)
+        bbs_logger.exception(e)
     # try:
     #     obj = Google(id,'bbs.qx818.com','bbs')
     #     obj.main()
