@@ -69,7 +69,7 @@ def search_for_new_statuses():
 
 def add_status_and_user_to_session(status, keyword_id):
     user = api.user.userinfo(status.name)
-
+    print status.name
     sql_user = session.query(User).filter(User.user_origin_id==user.name,
                                              User.info_source_id==QQ_WEIBO_INFO_SOURCE_ID).first()
     if not sql_user:
