@@ -71,7 +71,7 @@ def search_for_baidu_tieba_posts():
 
                 comment_count = get_comment_count(url)
                 read_count = 0
-                print url,title,bbs_user_screen_name,created_at,comment_count,content
+                #print url,title,bbs_user_screen_name,created_at,comment_count,content
                 store_bbs_post(url, bbs_user_screen_name, title, content,
                                BAIDU_TIEBA_INFO_SOURCE_ID, keyword.id, created_at, read_count, comment_count)
 
