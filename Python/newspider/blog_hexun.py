@@ -4,6 +4,7 @@
 # update by lgy, 2013.7.30, add google search
 # update by lgy, 2013.8.4, fix bugs.
 # update by lgy, 2013.10.30, fix bugs.
+# update by lgy, 2013.12.26, fix bugs.
 from BaseTimeLimit import *
 from blog_utils import *
 from news_hexun import HexunNews
@@ -64,7 +65,11 @@ class HexunBlog(BaseBBS):
         now = datetime.now()
         pattern = re.compile(r"\d*")
 
-        if strtime.find(u'天')>-1:
+        if strtime.find(u'分钟')>-1:
+            m = pattern.search(strtime)
+            m = m.group()        
+            return now-timedelta(minutes=int(m))
+        elif strtime.find(u'天')>-1:
             m = pattern.search(strtime)
             m = m.group()        
             return now-timedelta(days=int(m))

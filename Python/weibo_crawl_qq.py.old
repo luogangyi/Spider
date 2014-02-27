@@ -1,11 +1,10 @@
 #! /usr/bin/env python
 #coding=utf-8
-# update by lgy, fix a bug. 2013.12.22
-from config import *
-import json
 
-from qqweibo import OAuthHandler, API, JSONParser, ModelParser
-from utils import *
+from config import *
+
+from qqweibo import API,OAuthHandler,JSONParser, ModelParser
+from utils import store_category, weibo_logger, store_error
 
 
 API_KEY = '801322882'
@@ -43,16 +42,17 @@ def search_for_new_statuses():
     sql_job = Job()
     sql_job.previous_executed = datetime.now()
     sql_job.info_source_id = QQ_WEIBO_INFO_SOURCE_ID
-    
-    #print starttime
+
 
     for keyword in KEYWORDS : 
-        statuses = search_for_new_statuses_from_mobile_pages(keyword.str, starttime)
-        
-        # count = count + len(statuses)
-        # for status in statuses:
-        #     add_status_and_user_to_session(status, keyword.id)
-        #     time.sleep(1)
+        statuses = api.search.tweet(keyword=keyword.str, pagesize=30, page=1,
+                                    needdup=1, starttime=starttime,
+                                    endtime=endtime)
+
+        count = count + len(statuses)
+        for status in statuses:
+            add_status_and_user_to_session(status, keyword.id)
+            time.sleep(1)
 
         time.sleep(5)
     
@@ -68,14 +68,13 @@ def search_for_new_statuses():
 
 
 def add_status_and_user_to_session(status, keyword_id):
-    #print status.name
     user = api.user.userinfo(status.name)
-    print status.name
+
     sql_user = session.query(User).filter(User.user_origin_id==user.name,
                                              User.info_source_id==QQ_WEIBO_INFO_SOURCE_ID).first()
     if not sql_user:
         sql_user = User()
-
+    print user.name
     sql_user.user_origin_id = user.name
     sql_user.info_source_id = QQ_WEIBO_INFO_SOURCE_ID
     sql_user.screen_name = user.nick
@@ -143,71 +142,63 @@ def add_status_and_user_to_session(status, keyword_id):
 
 
 
-def search_for_new_statuses_from_mobile_pages(keyword, starttime):
-    page = 1
-    ids = ""
+def search_for_new_statuses_from_mobile_pages():
+    cookie_jar = cookielib.LWPCookieJar()
+    cookie_support = urllib2.HTTPCookieProcessor(cookie_jar)
+    opener = urllib2.build_opener(cookie_support, urllib2.HTTPHandler)
+    opener.addheaders = [('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36')]
+    urllib2.install_opener(opener)
 
-    # default 5 pages, enough for most cases, but can not satisfy special
-    # requierments, like history search  
-    #print keyworks_encode(keyword,'utf8')
-    while page < 6:
-        data = {'sid': 'AdA_av4yDo9HipzXLm_SbjWP',
-                'aid': 'vaction',
-                'mst': 33,
-                'ac': 60,
-                'shinfo': 'txt.wap_paged.l',
-                'shinforen': 'txt.wap_paged.k',
-                'keyword': keyword.encode('utf8'),
-                'dl2': 1,
-                'dumpJSON': 1,
-                'pageid': 'search',
-                'g_f': 18106,
-                'params': 'keyword='.encode('utf8')+keyword.encode('utf8')+'&type=msg'.encode('utf8'),
-                'psize': 10,
-                'pid': page
-               }
-        url = "http://ti.3g.qq.com/touch/s?" + urllib.urlencode(data)
-        print url
-        #print urllib.urlencode({"text":" "}),urllib.urlencode({"text":" ".encode('utf8')})
-        headers = {
-            'Host': 'ti.3g.qq.com',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36',
-            'Referer': 'http://bbs.tianya.cn/',          
-            'Connection': 'keep-alive',
-            'Accept:text/html': 'application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
-            'Cookie': 'g_ut=2'
-        }
+    # get cookie and login url
+    cookie_url = '''http://pt.3g.qq.com/s?aid=nLoginmb&g_ut=2'''
+    response = opener.open(cookie_url)
+    content = response.read()  
 
-        req = urllib2.Request(url, headers = headers)  
-        response = urllib2.urlopen(req)  
-        content = response.read() 
+    soup = BeautifulSoup(content)
 
-        results = json.loads(content)
-        
-        result_list = results["jsonDump"]["msgs"]
+    login_url_input = soup.find('input', attrs={'name':"login_url"})
+    login_url = login_url_input['value']
 
-        
-        for item in result_list:
-            #print str(item["msgId"])
-            #print api.t.list(ids=str(item["msgId"]))
-            try:
-                status = api.t.list(ids=str(item["msgId"]))
-                add_status_and_user_to_session(status, keyword.id)
-                time.sleep(3)
-                #ids = ids + "," + str(item["msgId"])
-            except:
-                continue
+    form = soup.find('form')
+    post_url = form['action']
 
-        page = page + 1
-        time.sleep(1)
+    # print post_url
+    # print cookie_jar
 
-    #ids = ids[1:]
-    #statuses = api.t.list(ids=ids)
-    #print statuses
-    #return statuses
+    username = 'tbs.spider.01@qq.com'
+    password = 'k3GhB4Wh'
+
+    post_data = urllib.urlencode({'qq':username,
+                                  'pwd':password,
+                                  'goUrl':'http://ti.3g.qq.com/g/s?aid=h',
+                                  'qfrom':'mblog',
+                                  'r_sid':'',
+                                  'sidtype':1,
+                                  'login_url':login_url,
+                                })
 
 
+    headers = {"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+               "Referer": "http://pt.3g.qq.com/s?aid=nLoginmb&g_ut=2",
+               "Accept-Language": "zh-CN,zh;q=0.8",
+               "Content-Type": "application/x-www-form-urlencoded",
+               "Accept-Encoding": "gzip,deflate,sdch",
+               "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36",
+               "Host": "pt.3g.qq.com",
+               "Connection": "Keep-alive",
+               "Cache-Control": "max-age=0",
+               "Origin": "http://pt.3g.qq.com"
+              }
+
+
+    req = urllib2.Request(url=post_url,data=post_data,headers=headers)
+    response = urllib2.urlopen(req) 
+    # print response.readlines()
+    # print response.info() 
+    # print response.status() 
+    content = response.read() 
+    soup = BeautifulSoup(content)
+    print soup.prettify()
 
 
 def location_split(location_str):
@@ -250,8 +241,9 @@ def update_by_weibo_id(id, origin_id):
 
 def main():
     try:
-        search_for_new_statuses()
-        refresh_monitoring_status()
+        search_for_new_statuses_from_mobile_pages()
+        # search_for_new_statuses()
+        # refresh_monitoring_status()
     except Exception, e:
         store_error(QQ_WEIBO_INFO_SOURCE_ID)
         weibo_logger.exception(e)

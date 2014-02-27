@@ -2,6 +2,7 @@
 #coding=utf-8
 #update by lgy 2013.7.29 ,add baidu search
 # update by lgy, 2013.7.30, add google search
+# update by lgy, 2013.12.26, fix bug
 from google_search import Google
 from baidu import Baidu
 from BaseNews import *
@@ -37,6 +38,7 @@ class HexunNews(BaseNews):
         url  = a['href']
         title = a.text
         title = self.deleteTag(title)
+        #print ult.h4.text
         createdAt = self.convertTime(ult.h4.text)
         content = item.find('div',{'class':'cont'}).text
         content = self.deleteTag(content)
@@ -53,7 +55,11 @@ class HexunNews(BaseNews):
         now = datetime.now()
         pattern = re.compile(r"\d*")
 
-        if strtime.find(u'天')>-1:
+        if strtime.find(u'分钟')>-1:
+            m = pattern.search(strtime)
+            m = m.group()        
+            return now-timedelta(minutes=int(m))
+        elif strtime.find(u'天')>-1:
             m = pattern.search(strtime)
             m = m.group()        
             return now-timedelta(days=int(m))
