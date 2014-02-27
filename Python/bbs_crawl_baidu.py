@@ -2,6 +2,8 @@
 #coding=utf-8
 # 更新于 2013.07.18
 # fix a bug by lgy, 2013.7.31
+# fix a bug by lgy, 2013.11.29
+# update by lgy, 2014.2.27
 from config import *
 from bbs_utils import *
 from utils import baidu_date_str_to_datetime, bbs_logger, store_error
@@ -40,7 +42,7 @@ def search_for_baidu_tieba_posts():
             content = response.read() 
     
             soup = BeautifulSoup(content.decode('gbk', 'ignore'))
-            
+            #print soup
             posts = soup.findAll('div', attrs={'class': 's_post'})
             count = count + len(posts)
             # print count
@@ -56,7 +58,7 @@ def search_for_baidu_tieba_posts():
                 content = post.find('div', attrs={'class': 'p_content'}).text
                 bbs_a_tags = post.findAll('a')
                 bbs_user_screen_name = bbs_a_tags[-1].text
-                created_at_str = post.findAll('font', attrs={'class': 'p_green'})[-1].text
+                created_at_str = post.findAll('font', attrs={'class': re.compile('p_green.*')})[-1].text
                 created_at = baidu_date_str_to_datetime(created_at_str)
 
 
@@ -69,7 +71,7 @@ def search_for_baidu_tieba_posts():
 
                 comment_count = get_comment_count(url)
                 read_count = 0
-                #print url,title,bbs_user_screen_name,created_at,comment_count,content
+                print url,title,bbs_user_screen_name,created_at,comment_count,content
                 store_bbs_post(url, bbs_user_screen_name, title, content,
                                BAIDU_TIEBA_INFO_SOURCE_ID, keyword.id, created_at, read_count, comment_count)
 
