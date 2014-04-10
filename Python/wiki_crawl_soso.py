@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 # update by lgy,2013.9.12
-
+# update by lgy,2014.4.10
 from config import *
 from utils import baidu_date_str_to_datetime, wiki_logger, store_category, store_error,recheck_title
 from newspider import baidu
@@ -201,7 +201,7 @@ def getPara(search_url):
 def main():
     try:
         start_time = datetime.now()
-        obj = baidu.Baidu(id,'scwx.newssc.org','news','四川外宣网')
+        obj = baidu.Baidu(SOSO_WENWEN_INFO_SOURCE_ID,'wenwen.sogou.com','wiki','')
         obj.main()
         # search_for_soso_wenwen_posts()
         end_time = datetime.now()
