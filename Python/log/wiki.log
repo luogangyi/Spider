@@ -27,3 +27,271 @@ Traceback (most recent call last):
   File "/usr/lib/python2.7/urllib2.py", line 1177, in do_open
     raise URLError(err)
 URLError: <urlopen error [Errno 111] Connection refused>
+2013-11-26 20:33:45,719 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1753938624815792588.html error. can't find title
+2013-11-26 20:34:51,277 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:37:06,964 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,966 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,968 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,970 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,972 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,974 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,976 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,978 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,980 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:06,982 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,572 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,574 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,577 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,579 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,581 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,584 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,586 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,588 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:07,590 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:08,577 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:08,579 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:08,581 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:08,583 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:08,586 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:08,588 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:08,590 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:08,592 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:09,764 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:09,766 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:09,768 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:09,771 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:09,774 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:09,777 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:09,779 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:37:09,781 - wiki_logger - ERROR - global name 'recheck_title' is not defined
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 61, in search_for_baidu_zhidao_posts
+    if not recheck_title(keyword, post.dt.a.text):
+NameError: global name 'recheck_title' is not defined
+2013-11-26 20:40:16,469 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:41:49,125 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:42:24,945 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:42:59,477 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:43:24,985 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:44:57,981 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:54:08,265 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:54:40,105 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:56:06,401 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 20:59:31,477 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-26 21:00:30,037 - wiki_logger - ERROR - open baidu zhidao url: http://zhidao.baidu.com/question/1494416932854958219.html error. can't find title
+2013-11-27 15:51:54,560 - wiki_logger - ERROR - timed out
+Traceback (most recent call last):
+  File "baidu_wiki_crawl.py", line 70, in search_for_baidu_zhidao_posts
+    store_by_wiki_url(url, comment_count, keyword.id)
+  File "baidu_wiki_crawl.py", line 109, in store_by_wiki_url
+    content = response.read()
+  File "/usr/lib/python2.6/socket.py", line 329, in read
+    data = self._sock.recv(rbufsize)
+  File "/usr/lib/python2.6/httplib.py", line 538, in read
+    s = self.fp.read(amt)
+  File "/usr/lib/python2.6/socket.py", line 353, in read
+    data = self._sock.recv(left)
+timeout: timed out
+2013-11-27 15:53:31,682 - wiki_logger - ERROR - open baidu zhidao url: http://www.babytree.com/ask/detail/9070452 error. can't find title
+2013-11-27 16:03:36,543 - wiki_logger - ERROR - open baidu zhidao url: http://www.babytree.com/ask/detail/10587967 error. can't find title
+2013-11-27 18:12:07,437 - wiki_logger - INFO - baidu zhidao consume time: 0:00:22.528667
+2014-04-10 20:36:01,265 - wiki_logger - ERROR - global name 'Baidu' is not defined
+Traceback (most recent call last):
+  File "wiki_crawl_soso.py", line 204, in main
+    obj = Baidu(id,'scwx.newssc.org','news','四川外宣网')
+NameError: global name 'Baidu' is not defined
+2014-04-10 20:36:01,265 - wiki_logger - ERROR - global name 'Baidu' is not defined
+Traceback (most recent call last):
+  File "wiki_crawl_soso.py", line 204, in main
+    obj = Baidu(id,'scwx.newssc.org','news','四川外宣网')
+NameError: global name 'Baidu' is not defined
+2014-04-10 20:37:25,502 - wiki_logger - ERROR - ''
+Traceback (most recent call last):
+  File "wiki_crawl_soso.py", line 205, in main
+    obj.main()
+  File "/home/lgy/lgy_git/Spider/Python/newspider/baidu.py", line 210, in main
+    count=self.searchWrapper(count)
+  File "/home/lgy/lgy_git/Spider/Python/newspider/baidu.py", line 172, in searchWrapper
+    items = self.nextPage(keyword)
+  File "/home/lgy/lgy_git/Spider/Python/newspider/baidu.py", line 62, in nextPage
+    response = opener.open(req)
+  File "/usr/lib/python2.7/urllib2.py", line 400, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.7/urllib2.py", line 418, in _open
+    '_open', req)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 1207, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.7/urllib2.py", line 1180, in do_open
+    r = h.getresponse(buffering=True)
+  File "/usr/lib/python2.7/httplib.py", line 1030, in getresponse
+    response.begin()
+  File "/usr/lib/python2.7/httplib.py", line 407, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python2.7/httplib.py", line 371, in _read_status
+    raise BadStatusLine(line)
+BadStatusLine: ''
+2014-04-10 20:37:25,502 - wiki_logger - ERROR - ''
+Traceback (most recent call last):
+  File "wiki_crawl_soso.py", line 205, in main
+    obj.main()
+  File "/home/lgy/lgy_git/Spider/Python/newspider/baidu.py", line 210, in main
+    count=self.searchWrapper(count)
+  File "/home/lgy/lgy_git/Spider/Python/newspider/baidu.py", line 172, in searchWrapper
+    items = self.nextPage(keyword)
+  File "/home/lgy/lgy_git/Spider/Python/newspider/baidu.py", line 62, in nextPage
+    response = opener.open(req)
+  File "/usr/lib/python2.7/urllib2.py", line 400, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.7/urllib2.py", line 418, in _open
+    '_open', req)
+  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 1207, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.7/urllib2.py", line 1180, in do_open
+    r = h.getresponse(buffering=True)
+  File "/usr/lib/python2.7/httplib.py", line 1030, in getresponse
+    response.begin()
+  File "/usr/lib/python2.7/httplib.py", line 407, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python2.7/httplib.py", line 371, in _read_status
+    raise BadStatusLine(line)
+BadStatusLine: ''

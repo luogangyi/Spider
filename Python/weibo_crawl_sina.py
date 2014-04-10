@@ -1,10 +1,11 @@
 #! /usr/bin/env python
 #coding=utf-8
+# update by lgy 2014.3.11
 
 from config import *
 
 import math
-from utils import store_category, weibo_logger, weibo_date_str_to_datetime
+from utils import *
 from sina_api import APIClient
 from locations import CITIES
 
@@ -29,9 +30,9 @@ APPLE_EXPIRES_IN = '7788166'
 
 WEIBO_DESKTOP_APP_KEY = '140226478'
 WEIBO_DESKTOP_APP_SECRET = '42fcc96d3e64d9e248649369d61632a6'
-WEIBO_DESKTOP_ACCESS_TOKEN = '2.00lodWMD05_4UJfa47c1c00a0OpbfZ'
-WEIBO_DESKTOP_EXPIRES_IN = '7816706'
 
+WEIBO_DESKTOP_ACCESS_TOKEN = '2.00lodWMD05_4UJa09171967eVCaRgB'
+WEIBO_DESKTOP_EXPIRES_IN = '7202005'
 
 client = APIClient(app_key=WEIBO_DESKTOP_APP_KEY, app_secret=WEIBO_DESKTOP_APP_SECRET, redirect_uri=CALLBACK_URL)
 client.set_access_token(WEIBO_DESKTOP_ACCESS_TOKEN, WEIBO_DESKTOP_EXPIRES_IN)
@@ -364,6 +365,7 @@ def add_status_and_user_to_session(status, keyword_id):
     sql_status.geo_info_province = location['province']
     sql_status.geo_info_city = location['city']
 
+    # print sql_user.screen_name,sql_status.text 
 
     sql_status.user = sql_user #foreign key
     
@@ -499,13 +501,13 @@ def locationId2Str(province_id, city_id):
 
 
 def main():
-    #hackApp()
-    #client = APIClient(app_key=WEIBO_DESKTOP_APP_KEY, app_secret=WEIBO_DESKTOP_APP_SECRET, redirect_uri=CALLBACK_URL)
-    #r = client.request_access_token(CODE)
-    #access_token = r.access_token # 新浪返回的token，类似abc123xyz456
-    #expires_in = r.expires_in # token过期的UNIX时间：http://zh.wikipedia.org/wiki/UNIX%E6%97%B6%E9%97%B4
+    # hackApp()
+    # client = APIClient(app_key=WEIBO_DESKTOP_APP_KEY, app_secret=WEIBO_DESKTOP_APP_SECRET, redirect_uri=CALLBACK_URL)
+    # r = client.request_access_token(CODE)
+    # access_token = r.access_token # 新浪返回的token，类似abc123xyz456
+    # expires_in = r.expires_in # token过期的UNIX时间：http://zh.wikipedia.org/wiki/UNIX%E6%97%B6%E9%97%B4
 
-    #client.set_access_token(WEIBO_DESKTOP_ACCESS_TOKEN, WEIBO_DESKTOP_EXPIRES_IN)
+    # client.set_access_token(WEIBO_DESKTOP_ACCESS_TOKEN, WEIBO_DESKTOP_EXPIRES_IN)
 
     try:
         search_for_new_statuses()

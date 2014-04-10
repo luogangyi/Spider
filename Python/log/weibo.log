@@ -1,23 +1,23 @@
-2013-08-26 16:01:36,798 - weibo_logger - ERROR - <urlopen error [Errno 111] Connection refused>
+2014-03-11 18:27:20,396 - weibo_logger - ERROR - <urlopen error [Errno 111] Connection refused>
 Traceback (most recent call last):
-  File "sina_weibo_crawl.py", line 512, in main
+  File "weibo_crawl_sina.py", line 511, in main
     search_for_new_statuses()
-  File "sina_weibo_crawl.py", line 167, in search_for_new_statuses
-    add_status_and_user_to_session(status, keyword.id)
-  File "sina_weibo_crawl.py", line 381, in add_status_and_user_to_session
-    store_category('weibo', str(sql_status.id))
-  File "/home/lgy/Code/lgy_git/Python/utils.py", line 32, in store_category
-    response = urllib2.urlopen(url)
-  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
+  File "weibo_crawl_sina.py", line 160, in search_for_new_statuses
+    search_statuses = client.search.statuses.get(q=keyword.str, count=50, starttime=starttime)
+  File "/home/lgy/lgy_git/Spider/Python/sina_api.py", line 248, in __call__
+    return _http_call('%s%s.json' % (self._client.api_url, self._path), method, self._client.access_token, **kw)
+  File "/home/lgy/lgy_git/Spider/Python/sina_api.py", line 147, in _http_call
+    resp = urllib2.urlopen(req)
+  File "/usr/lib/python2.6/urllib2.py", line 126, in urlopen
     return _opener.open(url, data, timeout)
-  File "/usr/lib/python2.7/urllib2.py", line 400, in open
+  File "/usr/lib/python2.6/urllib2.py", line 391, in open
     response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 418, in _open
+  File "/usr/lib/python2.6/urllib2.py", line 409, in _open
     '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
+  File "/usr/lib/python2.6/urllib2.py", line 369, in _call_chain
     result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1207, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1177, in do_open
+  File "/usr/lib/python2.6/urllib2.py", line 1180, in https_open
+    return self.do_open(httplib.HTTPSConnection, req)
+  File "/usr/lib/python2.6/urllib2.py", line 1147, in do_open
     raise URLError(err)
 URLError: <urlopen error [Errno 111] Connection refused>

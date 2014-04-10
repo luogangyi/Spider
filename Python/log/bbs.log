@@ -334,3 +334,55 @@ Traceback (most recent call last):
   File "/usr/lib/python2.7/urllib.py", line 1268, in quote
     return ''.join(map(quoter, s))
 KeyError: u'\u535a'
+2013-12-13 15:40:49,184 - bbs_logger - ERROR - HTTP Error 500: Internal Server Error
+Traceback (most recent call last):
+  File "bbs_crawl_tianya.py", line 148, in main
+    search_for_tianya_bbs_posts()
+  File "bbs_crawl_tianya.py", line 33, in search_for_tianya_bbs_posts
+    response = urllib2.urlopen(req)
+  File "/usr/lib/python2.6/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.6/urllib2.py", line 397, in open
+    response = meth(req, response)
+  File "/usr/lib/python2.6/urllib2.py", line 510, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python2.6/urllib2.py", line 435, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python2.6/urllib2.py", line 369, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.6/urllib2.py", line 518, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+HTTPError: HTTP Error 500: Internal Server Error
+2013-12-13 16:05:12,049 - bbs_logger - ERROR - <urlopen error [Errno 110] Connection timed out>
+Traceback (most recent call last):
+  File "bbs_crawl_tianya.py", line 149, in main
+    search_for_tianya_bbs_315_posts()
+  File "bbs_crawl_tianya.py", line 81, in search_for_tianya_bbs_315_posts
+    response = urllib2.urlopen(req)
+  File "/usr/lib/python2.6/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.6/urllib2.py", line 391, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.6/urllib2.py", line 409, in _open
+    '_open', req)
+  File "/usr/lib/python2.6/urllib2.py", line 369, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.6/urllib2.py", line 1172, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.6/urllib2.py", line 1147, in do_open
+    raise URLError(err)
+URLError: <urlopen error [Errno 110] Connection timed out>
+2014-02-27 13:49:13,384 - bbs_logger - ERROR - list index out of range
+Traceback (most recent call last):
+  File "bbs_crawl_baidu.py", line 120, in main
+    search_for_baidu_tieba_posts()
+  File "bbs_crawl_baidu.py", line 60, in search_for_baidu_tieba_posts
+    created_at_str = post.findAll('font', attrs={'class': 'p_green'})[-1].text
+IndexError: list index out of range
+2014-02-27 13:52:08,190 - bbs_logger - ERROR - list index out of range
+Traceback (most recent call last):
+  File "bbs_crawl_baidu.py", line 120, in main
+    search_for_baidu_tieba_posts()
+  File "bbs_crawl_baidu.py", line 60, in search_for_baidu_tieba_posts
+    created_at_str = post.findAll('font', attrs={'class': 'p_green'})[-1].text
+IndexError: list index out of range

@@ -4,6 +4,8 @@
 # update by lgy at 2013.9.6
 # update by lgy at 2013.9.9,sort by time!! only crawl 7 days data!
 # update by lgy at 2013.11.29
+# update by lgy, 2013.12.02 . updates
+# update by lgy, 2013.12.05 . fix bugs
 
 from config import *
 from utils import store_category, recheck_title, baidu_date_str_to_datetime
@@ -120,6 +122,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
             data = {'q': keyword.str.encode('utf8'),
                     'tbm': 'nws',
                     'hl': 'zh-CN',
+                    'tbs':'qdr:w,sbd:1',
                     'start': page
                    }
             
@@ -135,7 +138,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
             content = response.read() 
     
             soup = BeautifulSoup(content)
-
+            #print soup.prettify()
             news_tables = soup.findAll('td', attrs={'class': 'tsw'})
             count = count + len(news_tables)
             if len(news_tables) == 0:
@@ -143,6 +146,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
 
             for news_table in news_tables:
                 url = news_table.a['href']
+                #print url
                 title = news_table.a.text
                 source_name = news_table.find('span', attrs={'class': 'news-source'}).text
                 date_str = news_table.find('span', attrs={'class': 'f nsa'}).text
@@ -260,7 +264,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
                 if len(source_and_date) == 3:
                     date = source_and_date[1] + ' ' + source_and_date[2]
                 else:
-                    date = source_and_date[1]
+                    date = source_and_date[0]
                 try:
                     created_at = baidu_date_str_to_datetime(date)
                 except:
@@ -278,7 +282,7 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
                 #     time.sleep(5)
                 #     break
 
-                #print "outer",keyword.str, page,url, source_name, title, content,created_at,keyword.str,finished
+                print "outer",keyword.str, page,url, source_name, title, content,created_at,keyword.str,finished
                 # 新闻展开
                 morelink_a = news_table.find('a',attrs={'class':'c-more_link'})
                 if morelink_a != None:
@@ -357,14 +361,14 @@ def inner_search_for_baidu_news_posts(inner_url,count,last_time,keyword,info_sou
             if len(source_and_date) == 3:
                 date = source_and_date[1] + ' ' + source_and_date[2]
             else:
-                date = source_and_date[1]
+                date = source_and_date[0]
 
             try:
                 created_at = baidu_date_str_to_datetime(date)
             except:
                 created_at =  datetime.now()
 
-            print "inner",url, source_name, title, content,created_at
+            #print "inner",url, source_name, title, content,created_at
             if info_source_id == BAIDU_NEWS_INFO_SOURCE_ID:
                 add_news_to_session(url, source_name, title, content,
                                     info_source_id, created_at, keyword)

@@ -4,6 +4,7 @@
 # fix a bug by lgy, 2013.7.31
 # fix a bug by lgy, 2013.11.29
 # update by lgy, 2014.2.27
+# update by lgy, 2014.3.21
 from config import *
 from bbs_utils import *
 from utils import baidu_date_str_to_datetime, bbs_logger, store_error

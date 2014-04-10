@@ -20,3 +20,31 @@ Traceback (most recent call last):
   File "news_scpeople.py", line 29, in nextPage
     print soup.pretiffy()
 TypeError: 'NoneType' object is not callable
+2013-11-26 21:18:55,683 - news_logger - ERROR - list index out of range
+Traceback (most recent call last):
+  File "news_crawl_baidu.py", line 11, in main
+    search_for_baidu_news_posts(KEYWORDS, BAIDU_NEWS_INFO_SOURCE_ID)
+  File "/home/lgy/lgy_git/Spider/Python/news_utils.py", line 254, in search_for_baidu_news_posts
+    source_and_date = news_table.findAll('font', attrs={'class': 'g'})[-1].text.split()
+IndexError: list index out of range
+2013-11-27 13:06:13,273 - news_logger - ERROR - <urlopen error [Errno 110] Connection timed out>
+Traceback (most recent call last):
+  File "news_crawl_baidu.py", line 11, in main
+    search_for_baidu_news_posts(KEYWORDS, BAIDU_NEWS_INFO_SOURCE_ID)
+  File "/home/lgy/lgy_git/Spider/Python/news_utils.py", line 286, in search_for_baidu_news_posts
+    inner_count = inner_search_for_baidu_news_posts(url,count,last_time,keyword,info_source_id)
+  File "/home/lgy/lgy_git/Spider/Python/news_utils.py", line 331, in inner_search_for_baidu_news_posts
+    response = urllib2.urlopen(req)
+  File "/usr/lib/python2.6/urllib2.py", line 126, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/usr/lib/python2.6/urllib2.py", line 391, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.6/urllib2.py", line 409, in _open
+    '_open', req)
+  File "/usr/lib/python2.6/urllib2.py", line 369, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.6/urllib2.py", line 1172, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.6/urllib2.py", line 1147, in do_open
+    raise URLError(err)
+URLError: <urlopen error [Errno 110] Connection timed out>
