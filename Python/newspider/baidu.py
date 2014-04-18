@@ -8,6 +8,8 @@
 # update by lgy, 2013.10.11 .filter time
 # update by lgy, 2013.10.30 . updates
 # update by lgy, 2013.11.18 . updates
+# update by lgy, 2013.12.02 . updates
+# update by lgy, 2014.4.10 . updates
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
@@ -37,34 +39,42 @@ class Baidu(BaseBBS):
         opener.open(cookie_url)
 
         # for a month
-        url = 'http://www.baidu.com/s?q1=%s&q2=&q3=&q4=&rn=100&lm=7&ct=0&ft=&q5=&q6=%s&tn=baiduadv' % (keyword,domain)
-
         #url = 'http://www.google.com.hk/search?as_q=%s&as_epq=&as_oq=&as_eq=&as_nlo=&as_nhi=&lr=lang_zh-CN&cr=&as_qdr=w&as_sitesearch=%s&as_occt=any&safe=active&as_filetype=&as_rights=' % (keyword,domain)
         headers = {
                     'Host': 'wwww.baidu.com',
                     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17'
         }
-            #print url
-        req= urllib2.Request(url, headers = headers)  
-
-
+        #print url
+        # req= urllib2.Request(url, headers = headers)  
+        postdata = {"q1": keyword,
+                    "q2": '',
+                    "q3": '',
+                    "q4": '',
+                    "q5": '',
+                    "q6": domain,
+                    "rn": 100,
+                    'lm':7,
+                    'ct':0,
+                    'ft':'',
+                    'tn':'baiduadv'
+                }
         items = []
+
+        url = 'http://www.baidu.com/s?' + urllib.urlencode(postdata)
         try:
-            response = opener.open(req)
+            response = urllib2.urlopen(url)
             content = response.read() 
             soup = BeautifulSoup(content)
             #print soup.prettify()
-            items = soup.findAll("table",{'class':'result'})
-
+            items = soup.findAll("div",{'class':'result c-container'})        
+        except :
             time.sleep(2)
-        except:
-            response = opener.open(req)
+            response = urllib2.urlopen(url)
             content = response.read()
             soup = BeautifulSoup(content)
-            items = soup.findAll("table",{'class':'result'})
+            items = soup.findAll("div",{'class':'result c-container'})
             print "retry!"
             time.sleep(2)
-        
         return items
     
     def itemProcess(self,item,keyword):
@@ -72,7 +82,6 @@ class Baidu(BaseBBS):
         a = item.find('a')
         url = a['href']
         title = a.text
-
         #recheck title!
         if not recheck_title(keyword,title):
             return
@@ -81,12 +90,14 @@ class Baidu(BaseBBS):
         try:
             response = urllib2.urlopen(url)
             url = response.geturl()
+            #print url
         except:
             return
 
         #recheck url
         if recheck_url(url):
             return
+
         content = item.find('div',{'class':'c-abstract'}).text
         
         citeTime = item.find('div',{'class':'f13'}).span.text
@@ -99,12 +110,13 @@ class Baidu(BaseBBS):
         year,month,day = self.getYearMonthDay(createdAt)
         created_date = datetime(int(year),int(month),int(day))
         cur_date = datetime.now()
-
+        #print content
         #cur_date = time.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
         delta_days = (cur_date - created_date).days
+        #print delta_days
         if delta_days >10:
             return
-        print url, title,content,createdAt,delta_days
+        #print url, title,content,createdAt,delta_days
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
@@ -240,7 +252,7 @@ def test():
 
 # for test!!
 if __name__=="__main__":
-    obj = Baidu(1,'news.chengdu.cn','news')
+    obj = Baidu(1,'sina.com','news')
     obj.main()
 #    test()
 

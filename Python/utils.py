@@ -53,6 +53,16 @@ def recheck_title(keyword, title):
             return False
     return True
 
+def keyworks_encode(keyword,encoding_name):
+    keywords = keyword.split()
+    encoded_keyword = ""
+    for key in keywords:
+        if key =='':
+            continue
+        encoded_keyword=encoded_keyword+key.encode(encoding_name)+'+'
+    #remove last "+"
+    return encoded_keyword[0:-1]
+
 
 # Logging Part
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')  

@@ -96,7 +96,7 @@ class ZCDBBS(BaseBBS):
         createdAt = userInfoTag.contents[0].strip()[:-1].strip()
         createdAt = self.convertTime(createdAt)
         username = userInfoTag.a.text
-        print url, username, title, content, createdAt
+        #print url, username, title, content, createdAt
         store_bbs_post(url, username, title, content,
                    self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 

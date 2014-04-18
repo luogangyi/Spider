@@ -66,6 +66,7 @@ class BaseBBS(object):
                 self.search4EachItem(items)
 #                pageIndex += 1
                 isFinished = True #just crawl the first page
+                time.sleep(5)
             time.sleep(5)
         return count
     

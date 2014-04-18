@@ -42,7 +42,9 @@ class DZ19BBS(BaseBBS):
         soup = BeautifulSoup(content)
 
         time.sleep(3)
+        #print soup.prettify()
         if soup.find('a',text=u'24小时内')==None:
+            #print "error"
             return []
         url = soup.find('a',text=u'24小时内').parent['href']
         url = "http://so.dz19.net/"+url

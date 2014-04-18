@@ -65,7 +65,7 @@ class SNW(BaseBBS):
         createdAt = self.convertTime(userInfoTag.text[0:userInfoTag.text.find(" -")])
         #print createdAt
         username = userInfoTag('a')[0].text
-        print url, username, title, content,createdAt
+        #print url, username, title, content,createdAt
         store_bbs_post(url, username, title, content,
                         self.INFO_SOURCE_ID, self.keywordId, createdAt, readCount, commentCount)
 

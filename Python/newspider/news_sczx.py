@@ -44,9 +44,14 @@ class SCZX(BaseNews):
             print createdAt
             createdAt = self.convertTime(createdAt)
         except:
+<<<<<<< HEAD
             createdAt = datetime.now()
             createdAt = "0000-00-00"
         #print url, SOURCENAME, title, content,createdAt
+=======
+            createdAt = "0000-00-00"
+        print url, SOURCENAME, title, content,createdAt
+>>>>>>> bb77e1ea7d51536d9fe8ab7fbd3f523640775ea4
         add_news_to_session(url, SOURCENAME, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
 
