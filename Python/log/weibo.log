@@ -1,23 +1,13 @@
-2013-08-26 16:01:36,798 - weibo_logger - ERROR - <urlopen error [Errno 111] Connection refused>
+2013-12-22 22:20:13,179 - weibo_logger - ERROR - Response error: error ids param. (ret=1, errcode=14)
 Traceback (most recent call last):
-  File "sina_weibo_crawl.py", line 512, in main
+  File "weibo_crawl_qq.py", line 252, in main
     search_for_new_statuses()
-  File "sina_weibo_crawl.py", line 167, in search_for_new_statuses
-    add_status_and_user_to_session(status, keyword.id)
-  File "sina_weibo_crawl.py", line 381, in add_status_and_user_to_session
-    store_category('weibo', str(sql_status.id))
-  File "/home/lgy/Code/lgy_git/Python/utils.py", line 32, in store_category
-    response = urllib2.urlopen(url)
-  File "/usr/lib/python2.7/urllib2.py", line 126, in urlopen
-    return _opener.open(url, data, timeout)
-  File "/usr/lib/python2.7/urllib2.py", line 400, in open
-    response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 418, in _open
-    '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 378, in _call_chain
-    result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1207, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1177, in do_open
-    raise URLError(err)
-URLError: <urlopen error [Errno 111] Connection refused>
+  File "weibo_crawl_qq.py", line 50, in search_for_new_statuses
+    statuses = search_for_new_statuses_from_mobile_pages(keyword.str, starttime)
+  File "weibo_crawl_qq.py", line 205, in search_for_new_statuses_from_mobile_pages
+    statuses = api.t.list(ids=ids)
+  File "build/bdist.linux-x86_64/egg/qqweibo/binder.py", line 206, in _call
+    return method.execute()
+  File "build/bdist.linux-x86_64/egg/qqweibo/binder.py", line 194, in execute
+    (msg, retcode, errcode))
+QWeiboError: Response error: error ids param. (ret=1, errcode=14)
