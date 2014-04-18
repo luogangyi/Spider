@@ -1,2 +1,4 @@
 *.log
 *.pyc
+config.py
+newspider/config.py

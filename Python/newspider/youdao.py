@@ -53,7 +53,7 @@ class Youdao(BaseBBS):
         if delta_days >20:
             return
 
-        #print url.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8')
+        #print url.encode('utf-8'), title.encode('utf-8'), content.encode('utf-8'),createdAt
         if self.category=="news":
             add_news_to_session(url, self.sourcename, title, content,
                             self.INFO_SOURCE_ID, createdAt, self.keywordId)
@@ -81,8 +81,10 @@ class Youdao(BaseBBS):
              
     def convertTime(self,createdAt):
         
-        m = re.match(r'.*?-.*?-.*?(\d.+)',createdAt)
-        strtime = m.group(1)
+        m = re.search(r'\d+-\d+-\d+',createdAt)
+        if m.group() != None:
+            createdAt = datetime.strptime(m.group(),'%Y-%m-%d')
+            return createdAt
        
         now = datetime.now()
         pattern = re.compile(r"\d*")
@@ -95,13 +97,6 @@ class Youdao(BaseBBS):
             m = pattern.search(strtime)
             m = m.group()
             return now-timedelta(hours=int(m))
-        else:
-
-            try:
-                createdAt = datetime.strptime(nowstrtime.strip(),'%Y-%m-%d')
-            except:
-                createdAt = datetime.strptime(str(now.year)+"-"+strtime.strip(),'%Y-%m-%d')
-            return createdAt
 
     def main(self):
         #last_time = session.query(Job).filter(Job.info_source_id==self.INFO_SOURCE_ID).order_by(Job.id.desc()).first().previous_executed    

@@ -44,7 +44,7 @@ def search_for_baidu_zhidao_posts():
         
             soup = BeautifulSoup(content)
 
-
+            #print soup.prettify()
             posts = soup.findAll('dl', attrs={'class': re.compile("dl.*")})
             if(len(posts)==0):
                 isFinish = True
@@ -59,6 +59,7 @@ def search_for_baidu_zhidao_posts():
                     url = post.dt.a['href']
                     comment_count = 0
                     title = post.dt.a.text
+                    #print title
                     if not recheck_title(keyword, title):
                         time.sleep(10)
                         continue
@@ -78,7 +79,7 @@ def search_for_baidu_zhidao_posts():
                     username = u'匿名'
                     if username_a_tag != None:
                         username = username_a_tag.text
-                    #print url,title,created_at,content,username,comment_count
+                    print url,title,created_at,content,username,comment_count
                     #time.sleep(5)
                     store_by_wiki_url(url, comment_count, keyword.id, title,content,created_at,username)
                 except Exception, e:

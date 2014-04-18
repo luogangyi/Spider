@@ -28,8 +28,7 @@ socket.setdefaulttimeout(90)
 
 MYSQL_ADDR = 'localhost:3306/soya?charset=utf8'
 
-#MYSQL_USER = 'mysql'
-MYSQL_USER = 'root'
+MYSQL_USER = 'mysql'
 #MYSQL_PASSWORD = '^12fg7'
 MYSQL_PASSWORD = '123456'
 
