@@ -105,7 +105,7 @@ def add_status_and_user_to_session(status, count, keyword_id):
 
 
     sql_status.user = sql_user #foreign key
-    
+    print sql_status.weibo_user_screen_name,sql_status.text,sql_status.created_at
     session.merge(sql_status) #merge
 
     session.flush()

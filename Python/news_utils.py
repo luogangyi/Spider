@@ -6,6 +6,7 @@
 # update by lgy at 2013.11.29
 # update by lgy, 2013.12.02 . updates
 # update by lgy, 2013.12.05 . fix bugs
+# update by lgy, 2014.5.14 . fix bugs
 
 from config import *
 from utils import store_category, recheck_title, baidu_date_str_to_datetime
@@ -90,7 +91,7 @@ def google_date_str_to_datetime(date_str):
 
 def search_for_google_news_posts(using_keywords, info_source_id):
     last_time = session.query(Job).filter(Job.info_source_id==info_source_id).order_by(Job.id.desc()).first().previous_executed    
-
+    #print "test"
     previous_real_count = session.query(OpponentNews).count()
 
 
@@ -127,6 +128,7 @@ def search_for_google_news_posts(using_keywords, info_source_id):
                    }
             
             url = "http://www.google.com.hk/search?tbs=sbd:1&" + urllib.urlencode(data)
+            print url
             page = page + 10
             headers = {
                 'Host': 'www.google.com.hk',
@@ -139,17 +141,18 @@ def search_for_google_news_posts(using_keywords, info_source_id):
     
             soup = BeautifulSoup(content)
             #print soup.prettify()
-            news_tables = soup.findAll('td', attrs={'class': 'tsw'})
+            news_tables = soup.findAll('li', attrs={'class': 'g'})
             count = count + len(news_tables)
             if len(news_tables) == 0:
                 break
 
             for news_table in news_tables:
-                url = news_table.a['href']
+                a_tag = news_table.find('a', attrs={'class': 'l _f0'})
+                url = a_tag['href']
                 #print url
-                title = news_table.a.text
-                source_name = news_table.find('span', attrs={'class': 'news-source'}).text
-                date_str = news_table.find('span', attrs={'class': 'f nsa'}).text
+                title = a_tag.text
+                source_name = news_table.find('span', attrs={'class': re.compile('news-source.*')}).text
+                date_str = news_table.find('span', attrs={'class': re.compile('f nsa.*')}).text
 
                 try:
                     created_at = google_date_str_to_datetime(date_str)
@@ -158,10 +161,15 @@ def search_for_google_news_posts(using_keywords, info_source_id):
 
                 
                 content = news_table.find('div', attrs={'class': 'st'}).text
+                #print url, source_name, title, content,created_at
+
+                if not recheck_title(keyword,title):
+                    continue
 
                 if created_at < last_time:
                     finished = True
                     break
+                #print url, source_name, title, content,created_at
 
                 if info_source_id == GOOGLE_NEWS_INFO_SOURCE_ID:
                     #print url, source_name, title, content,created_at
@@ -276,13 +284,17 @@ def search_for_baidu_news_posts(using_keywords, info_source_id):
                     finished = True
                     time.sleep(5)
                     break
+
+                if not recheck_title(keyword,title):
+                    continue
+
                 #check time!!    
                 # if created_at < last_time:
                 #     finished = True
                 #     time.sleep(5)
                 #     break
 
-                print "outer",keyword.str, page,url, source_name, title, content,created_at,keyword.str,finished
+                #print "outer",keyword.str, page,url, source_name, title, content,created_at,keyword.str,finished
                 # 新闻展开
                 morelink_a = news_table.find('a',attrs={'class':'c-more_link'})
                 if morelink_a != None:

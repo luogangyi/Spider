@@ -109,7 +109,7 @@ def add_status_and_user_to_session(status, keyword_id):
     sql_status.keyword_id = keyword_id
     sql_status.info_source_id = QQ_WEIBO_INFO_SOURCE_ID
     sql_status.text = status.origtext
-    sql_status.created_at = datetime.fromtimestamp(status.timestamp)
+    sql_status.text = datetime.fromtimestamp(status.timestamp)
     sql_status.repost_count = status.count
     sql_status.comment_count = status.mcount
     sql_status.attitude_count = 0
@@ -130,7 +130,7 @@ def add_status_and_user_to_session(status, keyword_id):
 
 
     sql_status.user = sql_user #foreign key
-    
+    print sql_status.text,sql_status.text
     session.merge(sql_status) #merge
 
     session.flush()

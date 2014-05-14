@@ -28,8 +28,8 @@ socket.setdefaulttimeout(90)
 
 MYSQL_ADDR = 'localhost:3306/soya?charset=utf8'
 
-#MYSQL_USER = 'mysql'
-MYSQL_USER = 'root'
+MYSQL_USER = 'mysql'
+#MYSQL_USER = 'root'
 #MYSQL_PASSWORD = '^12fg7'
 MYSQL_PASSWORD = '123456'
 
@@ -47,5 +47,5 @@ for row in session.query(Keyword).filter(Keyword.enable==True):
     KEYWORDS.append(row)
 
 
-#PYTHON_DIR = '/home/lgy/lgy_git/Spider/Python/'
-PYTHON_DIR = '/home/lgy/Code/lgy_git/Python/'
+PYTHON_DIR = '/home/lgy/lgy_git/Spider/Python/'
+#PYTHON_DIR = '/home/lgy/Code/lgy_git/Python/'
