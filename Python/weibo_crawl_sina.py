@@ -87,8 +87,8 @@ def get_code2():
  
     postdata = {"client_id": APP_KEY,
                 "redirect_uri": CALLBACK_URL,
-                "userId": USERID,
-                "passwd": PASSWD,
+                "userId": ACCOUNT,
+                "passwd": PASSWORD,
                 "isLoginSina": "0",
                 "action": "submit",
                 "response_type": "code",
@@ -380,8 +380,145 @@ def add_status_and_user_to_session(status, keyword_id):
     
     if sql_status:
         store_category('weibo', str(sql_status.id))
-       
 
+def search_for_new_statuses_from_baidu():
+    previous_real_count = session.query(Status).filter(Status.info_source_id==SEARCH_INFO_SOURCE_ID).count()
+
+    lasttime = session.query(Job).filter(Job.info_source_id==SEARCH_INFO_SOURCE_ID).order_by(Job.id.desc()).first()
+    deltatime = lasttime.previous_executed - timedelta(hours=2)
+    starttime = time.mktime(deltatime.timetuple())
+
+    count = 0
+    sql_job = Job()
+    sql_job.previous_executed = datetime.now()
+    sql_job.info_source_id = info_source_id
+
+    http://www.baidu.com/s?wd=%E7%A9%B7%E4%BA%BA&tn=baiduwb&wb=4&cl=2&rtt=2&ie=utf-8&rn=20
+    for keyword in KEYWORDS :
+        page = 0
+        finished = False
+        while(not finished):
+            data = {'wd': keyword.str.encode('utf-8'),
+                    'tn': 'baiduwb',
+                    #'from':'news',
+                    'ie': 'utf-8',
+                    'rtt': 2,
+                    'cl': 2,
+                    'rn': 20,
+                    'wb': 4, 
+                    'pn': page
+                   }
+            
+            url = "http://www.baidu.com/s?" + urllib.urlencode(data)
+            page = page + 20
+
+            headers = {
+                'Host': 'news.baidu.com',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17'
+            }
+    
+            req = urllib2.Request(url, headers = headers)  
+            response = urllib2.urlopen(req)  
+            content = response.read() 
+    
+            soup = BeautifulSoup(content, fromEncoding="utf-8")
+            #print soup.prettify()
+            li_table = soup.find('ol', attrs={'id': 'weibo'})
+            news_tables = soup.findAll('li')
+            # res = soup.findAll('p', attrs={'class': 'res'})
+            # news_tables =[]
+            # for contents in res:
+            #     news = contents.findAll('span')
+            #     if len(news)>0:
+            #         news_tables = news
+            #         break
+
+
+            count = count + len(news_tables)
+            #print len(news_tables)
+            if len(news_tables) <20:
+                finished = True
+                time.sleep(5)
+
+            for news_table in news_tables:
+                li_id = news_table['id']
+                if li_id<pn-20:
+                    finished = True
+                    time.sleep(5)
+                    break  
+                url = news_table.a['href']
+                title = news_table.a.text
+                source_and_date = news_table.findAll('span', attrs={'class': 'c-author'})[-1].text.replace('&nbsp;',' ').split()
+                content = ""
+
+                source_name = source_and_date[0]
+                #print news_table.findAll('span', attrs={'class': 'c-author'})[-1].text.replace('&nbsp;',' ')
+                if len(source_and_date) == 3:
+                    date = source_and_date[1] + ' ' + source_and_date[2]
+                else:
+                    date = source_and_date[0]
+                try:
+                    created_at = baidu_date_str_to_datetime(date)
+                except:
+                    created_at =  datetime.now()
+
+                #print last_time,created_at,(last_time-created_at).days
+                #check time!! 
+                if (last_time-created_at).days>1 :
+                    finished = True
+                    time.sleep(5)
+                    break
+                #check time!!    
+                # if created_at < last_time:
+                #     finished = True
+                #     time.sleep(5)
+                #     break
+                sql_status = session.query(Status).filter(Status.weibo_origin_id==status['id'], Status.info_source_id==SEARCH_INFO_SOURCE_ID).first()
+                if not sql_status:
+                    sql_status = Status()
+
+                sql_status.weibo_origin_id = status['id'] 
+                sql_status.url = "http://weibo.com/" + str(user['id']) + "/" + id2mid(status['idstr'])
+                sql_status.weibo_user_screen_name = user['screen_name']
+                sql_status.keyword_id = keyword_id
+                sql_status.info_source_id = SEARCH_INFO_SOURCE_ID
+                sql_status.text = status['text']
+                sql_status.created_at = weibo_date_str_to_datetime(status['created_at'])
+                sql_status.repost_count = status['reposts_count']
+                sql_status.comment_count = status['comments_count']
+                sql_status.attitude_count = status['attitudes_count']
+                if status.has_key('retweeted_status'):
+                    sql_status.retweeted = True
+                else:
+                    sql_status.retweeted = False
+
+                if status.has_key('thumbnail_pic'):
+                    sql_status.with_pic = True
+                    sql_status.pic_address = status['thumbnail_pic']
+                else:
+                    sql_status.with_pic = False
+
+                sql_status.geo_info_province = location['province']
+                sql_status.geo_info_city = location['city']
+
+                # print sql_user.screen_name,sql_status.text 
+
+                sql_status.user = sql_user #foreign key
+                
+                session.merge(sql_status) #merge
+
+                session.flush()
+                session.commit()
+
+
+                sql_status = session.query(Status).filter(Status.weibo_origin_id==status['id'],
+                                             Status.info_source_id==SEARCH_INFO_SOURCE_ID).first()
+                
+                if sql_status:
+                    store_category('weibo', str(sql_status.id))
+
+
+            time.sleep(5)
 
 def store_by_weibo_mid(mid, keyword_id):
     try:
@@ -501,6 +638,7 @@ def locationId2Str(province_id, city_id):
 
 
 def main():
+    # get_code()
     # hackApp()
     # client = APIClient(app_key=WEIBO_DESKTOP_APP_KEY, app_secret=WEIBO_DESKTOP_APP_SECRET, redirect_uri=CALLBACK_URL)
     # r = client.request_access_token(CODE)
@@ -509,14 +647,14 @@ def main():
 
     # client.set_access_token(WEIBO_DESKTOP_ACCESS_TOKEN, WEIBO_DESKTOP_EXPIRES_IN)
 
-    try:
-        search_for_new_statuses()
-        #get_baidu_search_result()
-        refresh_monitoring_status()
-        #get_hots()
-    except Exception, e:
-        store_error(SEARCH_INFO_SOURCE_ID)
-        weibo_logger.exception(e)
+    # try:
+    #     search_for_new_statuses()
+    #     #get_baidu_search_result()
+    #     refresh_monitoring_status()
+    #     #get_hots()
+    # except Exception, e:
+    #     store_error(SEARCH_INFO_SOURCE_ID)
+    #     weibo_logger.exception(e)
 
 
 if __name__ == '__main__':
