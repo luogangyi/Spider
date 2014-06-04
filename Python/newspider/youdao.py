@@ -3,6 +3,7 @@
 #update by lgy 2013.7.29
 # update by lgy, 2013.08.04 .fix bug of calculate fetched count of different category 
 # update by lgy, 2013.10.17 .filter old data 
+# update by lgy, 2014.04.22
 from BaseTimeLimit import *
 from news_utils import *
 from blog_utils import *
