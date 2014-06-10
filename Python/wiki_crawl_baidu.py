@@ -79,7 +79,7 @@ def search_for_baidu_zhidao_posts():
                     username = u'匿名'
                     if username_a_tag != None:
                         username = username_a_tag.text
-                    print url,title,created_at,content,username,comment_count
+                    #print url,title,created_at,content,username,comment_count
                     #time.sleep(5)
                     store_by_wiki_url(url, comment_count, keyword.id, title,content,created_at,username)
                 except Exception, e:

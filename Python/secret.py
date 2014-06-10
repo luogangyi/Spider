@@ -1,0 +1,6 @@
+apiKey = '801322882'
+apiSecret = '0f4b0f472813b31c23720623014e22e9'
+callbackUrl = 'http://www.tbs-info.com'
+openid = '1332498E3B21E03AC5F4A4D62D6D2465'
+#accessToken = '03c90c54218f69ee734e671cba0ef03c'
+accessToken = '03c90c54218f69ee491f17b273a424bc'

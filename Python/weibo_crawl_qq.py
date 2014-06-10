@@ -1,34 +1,47 @@
 #! /usr/bin/env python
 #coding=utf-8
-# update by lgy, fix a bug. 2013.12.22
-from config import *
+# written by lgy, 2014.6.10, use oauth 2.0 instead!
+
+import time
 import json
-
-from qqweibo import OAuthHandler, API, JSONParser, ModelParser
+#sys.path.insert(0, 'tweibo.zip')
+from tweibo import *
 from utils import *
-
-
-API_KEY = '801322882'
-API_SECRET = '0f4b0f472813b31c23720623014e22e9'
-
-a = OAuthHandler(API_KEY, API_SECRET)
-
-def get_token():
-    print a.get_authorization_url()
-    verifier = raw_input('PIN: ').strip()
-    print a.get_access_token(verifier)
-
-
-# or directly use:
-#token = 'e9fc735b76ba4e75a6ebaefe61ee66fc'
-token = 'd169abff38d747cfa8bdb21123577482'
-#tokenSecret = 'ec07bda1b332156d1554470893b16b6d'
-tokenSecret = '25d60b4c67c488a4d5291dcb9bd43fd8'
-a.setToken(token, tokenSecret)
-
-api = API(a)
+from config import *
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 QQ_WEIBO_INFO_SOURCE_ID = 7
+
+#update token every 3 month! s
+APP_KEY = "801322882"
+APP_SECRET = "c057534d14cba920579f2d54005e0c06"
+CALLBACK_URL = "http://wwww.tbs-info.com"
+ACCESS_TOKEN = "88e5a688d7246979985ccf480f229c4e"
+OPENID = "d95e1cb696e0e35b4166546c875de23c"
+
+oauth = OAuth2Handler()
+oauth.set_app_key_secret(APP_KEY, APP_SECRET, CALLBACK_URL)
+oauth.set_access_token(ACCESS_TOKEN)
+oauth.set_openid(OPENID)
+api = API(oauth)
+
+
+def access_token_test():
+    """ 访问get_access_token_url()的URL并授权后，会跳转callback页面，其中包含如下参数：
+        #access_token=00000000000ACCESSTOKEN0000000000&expires_in=8035200&openid=0000000000000OPENID0000000000000&openkey=0000000000000OPENKEY000000000000&refresh_token=0000000000REFRESHTOKEN00000000&state=
+    保存下其中的 access_token, openid 并调用
+        oauth.set_access_token(access_token)
+        oauth.set_openid(openid)
+    即可完成 OAuth2Handler() 的初始化。可以记录 access_token 等信息
+    """
+    oauth = OAuth2Handler()
+    oauth.set_app_key_secret(APP_KEY, APP_SECRET, CALLBACK_URL)
+    print oauth.get_access_token_url()
+
+
+
 
 
 def search_for_new_statuses():
@@ -47,12 +60,13 @@ def search_for_new_statuses():
     #print starttime
 
     for keyword in KEYWORDS : 
-        statuses = search_for_new_statuses_from_mobile_pages(keyword.str, starttime)
+        statuses = search_for_new_statuses_from_mobile_pages(keyword, starttime)
         
-        # count = count + len(statuses)
-        # for status in statuses:
-        #     add_status_and_user_to_session(status, keyword.id)
-        #     time.sleep(1)
+        count = count + len(statuses)
+        print count
+        for status in statuses:
+            add_status_and_user_to_session(status, keyword.id)
+            time.sleep(1)
 
         time.sleep(5)
     
@@ -68,9 +82,10 @@ def search_for_new_statuses():
 
 
 def add_status_and_user_to_session(status, keyword_id):
-    #print status.name
-    user = api.user.userinfo(status.name)
-    print status.name
+    # print status.name
+    user = api.get.user__other_info(format="json", name=status.name)
+    user = user.data
+
     sql_user = session.query(User).filter(User.user_origin_id==user.name,
                                              User.info_source_id==QQ_WEIBO_INFO_SOURCE_ID).first()
     if not sql_user:
@@ -109,7 +124,7 @@ def add_status_and_user_to_session(status, keyword_id):
     sql_status.keyword_id = keyword_id
     sql_status.info_source_id = QQ_WEIBO_INFO_SOURCE_ID
     sql_status.text = status.origtext
-    sql_status.text = datetime.fromtimestamp(status.timestamp)
+    sql_status.created_at = datetime.fromtimestamp(status.timestamp)
     sql_status.repost_count = status.count
     sql_status.comment_count = status.mcount
     sql_status.attitude_count = 0
@@ -130,7 +145,8 @@ def add_status_and_user_to_session(status, keyword_id):
 
 
     sql_status.user = sql_user #foreign key
-    print sql_status.text,sql_status.text
+    # print sql_status.text,sql_status.text
+    print sql_status.url
     session.merge(sql_status) #merge
 
     session.flush()
@@ -146,7 +162,6 @@ def add_status_and_user_to_session(status, keyword_id):
 def search_for_new_statuses_from_mobile_pages(keyword, starttime):
     page = 1
     ids = ""
-
     # default 5 pages, enough for most cases, but can not satisfy special
     # requierments, like history search  
     #print keyworks_encode(keyword,'utf8')
@@ -157,18 +172,18 @@ def search_for_new_statuses_from_mobile_pages(keyword, starttime):
                 'ac': 60,
                 'shinfo': 'txt.wap_paged.l',
                 'shinforen': 'txt.wap_paged.k',
-                'keyword': keyword.encode('utf8'),
+                'keyword': keyword.str.encode('utf8'),
                 'dl2': 1,
                 'dumpJSON': 1,
                 'pageid': 'search',
                 'g_f': 18106,
-                'params': 'keyword='.encode('utf8')+keyword.encode('utf8')+'&type=msg'.encode('utf8'),
+                'params': 'keyword='.encode('utf8')+keyword.str.encode('utf8')+'&type=msg'.encode('utf8'),
                 'psize': 10,
                 'pid': page
                }
         url = "http://ti.3g.qq.com/touch/s?" + urllib.urlencode(data)
-        print url
-        #print urllib.urlencode({"text":" "}),urllib.urlencode({"text":" ".encode('utf8')})
+        # print url
+        # print urllib.urlencode({"text":" "}),urllib.urlencode({"text":" ".encode('utf8')})
         headers = {
             'Host': 'ti.3g.qq.com',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36',
@@ -184,28 +199,22 @@ def search_for_new_statuses_from_mobile_pages(keyword, starttime):
         content = response.read() 
 
         results = json.loads(content)
-        
         result_list = results["jsonDump"]["msgs"]
 
         
         for item in result_list:
-            #print str(item["msgId"])
-            #print api.t.list(ids=str(item["msgId"]))
-            try:
-                status = api.t.list(ids=str(item["msgId"]))
-                add_status_and_user_to_session(status, keyword.id)
-                time.sleep(3)
-                #ids = ids + "," + str(item["msgId"])
-            except:
-                continue
+            ids = ids + "," + str(item["msgId"])
 
         page = page + 1
         time.sleep(1)
 
-    #ids = ids[1:]
-    #statuses = api.t.list(ids=ids)
-    #print statuses
-    #return statuses
+    if ids == "":
+        return []
+    ids = ids[1:]
+    statuses = api.get.t__list(format="json", ids=ids)
+    statuses = statuses.data.info
+    return statuses
+
 
 
 
@@ -231,10 +240,11 @@ def refresh_monitoring_status():
             time.sleep(1)
 
 
-def update_by_weibo_id(id, origin_id):
+def update_by_weibo_id(wid, origin_id):
     try:
-        api_status = api.tweet.show(origin_id)
-        sql_status = session.query(Status).get(id)
+        api_status = api.get.t__show(format="json", id=origin_id)
+        api_status = api_status.data
+        sql_status = session.query(Status).get(wid)
 
         sql_status.repost_count = api_status.count
         sql_status.comment_count = api_status.mcount
@@ -250,6 +260,7 @@ def update_by_weibo_id(id, origin_id):
 
 def main():
     try:
+        #get_token()
         search_for_new_statuses()
         refresh_monitoring_status()
     except Exception, e:
